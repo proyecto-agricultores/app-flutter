@@ -10,4 +10,12 @@ class AuthenticateUser {
       refresh: json['refresh'],
     );
   }
+
+  factory AuthenticateUser.fromJsonRefresh(Map<String, dynamic> json) {
+    return AuthenticateUser(
+      access: json['access'],
+      refresh: '-',
+    );
+  }
+
 }

@@ -108,16 +108,47 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
+
+          try {
+            final refreshToken = await Token.getToken(TokenType.refresh);
+            final tokenGenerator = await AuthenticateService.refresh(refreshToken);
+
+            await Token.setToken(TokenType.access, tokenGenerator.access);
+            await Token.setToken(TokenType.refresh, tokenGenerator.refresh);
+
+            final hw = await HelloWorldService.getHelloWorld();
+            print(hw.toString());
+          } 
+          catch(e) {
+            print(e.toString());
+            final tokenGenerator = await AuthenticateService.authenticate('+51969999869', '1112');
+            await Token.setToken(TokenType.access, tokenGenerator.access);
+            await Token.setToken(TokenType.refresh, tokenGenerator.refresh);
+
+            final access = await Token.getToken(TokenType.access);
+            final refresh = await Token.getToken(TokenType.refresh);
+
+            print(access);
+            print(refresh);
+
+            final hw = await HelloWorldService.getHelloWorld();
+            print(hw.toString());
+          }
+/*
           final tester =
               await AuthenticateService.authenticate('+51969999869', '1112');
           await Token.setToken(TokenType.access, tester.access);
           await Token.setToken(TokenType.refresh, tester.refresh);
 
-          print(tester.access);
-          print(tester.refresh);
+          final access = await Token.getToken(TokenType.access);
+          final refresh = await Token.getToken(TokenType.refresh);
+
+          print(access);
+          print(refresh);
 
           final hw = await HelloWorldService.getHelloWorld();
           print(hw.toString());
+          */
         },
         tooltip: 'Increment',
         child: Icon(Icons.add),
@@ -125,3 +156,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
+// primero, probar el refresh. api/token/refresh
+// sino funciona el refresh, es decir, 401 Unauthorized, usar api/token/
+// sino funciona api/token/, usuario debe revisar usuario y contraseña (mostrar login)
