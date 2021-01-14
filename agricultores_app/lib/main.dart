@@ -1,3 +1,6 @@
+import 'package:agricultores_app/services/authService.dart';
+import 'package:agricultores_app/services/helloWorldService.dart';
+import 'package:agricultores_app/services/token.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -104,7 +107,18 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: () async {
+          final tester =
+              await AuthenticateService.authenticate('+51969999869', '1112');
+          await Token.setToken(TokenType.access, tester.access);
+          await Token.setToken(TokenType.refresh, tester.refresh);
+
+          print(tester.access);
+          print(tester.refresh);
+
+          final hw = await HelloWorldService.getHelloWorld();
+          print(hw.toString());
+        },
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
