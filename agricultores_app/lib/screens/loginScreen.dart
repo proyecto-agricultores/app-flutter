@@ -106,6 +106,9 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(
                 width: 300,
                 child: TextFormField(
+                  obscureText: true,
+                  enableSuggestions: false,
+                  autocorrect: false,
                   decoration: InputDecoration(
                     labelText: 'Contraseña',
                     prefixIcon: Icon(
