@@ -22,6 +22,11 @@ class _LoginScreenState extends State<LoginScreen> {
       // ),
       body: Center(
         child: SingleChildScrollView(
+          //physics: AlwaysScrollableScrollPhysics(),
+          padding: EdgeInsets.symmetric(
+            horizontal: 40.0,
+            vertical: 120.0,
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -85,43 +90,46 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               ),
               SizedBox(height: 50),
-              SizedBox(
-                width: 300,
-                child: IntlPhoneField(
-                  decoration: InputDecoration(
-                    labelText: 'Número de celular',
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.green),
-                      borderRadius:
-                          const BorderRadius.all(const Radius.circular(20.0)),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  IntlPhoneField(
+                    decoration: InputDecoration(
+                      labelText: 'Número de celular',
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.green),
+                        borderRadius:
+                            const BorderRadius.all(const Radius.circular(20.0)),
+                      ),
                     ),
+                    initialCountryCode: 'PE',
+                    onChanged: (phone) {
+                      //print(phone.completeNumber);
+                    },
                   ),
-                  initialCountryCode: 'PE',
-                  onChanged: (phone) {
-                    //print(phone.completeNumber);
-                  },
-                ),
+                ],
               ),
               SizedBox(height: 10),
-              SizedBox(
-                width: 300,
-                child: TextFormField(
-                  obscureText: true,
-                  enableSuggestions: false,
-                  autocorrect: false,
-                  decoration: InputDecoration(
-                    labelText: 'Contraseña',
-                    prefixIcon: Icon(
-                      Icons.lock,
-                      color: Colors.green,
-                    ),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.green),
-                      borderRadius:
-                          const BorderRadius.all(const Radius.circular(20.0)),
+              Column(
+                children: [
+                  TextFormField(
+                    obscureText: true,
+                    enableSuggestions: false,
+                    autocorrect: false,
+                    decoration: InputDecoration(
+                      labelText: 'Contraseña',
+                      prefixIcon: Icon(
+                        Icons.lock,
+                        color: Colors.green,
+                      ),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.green),
+                        borderRadius:
+                            const BorderRadius.all(const Radius.circular(20.0)),
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
               SizedBox(height: 30),
               Text('¿No tienes una cuenta?'),
