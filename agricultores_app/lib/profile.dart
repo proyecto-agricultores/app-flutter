@@ -24,7 +24,6 @@ class Profile extends StatelessWidget {
           ),
           body:
             Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
         Container(
           height: 150,
@@ -71,20 +70,29 @@ class Profile extends StatelessWidget {
                 )  ,
 
         Stack(
-          fit: StackFit.expand,
           children: [
-            Image(
-              fit: BoxFit.cover,
-              image: AssetImage("assets/images/papas.jpg"),
+            Container(
+              width: 450,
+                child:Image(
+                  image: AssetImage("assets/images/papas.jpg"),
+                )
             ),
-              Container(
+              Positioned(
+                  top: 175,
+                  left: 100,
+                child: Container(
                 alignment: Alignment.center,
-                color: Colors.black45,
-                constraints: BoxConstraints.expand(height: 55),
-                child: Text(
-                  "El Perro",
-                  style: TextStyle(color: Colors.white, fontSize: 50),
-                ),
+                child: RaisedButton(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                      side: BorderSide(color: Colors.red)),
+                  onPressed: () {},
+                  color: Colors.red,
+                  textColor: Colors.white,
+                  child: Text("Ver todos los cultivos".toUpperCase(),
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                )
+              )
               ),
           ],
         ),
