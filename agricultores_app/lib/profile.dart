@@ -1,29 +1,28 @@
 import 'package:flutter/material.dart';
 
-class Profile extends StatelessWidget {
+
+class ProfileScreen extends StatefulWidget {
+  ProfileScreen({Key key, this.title}) : super(key: key);
+
+  final String title;
+
+  @override
+  _ProfileScreenState createState() => _ProfileScreenState();
+}
+
+
+
+
+class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: Scaffold(
+    return Scaffold(
           appBar: AppBar(
             title: Text("Claro pe mascota"),
           ),
-          body:
-            Column(
+          body: SingleChildScrollView(
+            child: Column(
               children: <Widget>[
         Container(
           height: 150,
@@ -44,9 +43,9 @@ class Profile extends StatelessWidget {
                     RaisedButton(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18.0),
-                          side: BorderSide(color: Colors.red)),
+                          side: BorderSide(color: Colors.green)),
                       onPressed: () {},
-                      color: Colors.red,
+                      color: Colors.green,
                       textColor: Colors.white,
                       child: Text("Ver en  mapa".toUpperCase(),
                           style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
@@ -59,9 +58,9 @@ class Profile extends StatelessWidget {
                     RaisedButton(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18.0),
-                          side: BorderSide(color: Colors.red)),
+                          side: BorderSide(color: Colors.green)),
                       onPressed: () {},
-                      color: Colors.red,
+                      color: Colors.green,
                       textColor: Colors.white,
                       child: Text("Contactar",
                           style: TextStyle(fontSize: 14, fontWeight: FontWeight.normal)),
@@ -71,34 +70,39 @@ class Profile extends StatelessWidget {
 
         Stack(
           children: [
+
             Container(
-              width: 450,
+                margin: const EdgeInsets.all(15.0),
                 child:Image(
                   image: AssetImage("assets/images/papas.jpg"),
                 )
             ),
-              Positioned(
-                  top: 175,
-                  left: 100,
-                child: Container(
-                alignment: Alignment.center,
-                child: RaisedButton(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
-                      side: BorderSide(color: Colors.red)),
-                  onPressed: () {},
-                  color: Colors.red,
-                  textColor: Colors.white,
-                  child: Text("Ver todos los cultivos".toUpperCase(),
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
-                )
-              )
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Center(
+                  child: Positioned(
+
+                      top: 200,
+                    child: Container(
+                    alignment: Alignment.center,
+                    child: RaisedButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                          side: BorderSide(color: Colors.green)),
+                      onPressed: () {},
+                      color: Colors.green,
+                      textColor: Colors.white,
+                      child: Text("Ver todos los cultivos".toUpperCase(),
+                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                    )
+                  )
+                  ),
+                ),
               ),
           ],
         ),
       ],
     )
-      )
-    );
+      ),);
   }
 }
