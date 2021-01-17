@@ -145,8 +145,45 @@ class _LoginScreenState extends State<LoginScreen> {
                   borderRadius: BorderRadius.circular(18.0),
                 ),
                 // onPressed: Token.generateOrRefreshToken(telephone, passwordController.text),
-                onPressed: () => {
-                  Token.generateOrRefreshToken(telephone, passwordController.text),
+                onPressed: () async {
+                  await Token.setToken(TokenType.access, '');
+                  await Token.setToken(TokenType.refresh, '');
+                  try {
+                    await Token.generateOrRefreshToken(telephone, passwordController.text);
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => 
+                          Scaffold(
+                            appBar: AppBar(
+                              title: const Text('Logged In')
+                            ),
+                        )
+                      )
+                    );
+                  }
+                  catch(e) {
+                    print(e.toString());
+                    return showDialog<void>(
+                      context: context,
+                      barrierDismissible: true,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('Credenciales Incorrectas'),
+                          content: Text(
+                              'Ingresar nuevamente su correo y contraseña.'),
+                          actions: <Widget>[
+                            TextButton(
+                              child: Text('Intentar Nuevamente'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }
                 },
                 color: Colors.green[400],
                 child: Text('Ingresar',

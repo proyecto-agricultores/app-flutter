@@ -53,7 +53,3 @@ class Token {
     }
   }
 }
-
-// primero, probar el refresh. api/token/refresh
-// sino funciona el refresh, es decir, 401 Unauthorized, usar api/token/
-// sino funciona api/token/, usuario debe revisar usuario y contraseña (mostrar login)
