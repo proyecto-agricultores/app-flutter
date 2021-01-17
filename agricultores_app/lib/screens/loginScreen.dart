@@ -1,5 +1,5 @@
+import 'package:agricultores_app/services/token.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
 import '../app_icons.dart';
@@ -14,15 +14,20 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final passwordController = TextEditingController();
+  String telephone;
+
+  @override
+  void dispose() {
+    passwordController.dispose();
+    super.dispose();
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text(widget.title),
-      // ),
       body: Center(
         child: SingleChildScrollView(
-          //physics: AlwaysScrollableScrollPhysics(),
           padding: EdgeInsets.symmetric(
             horizontal: 40.0,
             vertical: 120.0,
@@ -30,13 +35,6 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              // Text(
-              //   'You have pushed the button this many times:',
-              // ),
-              // Text(
-              //   '$_counter',
-              //   style: Theme.of(context).textTheme.headline4,
-              // ),
               Image.asset(
                 'assets/images/logo.png',
                 height: 150,
@@ -48,9 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: <Widget>[
                   FlatButton(
                     onPressed: null,
-                    //padding: EdgeInsets.all(50.0),
                     child: Column(
-                      // Replace with a Row for horizontal icon + text
                       children: <Widget>[
                         Icon(
                           AppIcons.seedling,
@@ -104,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     initialCountryCode: 'PE',
                     onChanged: (phone) {
-                      //print(phone.completeNumber);
+                      telephone = phone.completeNumber;
                     },
                   ),
                 ],
@@ -113,6 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Column(
                 children: [
                   TextFormField(
+                    controller: passwordController,
                     obscureText: true,
                     enableSuggestions: false,
                     autocorrect: false,
@@ -134,7 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(height: 30),
               Text('¿No tienes una cuenta?'),
               new GestureDetector(
-                onTap: () {},
+                onTap: () {print('registrese');},
                 child: new Text(
                   "Regístrate aquí",
                   style: TextStyle(
@@ -147,7 +144,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(18.0),
                 ),
-                onPressed: () {},
+                // onPressed: Token.generateOrRefreshToken(),
+                onPressed: () {
+                  print(telephone);
+                  print(passwordController.text);
+                },
                 color: Colors.green[400],
                 child: Text('Ingresar',
                     style: TextStyle(
@@ -160,11 +161,6 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: _incrementCounter,
-      //   tooltip: 'Increment',
-      //   child: Icon(Icons.add),
-      // ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
