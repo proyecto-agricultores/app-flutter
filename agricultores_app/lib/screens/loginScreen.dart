@@ -1,3 +1,4 @@
+import 'package:agricultores_app/screens/registerScreen.dart';
 import 'package:agricultores_app/services/token.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
@@ -39,51 +40,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 'assets/images/logo.png',
                 height: 150,
                 width: 150,
-              ),
-              SizedBox(height: 30),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  FlatButton(
-                    onPressed: null,
-                    child: Column(
-                      children: <Widget>[
-                        Icon(
-                          AppIcons.seedling,
-                          size: 70,
-                          color: Colors.black54,
-                        ),
-                        Text("Agricultor")
-                      ],
-                    ),
-                  ),
-                  FlatButton(
-                    onPressed: null,
-                    child: Column(
-                      children: <Widget>[
-                        Icon(
-                          Icons.person_search,
-                          size: 70,
-                          color: Colors.black54,
-                        ),
-                        Text("Comprador")
-                      ],
-                    ),
-                  ),
-                  FlatButton(
-                    onPressed: null,
-                    child: Column(
-                      children: <Widget>[
-                        Icon(
-                          Icons.ad_units,
-                          size: 70,
-                          color: Colors.black54,
-                        ),
-                        Text("Anunciante")
-                      ],
-                    ),
-                  ),
-                ],
               ),
               SizedBox(height: 50),
               Column(
@@ -131,7 +87,12 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(height: 30),
               Text('¿No tienes una cuenta?'),
               new GestureDetector(
-                onTap: () {print('registrese');},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => RegisterScreen())
+                  );
+                },
                 child: new Text(
                   "Regístrate aquí",
                   style: TextStyle(
