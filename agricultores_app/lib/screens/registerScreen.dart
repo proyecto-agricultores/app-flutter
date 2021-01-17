@@ -70,66 +70,72 @@ class _RegisterScreenState extends State<RegisterScreen> {
         title: Text('Registro'),
       ),
       body: Center(
-        child: Column(
-          children: <Widget> [
-            Expanded(
-              child: Image.asset(
-                'assets/images/logo.png',
-                scale: MediaQuery.of(context).size.height / MediaQuery.of(context).size.width,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget> [
+              //Flexible(
+                //child: 
+                Image.asset(
+                  'assets/images/logo.png',
+                  scale: MediaQuery.of(context).size.height / MediaQuery.of(context).size.width,
+                //),
               ),
-            ),
-            Expanded(
-              flex: 3,
-              child: Container(
-                width: MediaQuery.of(context).size.width * 0.8,
-                child: Column(
-                  children: [
-                    this.textField(firstNameController, 'Nombres', false, Icons.person, 30),
-                    this.textField(lastNameController, 'Apellidos', false, Icons.person, 30),
-                    this.textField(dniController, 'DNI', false, Icons.call_to_action, 8),
-                    this.textField(rucController, 'RUC', false, Icons.call_to_action_outlined, 10),
-                    IntlPhoneField(
-                      decoration: InputDecoration(
-                        labelText: 'Número de celular',
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.green),
-                          borderRadius:
-                              const BorderRadius.all(const Radius.circular(20.0)),
+              Flexible(
+                flex: 3,
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  child: Column(
+                    children: [
+                      this.textField(firstNameController, 'Nombres', false, Icons.person, 30),
+                      this.textField(lastNameController, 'Apellidos', false, Icons.person, 30),
+                      this.textField(dniController, 'DNI', false, Icons.call_to_action, 8),
+                      this.textField(rucController, 'RUC', false, Icons.call_to_action_outlined, 10),
+                      IntlPhoneField(
+                        decoration: InputDecoration(
+                          labelText: 'Número de celular',
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.green),
+                            borderRadius:
+                                const BorderRadius.all(const Radius.circular(20.0)),
+                          ),
                         ),
+                        initialCountryCode: 'PE',
+                        onChanged: (phone) {
+                          telephone = phone.completeNumber;
+                        },
                       ),
-                      initialCountryCode: 'PE',
-                      onChanged: (phone) {
-                        telephone = phone.completeNumber;
-                      },
-                    ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.01),
-                    this.textField(passwordController, 'Contraseña', true, Icons.lock, 4096),
-                    FlatButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                      ),
-                      // onPressed: Token.generateOrRefreshToken(telephone, passwordController.text),
-                      onPressed: () {
-                        print(firstNameController.text);
-                        print(lastNameController.text);
-                        print(dniController.text);
-                        print(rucController.text);
-                        print(telephone);
-                        print(passwordController.text);
-                      },
-                      color: Colors.green[400],
-                      child: Text('Siguiente',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          )),
-                    )
-                  ],
-                ),
-              )
-            ),
-          ]
+                      SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+                      this.textField(passwordController, 'Contraseña', true, Icons.lock, 4096),
+                      FlatButton(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                        ),
+                        // onPressed: Token.generateOrRefreshToken(telephone, passwordController.text),
+                        onPressed: () {
+                          print(firstNameController.text);
+                          print(lastNameController.text);
+                          print(dniController.text);
+                          print(rucController.text);
+                          print(telephone);
+                          print(passwordController.text);
+                        },
+                        color: Colors.green[400],
+                        child: Text('Siguiente',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            )),
+                      )
+                    ],
+                  ),
+                )
+              ),
+            ]
+          )
         )
       ),
     );
