@@ -144,10 +144,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(18.0),
                 ),
-                // onPressed: Token.generateOrRefreshToken(),
-                onPressed: () {
-                  print(telephone);
-                  print(passwordController.text);
+                // onPressed: Token.generateOrRefreshToken(telephone, passwordController.text),
+                onPressed: () => {
+                  Token.generateOrRefreshToken(telephone, passwordController.text),
                 },
                 color: Colors.green[400],
                 child: Text('Ingresar',
