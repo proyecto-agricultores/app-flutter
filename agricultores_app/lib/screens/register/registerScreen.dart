@@ -158,6 +158,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             fontSize: 16,
           )),
     );
+  }
 
   Widget _logo() {
     return Column(
