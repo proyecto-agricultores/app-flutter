@@ -16,6 +16,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool dniOrRuc = false;
   final dniOrRucController = TextEditingController();
   final passwordController = TextEditingController();
+  final _formKey = new GlobalKey<FormState>();
 
   InputDecoration _buildInputDecoration(String placeholder) {
     return InputDecoration(
@@ -99,6 +100,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               onChanged: (value) {
                 setState(() {
                   this.dniOrRuc = value;
+                  this.dniOrRucController.text = '';
                 });
               }
             ),
@@ -107,8 +109,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 children: [
                   TextFormField(
                     controller: dniOrRucController,
-                    validator: (value) => value.isEmpty ? 
-                      (this.dniOrRuc ? "El campo DNI no puede ser vacío" : "El campo RUC no puede ser vacío") : null,
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return this.dniOrRuc ? "El campo DNI no puede ser vacío" : "El campo RUC no puede ser vacío";
+                      } else if (this.dniOrRuc && value.length < 10) {
+                        return "Su RUC está incompleto";
+                      } else if (!this.dniOrRuc && value.length < 8) {
+                        return "Su DNI está incompleto";
+                      } else {
+                        return null;
+                      }
+                    },
                     maxLength: this.dniOrRuc ? 10 : 8,
                     decoration: _buildInputDecoration(this.dniOrRuc ? "RUC" : "DNI"),
                   ),
@@ -149,6 +160,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         print(dniOrRucController.text);
         print(telephone);
         print(passwordController.text);
+        //_validateAndSubmit();
       },
       color: Colors.green[400],
       child: Text('Siguiente',
@@ -184,36 +196,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
       appBar: AppBar(
         title: Text('Registro'),
       ),
-        body: LayoutBuilder(builder: (context, constraints) {
-          return SingleChildScrollView(
-            padding: EdgeInsets.symmetric(
-              horizontal: 40.0,
-            ),
-            child: ConstrainedBox(
-              constraints: BoxConstraints(minWidth: constraints.maxWidth, minHeight: constraints.maxHeight),
-              child: IntrinsicHeight(
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    this._logo(),
-                    Expanded(
-                      child: Column(
-                        children: [
-                          this._buildFirstName(),
-                          this._buildLastName(),
-                          this._buildTelephoneNumber(),
-                          this._buildDniOrRuc(),
-                          this._buildPassword(),
-                        ],
-                      ),
-                    ),
-                    this._nextButton(),
-                  ]
-                ),
-              )
-            ),
-          );
-        }
+      body: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(
+          horizontal: 40.0,
+        ),
+        child: Column(
+          children: [
+            this._logo(),
+            this._buildFirstName(),
+            this._buildLastName(),
+            this._buildTelephoneNumber(),
+            this._buildDniOrRuc(),
+            this._buildPassword(),
+            this._nextButton(),
+          ],
+        ),
       ),
     );
   }
