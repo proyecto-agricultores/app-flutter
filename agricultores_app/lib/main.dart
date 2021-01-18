@@ -1,7 +1,10 @@
-import 'package:agricultores_app/screens/loginScreen.dart';
+import 'package:agricultores_app/screens/register/codeRegisterScreen.dart';
+import 'package:agricultores_app/screens/register/locationRegisterScreen.dart';
+import 'package:agricultores_app/screens/register/photoRegisterScreen.dart';
 import 'package:flutter/material.dart';
 
 import 'MyColors.dart';
+import 'screens/loginScreen.dart';
 
 void main() {
   runApp(MyApp());
@@ -19,7 +22,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         fontFamily: 'Poppins',
       ),
-      home: LoginScreen(),  
+      home: LocationRegisterScreen(),
     );
   }
 }

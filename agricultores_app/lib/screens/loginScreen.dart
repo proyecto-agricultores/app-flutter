@@ -3,8 +3,6 @@ import 'package:agricultores_app/services/token.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
-import '../app_icons.dart';
-
 class LoginScreen extends StatefulWidget {
   LoginScreen({Key key, this.title}) : super(key: key);
 
@@ -23,7 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
     passwordController.dispose();
     super.dispose();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,9 +87,9 @@ class _LoginScreenState extends State<LoginScreen> {
               new GestureDetector(
                 onTap: () {
                   Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => RegisterScreen())
-                  );
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => RegisterScreen()));
                 },
                 child: new Text(
                   "Regístrate aquí",
@@ -110,20 +108,16 @@ class _LoginScreenState extends State<LoginScreen> {
                   await Token.setToken(TokenType.access, '');
                   await Token.setToken(TokenType.refresh, '');
                   try {
-                    await Token.generateOrRefreshToken(telephone, passwordController.text);
+                    await Token.generateOrRefreshToken(
+                        telephone, passwordController.text);
                     await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => 
-                          Scaffold(
-                            appBar: AppBar(
-                              title: const Text('Logged In')
-                            ),
-                        )
-                      )
-                    );
-                  }
-                  catch(e) {
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Scaffold(
+                                  appBar:
+                                      AppBar(title: const Text('Logged In')),
+                                )));
+                  } catch (e) {
                     print(e.toString());
                     return showDialog<void>(
                       context: context,

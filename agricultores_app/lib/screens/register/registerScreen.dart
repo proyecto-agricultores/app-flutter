@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show DeviceOrientation, FilteringTextInputFormatter, SystemChrome, TextInputFormatter;
+import 'package:flutter/services.dart' show DeviceOrientation, SystemChrome;
 import 'package:intl_phone_field/intl_phone_field.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -10,7 +10,6 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-
   final firstNameController = TextEditingController();
   final lastNameController = TextEditingController();
   String telephone;
@@ -159,7 +158,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
             fontSize: 16,
           )),
     );
-  }
 
   Widget _logo() {
     return Column(
