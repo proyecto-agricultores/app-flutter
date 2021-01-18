@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show DeviceOrientation, SystemChrome;
+import 'package:flutter/services.dart' show DeviceOrientation, FilteringTextInputFormatter, SystemChrome, TextInputFormatter;
 import 'package:intl_phone_field/intl_phone_field.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -16,6 +16,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool dniOrRuc = false;
   final dniOrRucController = TextEditingController();
   final passwordController = TextEditingController();
+  static final TextInputFormatter digitsOnly = FilteringTextInputFormatter.allow(RegExp(r'[0-9]'));
+  static final TextInputFormatter lettersOnly = FilteringTextInputFormatter.allow(RegExp(r'^[^0-9]+$'));
+
   final _formKey = new GlobalKey<FormState>();
 
   InputDecoration _buildInputDecoration(String placeholder) {
@@ -33,6 +36,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Column(
       children: [
         TextFormField(
+          keyboardType: TextInputType.name,
+          inputFormatters: [lettersOnly],
           controller: firstNameController,
           validator: (value) => value.isEmpty ? "El campo Nombres no puede ser vacío" : null,
           maxLength: 30,
@@ -42,11 +47,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ]
     );
   }
-  
+ 
   Widget _buildLastName() {
     return Column(
       children: [
         TextFormField(
+          keyboardType: TextInputType.name,
+          inputFormatters: [lettersOnly],
           controller: lastNameController,
           validator: (value) => value.isEmpty ? "El campo Apellidos no puede ser vacío" : null,
           maxLength: 30,
@@ -62,6 +69,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       children: [
         IntlPhoneField(
           validator: (value) => value.isEmpty ? "El campo Número no puede ser vacío" : null,
+          inputFormatters: [digitsOnly],
           decoration: InputDecoration(
             labelText: 'Número de celular',
             border: OutlineInputBorder(
@@ -108,10 +116,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
               child: Column(
                 children: [
                   TextFormField(
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [digitsOnly],
                     controller: dniOrRucController,
                     validator: (value) {
                       if (value.isEmpty) {
-                        return this.dniOrRuc ? "El campo DNI no puede ser vacío" : "El campo RUC no puede ser vacío";
+                        return this.dniOrRuc ? "El campo RUC no puede ser vacío" : "El campo DNI no puede ser vacío";
                       } else if (this.dniOrRuc && value.length < 10) {
                         return "Su RUC está incompleto";
                       } else if (!this.dniOrRuc && value.length < 8) {
@@ -140,7 +150,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           controller: passwordController,
           obscureText: true,
           validator: (value) => value.isEmpty ? "El campo Contraseña no puede ser vacío" : null,
-          maxLength: 30,
+          maxLength: 4096,
           decoration: _buildInputDecoration("Contraseña"),
         ),
         SizedBox(height: MediaQuery.of(context).size.height * 0.01),
@@ -155,11 +165,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
       // onPressed: Token.generateOrRefreshToken(telephone, passwordController.text),
       onPressed: () {
-        print(firstNameController.text);
-        print(lastNameController.text);
-        print(dniOrRucController.text);
-        print(telephone);
-        print(passwordController.text);
+        if (_formKey.currentState.validate()) {
+          print(firstNameController.text);
+          print(lastNameController.text);
+          print(dniOrRucController.text);
+          print(telephone);
+          print(passwordController.text);
+        }
         //_validateAndSubmit();
       },
       color: Colors.green[400],
@@ -200,17 +212,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
         padding: EdgeInsets.symmetric(
           horizontal: 40.0,
         ),
-        child: Column(
-          children: [
-            this._logo(),
-            this._buildFirstName(),
-            this._buildLastName(),
-            this._buildTelephoneNumber(),
-            this._buildDniOrRuc(),
-            this._buildPassword(),
-            this._nextButton(),
-          ],
-        ),
+        child: Form(
+          key: _formKey,
+          child: Container(
+            alignment: Alignment.center,
+            child: Column(
+              children: [
+                this._logo(),
+                this._buildFirstName(),
+                this._buildLastName(),
+                this._buildTelephoneNumber(),
+                this._buildDniOrRuc(),
+                this._buildPassword(),
+                this._nextButton(),
+              ],
+            ),
+          )
+        )
       ),
     );
   }
