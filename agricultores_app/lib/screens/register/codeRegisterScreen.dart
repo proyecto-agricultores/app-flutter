@@ -16,11 +16,6 @@ class _CodeRegisterScreenState extends State<CodeRegisterScreen> {
   String code;
 
   @override
-  void initState() {
-    CodeRegisterService.generateCode();
-  }
-
-  @override
   Widget build(BuildContext context) {
     WidgetsFlutterBinding.ensureInitialized();
     SystemChrome.setPreferredOrientations(

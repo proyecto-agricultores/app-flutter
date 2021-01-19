@@ -1,5 +1,6 @@
 import 'package:agricultores_app/screens/register/codeRegisterScreen.dart';
 import 'package:agricultores_app/services/authService.dart';
+import 'package:agricultores_app/services/codeRegisterService.dart';
 import 'package:agricultores_app/services/registerService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show DeviceOrientation, FilteringTextInputFormatter, SystemChrome, TextInputFormatter;
@@ -175,7 +176,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           print(dniOrRucController.text);
           print(passwordController.text);
           try {
-            RegisterService.createUser(
+            await RegisterService.createUser(
               firstNameController.text,
               lastNameController.text,
               telephone,
@@ -184,6 +185,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               dniOrRuc
             );
             await AuthenticateService.authenticate(telephone, passwordController.text);
+            await CodeRegisterService.generateCode();
             Navigator.push(
               context,
               MaterialPageRoute(

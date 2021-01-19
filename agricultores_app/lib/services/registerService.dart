@@ -31,6 +31,8 @@ class RegisterService {
       return 'phone already in use';
     } else if (response.statusCode != 201) {
       throw Exception('Error al momento de realizar el registro');
+    } else if (response.statusCode == 201) {
+      return 'ok';
     }
   }
 }
