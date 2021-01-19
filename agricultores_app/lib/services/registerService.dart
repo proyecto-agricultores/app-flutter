@@ -24,7 +24,8 @@ class RegisterService {
         "first_name": firstName,
         "last_name": lastName,
         "phone_number": telephone,
-        (usingRuc ? "DNI" : "RUC"): dniOrRuc,
+        (usingRuc ? "RUC" : "DNI"): dniOrRuc,
+        (usingRuc ? "DNI" : "RUC"): "",
         "password": password,
       }),
     );
