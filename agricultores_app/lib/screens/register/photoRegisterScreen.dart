@@ -16,8 +16,8 @@ class _PhotoRegisterScreenState extends State<PhotoRegisterScreen> {
   File _image;
   final picker = ImagePicker();
 
-  Future getImage() async {
-    final pickedFile = await picker.getImage(source: ImageSource.camera);
+  Future getImage(ImageSource src) async {
+    final pickedFile = await picker.getImage(source: src);
 
     setState(() {
       if (pickedFile != null) {
@@ -101,10 +101,21 @@ class _PhotoRegisterScreenState extends State<PhotoRegisterScreen> {
                               ),
                       ),
                       SizedBox(height: 40),
-                      FloatingActionButton(
-                        onPressed: getImage,
-                        tooltip: 'Pick Image',
-                        child: Icon(Icons.add_a_photo),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          FloatingActionButton(
+                            onPressed: () => getImage(ImageSource.camera),
+                            tooltip: 'Pick Image',
+                            child: Icon(Icons.add_a_photo),
+                          ),
+                          SizedBox(width: 10),
+                          FloatingActionButton(
+                            onPressed: () => getImage(ImageSource.gallery),
+                            tooltip: 'Pick Image',
+                            child: Icon(Icons.photo_library),
+                          )
+                        ],
                       ),
                       SizedBox(height: 40),
                       FlatButton(
