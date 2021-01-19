@@ -14,6 +14,8 @@ class LocationRegisterScreen extends StatefulWidget {
 
 class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
   String code;
+  String _selectedDistrict;
+  List<String> _locations = ['A', 'B', 'C', 'D']; // Option 2
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +51,22 @@ class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
                   width: MediaQuery.of(context).size.width * 0.8,
                   child: Column(
                     children: [
+                      DropdownButton(
+                        hint: Text(
+                            'Please choose a location'), // Not necessary for Option 1
+                        value: _selectedDistrict,
+                        onChanged: (newValue) {
+                          setState(() {
+                            _selectedDistrict = newValue;
+                          });
+                        },
+                        items: _locations.map((location) {
+                          return DropdownMenuItem(
+                            child: new Text(location),
+                            value: location,
+                          );
+                        }).toList(),
+                      ),
                       FlatButton(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18.0),
