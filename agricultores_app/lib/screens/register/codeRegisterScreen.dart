@@ -1,3 +1,4 @@
+import 'package:agricultores_app/screens/register/photoRegisterScreen.dart';
 import 'package:agricultores_app/services/authService.dart';
 import 'package:agricultores_app/services/codeRegisterService.dart';
 import 'package:flutter/material.dart';
@@ -70,8 +71,30 @@ class _CodeRegisterScreenState extends State<CodeRegisterScreen> {
                         // onPressed: Token.generateOrRefreshToken(telephone, passwordController.text),
                         onPressed: () async {
                           print(code);
-                          final response = await CodeRegisterService.sendCode(code);
+                          final response =
+                              await CodeRegisterService.sendCode(code);
                           print(response);
+                          if (response == "ok") {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => PhotoRegisterScreen()),
+                            );
+                          } else if (response == "incorrect-code") {
+                            return AlertDialog(
+                              title: Text('Codigo Incorrecto'),
+                              content: Text(
+                                  'Ingresar nuevamente el código recibido por SMM.'),
+                              actions: <Widget>[
+                                TextButton(
+                                  child: Text('Intentar Nuevamente'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          }
                         },
                         color: Colors.green[400],
                         child: Text('Siguiente',

@@ -1,6 +1,7 @@
 import 'package:agricultores_app/screens/register/codeRegisterScreen.dart';
 import 'package:agricultores_app/screens/register/locationRegisterScreen.dart';
 import 'package:agricultores_app/screens/register/photoRegisterScreen.dart';
+import 'package:agricultores_app/screens/register/registerScreen.dart';
 import 'package:flutter/material.dart';
 
 import 'MyColors.dart';
