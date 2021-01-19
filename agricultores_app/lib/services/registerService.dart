@@ -11,7 +11,7 @@ class RegisterService {
     String telephone,
     String dniOrRuc,
     String password,
-    bool usingDni
+    bool usingRuc
   ) async {
     String token = await Token.getToken(TokenType.access);
 
@@ -19,13 +19,12 @@ class RegisterService {
       MyHTTPConection.HTTP_URL + 'users/',
       headers: <String, String> {
         'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer ' + token,
       },
       body: jsonEncode({
         "first_name": firstName,
         "last_name": lastName,
         "phone_number": telephone,
-        (usingDni ? "DNI" : "RUC"): dniOrRuc,
+        (usingRuc ? "DNI" : "RUC"): dniOrRuc,
         "password": password,
       }),
     );
