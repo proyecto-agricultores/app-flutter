@@ -30,7 +30,7 @@ class RegisterService {
       }),
     );
 
-    if (response.statusCode != 200) {
+    if (response.statusCode != 201) {
       throw Exception('Error al momento de realizar el registro');
     }
   }

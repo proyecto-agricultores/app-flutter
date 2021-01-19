@@ -1,3 +1,4 @@
+import 'package:agricultores_app/services/registerService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show DeviceOrientation, FilteringTextInputFormatter, SystemChrome, TextInputFormatter;
 import 'package:intl_phone_field/intl_phone_field.dart';
@@ -19,7 +20,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   static final TextInputFormatter digitsOnly = FilteringTextInputFormatter.allow(RegExp(r'[0-9]'));
   static final TextInputFormatter lettersOnly = FilteringTextInputFormatter.allow(RegExp(r'^[^0-9]+$'));
 
-  final _formKey = new GlobalKey<FormState>();
+  final _formKey1 = new GlobalKey<FormState>();
+  final _formKey2 = new GlobalKey<FormState>();
 
   InputDecoration _buildInputDecoration(String placeholder) {
     return InputDecoration(
@@ -163,24 +165,36 @@ class _RegisterScreenState extends State<RegisterScreen> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(18.0),
       ),
-      // onPressed: Token.generateOrRefreshToken(telephone, passwordController.text),
       onPressed: () {
-        if (_formKey.currentState.validate()) {
+        if (_formKey1.currentState.validate()) {
           print(firstNameController.text);
           print(lastNameController.text);
-          print(dniOrRucController.text);
           print(telephone);
+          print(dniOrRucController.text);
           print(passwordController.text);
+          try {
+            RegisterService.createUser(
+              firstNameController.text,
+              lastNameController.text,
+              telephone,
+              dniOrRucController.text,
+              passwordController.text,
+              dniOrRuc
+            );
+          }
+          catch(e) {
+            print(e.toString());
+          }
         }
-        //_validateAndSubmit();
       },
       color: Colors.green[400],
       child: Text('Siguiente',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          )),
+        style: TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+          fontSize: 16,
+        )
+      ),
     );
   }
 
@@ -212,23 +226,44 @@ class _RegisterScreenState extends State<RegisterScreen> {
         padding: EdgeInsets.symmetric(
           horizontal: 40.0,
         ),
-        child: Form(
-          key: _formKey,
-          child: Container(
-            alignment: Alignment.center,
-            child: Column(
-              children: [
-                this._logo(),
-                this._buildFirstName(),
-                this._buildLastName(),
-                this._buildTelephoneNumber(),
-                this._buildDniOrRuc(),
-                this._buildPassword(),
-                this._nextButton(),
-              ],
+        child: Column(
+          children: [
+            this._logo(),
+            this._buildTelephoneNumber(),
+            Form(
+              key: _formKey1,
+              child: Container(
+                alignment: Alignment.center,
+                child: Column(
+                  children: [
+                    this._buildFirstName(),
+                    this._buildLastName(),
+                    this._buildDniOrRuc(),
+                    this._buildPassword(),
+                    this._nextButton(),
+                  ],
+                ),
+              )
             ),
-          )
+          ],
         )
+        // child: Form(
+        //   key: _formKey,
+        //   child: Container(
+        //     alignment: Alignment.center,
+        //     child: Column(
+        //       children: [
+        //         this._logo(),
+        //         this._buildFirstName(),
+        //         this._buildLastName(),
+        //         //this._buildTelephoneNumber(),
+        //         this._buildDniOrRuc(),
+        //         this._buildPassword(),
+        //         this._nextButton(),
+        //       ],
+        //     ),
+        //   )
+        // )
       ),
     );
   }
