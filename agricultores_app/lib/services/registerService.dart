@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import 'package:agricultores_app/global/myHTTPConnection.dart';
-import 'token.dart';
 
 class RegisterService {
   static Future createUser (
@@ -13,8 +12,6 @@ class RegisterService {
     String password,
     bool usingRuc
   ) async {
-    String token = await Token.getToken(TokenType.access);
-
     final response = await http.post(
       MyHTTPConection.HTTP_URL + 'users/',
       headers: <String, String> {
@@ -30,7 +27,9 @@ class RegisterService {
       }),
     );
 
-    if (response.statusCode != 201) {
+    if (response.body == "{\"phone_number\":[\"user with this phone number already exists.\"]}") {
+      return 'phone already in use';
+    } else if (response.statusCode != 201) {
       throw Exception('Error al momento de realizar el registro');
     }
   }

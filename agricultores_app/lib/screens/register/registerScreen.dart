@@ -1,3 +1,5 @@
+import 'package:agricultores_app/screens/register/codeRegisterScreen.dart';
+import 'package:agricultores_app/services/authService.dart';
 import 'package:agricultores_app/services/registerService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show DeviceOrientation, FilteringTextInputFormatter, SystemChrome, TextInputFormatter;
@@ -165,7 +167,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(18.0),
       ),
-      onPressed: () {
+      onPressed: () async {
         if (_formKey1.currentState.validate()) {
           print(firstNameController.text);
           print(lastNameController.text);
@@ -180,6 +182,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
               dniOrRucController.text,
               passwordController.text,
               dniOrRuc
+            );
+            await AuthenticateService.authenticate(telephone, passwordController.text);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CodeRegisterScreen()
+              )
             );
           }
           catch(e) {

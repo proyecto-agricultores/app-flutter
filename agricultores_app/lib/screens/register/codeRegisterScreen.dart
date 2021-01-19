@@ -1,3 +1,5 @@
+import 'package:agricultores_app/services/authService.dart';
+import 'package:agricultores_app/services/codeRegisterService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show DeviceOrientation, SystemChrome;
 
@@ -12,6 +14,11 @@ class CodeRegisterScreen extends StatefulWidget {
 
 class _CodeRegisterScreenState extends State<CodeRegisterScreen> {
   String code;
+
+  @override
+  void initState() {
+    CodeRegisterService.generateCode();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,8 +73,10 @@ class _CodeRegisterScreenState extends State<CodeRegisterScreen> {
                           borderRadius: BorderRadius.circular(18.0),
                         ),
                         // onPressed: Token.generateOrRefreshToken(telephone, passwordController.text),
-                        onPressed: () {
+                        onPressed: () async {
                           print(code);
+                          final response = await CodeRegisterService.sendCode(code);
+                          print(response);
                         },
                         color: Colors.green[400],
                         child: Text('Siguiente',
