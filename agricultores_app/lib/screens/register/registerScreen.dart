@@ -133,7 +133,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       }
                     },
                     maxLength: this.dniOrRuc ? 10 : 8,
-                    decoration: _buildInputDecoration(this.dniOrRuc ? "RUC" : "DNI"),
+                    decoration: _buildInputDecoration(""),
                   ),
                 ]
               ),
