@@ -186,30 +186,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
             print(register);
             print(telephone);
             print(passwordController.text);
-            // if (register == 'phone already in use') {
-            //   return showDialog<void>(
-            //     context: context,
-            //     barrierDismissible: true,
-            //     builder: (BuildContext context) {
-            //       return AlertDialog(
-            //         title: Text('Número de teléfono ya registrado'),
-            //         content: Text('Ya existe una cuenta registrada con el número de teléfono ingresado. Intente hacer log-in'),
-            //         actions: <Widget>[
-            //           TextButton(
-            //             child: Text('Aceptar'),
-            //             onPressed: () {
-            //               Navigator.of(context).popUntil((route) => route.isFirst);
-            //             },
-            //           ),
-            //         ],
-            //       );
-            //     },
-            //   );
-            //} else if (register == 'ok') {
+            if (register == 'phone already in use') {
+              return showDialog<void>(
+                context: context,
+                barrierDismissible: true,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: Text('Número de teléfono ya registrado'),
+                    content: Text('Ya existe una cuenta registrada con el número de teléfono ingresado. Intente hacer log-in'),
+                    actions: <Widget>[
+                      TextButton(
+                        child: Text('Aceptar'),
+                        onPressed: () {
+                          Navigator.of(context).popUntil((route) => route.isFirst);
+                        },
+                      ),
+                    ],
+                  );
+                },
+              );
+            } else if (register == 'ok') {
               await Token.generateOrRefreshToken(telephone, passwordController.text);
               await CodeRegisterService.generateCode();
               Navigator.push(context, MaterialPageRoute(builder: (context) => CodeRegisterScreen()));
-            //}
+            }
           } catch (e) {
             print(e.toString());
           }
