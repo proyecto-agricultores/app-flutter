@@ -28,6 +28,7 @@ class _CodeRegisterScreenState extends State<CodeRegisterScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Registro'),
+        automaticallyImplyLeading: false,
       ),
       body: Center(
           child: SingleChildScrollView(

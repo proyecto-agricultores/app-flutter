@@ -87,9 +87,11 @@ class _LoginScreenState extends State<LoginScreen> {
               new GestureDetector(
                 onTap: () {
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => RegisterScreen()));
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => RegisterScreen()
+                    )
+                  );
                 },
                 child: new Text(
                   "Regístrate aquí",
@@ -142,11 +144,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 },
                 color: Colors.green[400],
                 child: Text('Ingresar',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    )),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  )
+                ),
               )
             ],
           ),

@@ -40,6 +40,7 @@ class _PhotoRegisterScreenState extends State<PhotoRegisterScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Registro'),
+        automaticallyImplyLeading: false,
       ),
       body: Center(
           child: SingleChildScrollView(
@@ -112,7 +113,7 @@ class _PhotoRegisterScreenState extends State<PhotoRegisterScreen> {
                           SizedBox(width: 10),
                           FloatingActionButton(
                             onPressed: () => getImage(ImageSource.gallery),
-                            tooltip: 'Pick Image',
+                            tooltip: 'Pick Image From Library',
                             child: Icon(Icons.photo_library),
                           )
                         ],

@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         fontFamily: 'Poppins',
       ),
-      home: LoginScreen(),
+      home: PhotoRegisterScreen(),
     );
   }
 }

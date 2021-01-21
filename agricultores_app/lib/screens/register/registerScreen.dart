@@ -174,19 +174,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
       onPressed: () async {
         if (_formKey1.currentState.validate()) {
-          print(firstNameController.text);
-          print(lastNameController.text);
-          print(telephone);
-          print(dniOrRucController.text);
-          print(passwordController.text);
           try {
-            await RegisterService.createUser(
+            final register = await RegisterService.createUser(
                 firstNameController.text,
                 lastNameController.text,
                 telephone,
                 dniOrRucController.text,
                 passwordController.text,
                 dniOrRuc);
+            print(register);
             await Token.generateOrRefreshToken(
                 telephone, passwordController.text);
             await CodeRegisterService.generateCode();
@@ -233,47 +229,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
         title: Text('Registro'),
       ),
       body: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(
-            horizontal: 40.0,
-          ),
-          child: Column(
-            children: [
-              this._logo(),
-              this._buildTelephoneNumber(),
-              Form(
-                  key: _formKey1,
-                  child: Container(
-                    alignment: Alignment.center,
-                    child: Column(
-                      children: [
-                        this._buildFirstName(),
-                        this._buildLastName(),
-                        this._buildDniOrRuc(),
-                        this._buildPassword(),
-                        this._nextButton(),
-                      ],
-                    ),
-                  )),
-            ],
-          )
-          // child: Form(
-          //   key: _formKey,
-          //   child: Container(
-          //     alignment: Alignment.center,
-          //     child: Column(
-          //       children: [
-          //         this._logo(),
-          //         this._buildFirstName(),
-          //         this._buildLastName(),
-          //         //this._buildTelephoneNumber(),
-          //         this._buildDniOrRuc(),
-          //         this._buildPassword(),
-          //         this._nextButton(),
-          //       ],
-          //     ),
-          //   )
-          // )
-          ),
+        padding: EdgeInsets.symmetric(
+          horizontal: 40.0,
+        ),
+        child: Column(
+          children: [
+            this._logo(),
+            this._buildTelephoneNumber(),
+            Form(
+              key: _formKey1,
+              child: Container(
+                alignment: Alignment.center,
+                child: Column(
+                  children: [
+                    this._buildFirstName(),
+                    this._buildLastName(),
+                    this._buildDniOrRuc(),
+                    this._buildPassword(),
+                    this._nextButton(),
+                  ],
+                ),
+              )
+            ),
+          ],
+        )
+      ),
     );
   }
 }
