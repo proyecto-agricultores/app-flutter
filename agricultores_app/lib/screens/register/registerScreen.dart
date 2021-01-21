@@ -30,9 +30,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
       FilteringTextInputFormatter.allow(RegExp(r'[0-9]'));
   static final TextInputFormatter lettersOnly =
       FilteringTextInputFormatter.allow(RegExp(r'^[^0-9]+$'));
+  bool isLoading = false;
 
-  final _formKey1 = new GlobalKey<FormState>();
-  final _formKey2 = new GlobalKey<FormState>();
+  final _formKey = new GlobalKey<FormState>();
 
   InputDecoration _buildInputDecoration(String placeholder) {
     return InputDecoration(
@@ -168,60 +168,73 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   Widget _nextButton() {
-    return FlatButton(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(18.0),
-      ),
-      onPressed: () async {
-        if (_formKey1.currentState.validate()) {
-          try {
-            final register = await RegisterService.createUser(
-              firstNameController.text,
-              lastNameController.text,
-              telephone,
-              dniOrRucController.text,
-              passwordController.text,
-              dniOrRuc
-            );
-            print(register);
-            print(telephone);
-            print(passwordController.text);
-            if (register == 'phone already in use') {
-              return showDialog<void>(
-                context: context,
-                barrierDismissible: true,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: Text('Número de teléfono ya registrado'),
-                    content: Text('Ya existe una cuenta registrada con el número de teléfono ingresado. Intente hacer log-in'),
-                    actions: <Widget>[
-                      TextButton(
-                        child: Text('Aceptar'),
-                        onPressed: () {
-                          Navigator.of(context).popUntil((route) => route.isFirst);
-                        },
-                      ),
-                    ],
-                  );
-                },
+    return Container(
+      child: FlatButton(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(18.0),
+        ),
+        onPressed: () async {
+          if (_formKey.currentState.validate()) {
+            setState(() {
+              this.isLoading = true;
+            });
+            try {
+              final register = await RegisterService.createUser(
+                firstNameController.text,
+                lastNameController.text,
+                telephone,
+                dniOrRucController.text,
+                passwordController.text,
+                dniOrRuc
               );
-            } else if (register == 'ok') {
-              await Token.generateOrRefreshToken(telephone, passwordController.text);
-              await CodeRegisterService.generateCode();
-              Navigator.push(context, MaterialPageRoute(builder: (context) => CodeRegisterScreen()));
+              setState(() {
+                this.isLoading = false;
+              });
+              print(register);
+              print(telephone);
+              print(passwordController.text);
+              if (register == 'phone already in use') {
+                return showDialog<void>(
+                  context: context,
+                  barrierDismissible: true,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('Número de teléfono ya registrado'),
+                      content: Text('Ya existe una cuenta registrada con el número de teléfono ingresado. Intente hacer log-in'),
+                      actions: <Widget>[
+                        TextButton(
+                          child: Text('Aceptar'),
+                          onPressed: () {
+                            Navigator.of(context).popUntil((route) => route.isFirst);
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
+              } else if (register == 'ok') {
+                await Token.generateOrRefreshToken(telephone, passwordController.text);
+                await CodeRegisterService.generateCode();
+                Navigator.push(context, MaterialPageRoute(builder: (context) => CodeRegisterScreen()));
+              }
+            } catch (e) {
+              print(e.toString());
             }
-          } catch (e) {
-            print(e.toString());
           }
-        }
-      },
-      color: Colors.green[400],
-      child: Text('Siguiente',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          )),
+        },
+        color: Colors.green[400],
+        child: this.isLoading
+          ? LinearProgressIndicator(
+            minHeight: 5,
+          )
+          : Text('Siguiente',
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            )
+          ),
+      )
     );
   }
 
@@ -246,36 +259,42 @@ class _RegisterScreenState extends State<RegisterScreen> {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Registro'),
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(
-          horizontal: 40.0,
+    if (this.isLoading) {
+      return Container(
+        child: Text('loading')
+      );
+    } else {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text('Registro'),
         ),
-        child: Column(
-          children: [
-            this._logo(),
-            this._buildTelephoneNumber(),
-            Form(
-              key: _formKey1,
-              child: Container(
-                alignment: Alignment.center,
-                child: Column(
-                  children: [
-                    this._buildFirstName(),
-                    this._buildLastName(),
-                    this._buildDniOrRuc(),
-                    this._buildPassword(),
-                    this._nextButton(),
-                  ],
-                ),
-              )
-            ),
-          ],
-        )
-      ),
-    );
+        body: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(
+            horizontal: 40.0,
+          ),
+          child: Column(
+            children: [
+              this._logo(),
+              this._buildTelephoneNumber(),
+              Form(
+                key: _formKey,
+                child: Container(
+                  alignment: Alignment.center,
+                  child: Column(
+                    children: [
+                      this._buildFirstName(),
+                      this._buildLastName(),
+                      this._buildDniOrRuc(),
+                      this._buildPassword(),
+                      this._nextButton(),
+                    ],
+                  ),
+                )
+              ),
+            ],
+          )
+        ),
+      );
+    }
   }
 }
