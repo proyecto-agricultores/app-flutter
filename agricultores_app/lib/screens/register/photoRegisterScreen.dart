@@ -109,12 +109,14 @@ class _PhotoRegisterScreenState extends State<PhotoRegisterScreen> {
                             onPressed: () => getImage(ImageSource.camera),
                             tooltip: 'Pick Image',
                             child: Icon(Icons.add_a_photo),
+                            heroTag: 'camera',
                           ),
                           SizedBox(width: 10),
                           FloatingActionButton(
                             onPressed: () => getImage(ImageSource.gallery),
                             tooltip: 'Pick Image From Library',
                             child: Icon(Icons.photo_library),
+                            heroTag: 'library',
                           )
                         ],
                       ),

@@ -37,13 +37,10 @@ class _CodeRegisterScreenState extends State<CodeRegisterScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-            //Flexible(
-            //child:
             Image.asset(
               'assets/images/logo.png',
               scale: MediaQuery.of(context).size.height /
                   MediaQuery.of(context).size.width,
-              //),
             ),
             Flexible(
                 flex: 3,
@@ -82,18 +79,24 @@ class _CodeRegisterScreenState extends State<CodeRegisterScreen> {
                                   builder: (context) => PhotoRegisterScreen()),
                             );
                           } else if (response == "incorrect-code") {
-                            return AlertDialog(
-                              title: Text('Codigo Incorrecto'),
-                              content: Text(
-                                  'Ingresar nuevamente el código recibido por SMM.'),
-                              actions: <Widget>[
-                                TextButton(
-                                  child: Text('Intentar Nuevamente'),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              ],
+                            return showDialog<void>(
+                              context: context,
+                              barrierDismissible: true,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('Codigo Incorrecto'),
+                                  content: Text(
+                                      'Ingresar nuevamente el código recibido por SMM.'),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: Text('Intentar Nuevamente'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
                             );
                           }
                         },
