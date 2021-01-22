@@ -19,13 +19,15 @@ class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
   String code;
   List<Department> _departments;
   List<Region> _regions = [Region(id: 0, name: '')];
-  List<District> _districts;
+  List<District> _districts = [District(id: 0, name: '')];
   int _selectedDepartment;
   int _selectedRegion;
   int _selectedDistrict;
   bool _fetchingDepartments = true;
   bool _fetchingRegions = false;
+  bool _fetchingDistricts = false;
   bool _departmentIsSelected = false;
+  bool _regionIsSelected = false;
 
   @override
   void initState() {
@@ -47,6 +49,14 @@ class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
     setState(() {
       this._regions = response;
       this._fetchingRegions = false;
+    });
+  }
+
+  void _getDistricts() async {
+    final response = await LocationService.getDistrictsByRegion(this._selectedRegion);
+    setState(() {
+      this._districts = response;
+      this._fetchingDistricts = false;
     });
   }
 
@@ -183,6 +193,9 @@ class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
           onChanged: (newValue) {
             setState(() {
               _selectedRegion = newValue;
+              _regionIsSelected = true;
+              _fetchingDistricts = true;
+              this._getDistricts();
             });
           },
           items: this._regions.map((region) {
@@ -195,6 +208,32 @@ class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
       )
     );
   }
+
+  Widget _districtDropdown() {
+    return IgnorePointer(
+      ignoring: !_departmentIsSelected || !_regionIsSelected,
+      child: Container(
+        height: MediaQuery.of(context).size.height * 0.04,
+        width: MediaQuery.of(context).size.height * 0.8,
+        child: DropdownButton(
+          isExpanded: true,
+          hint: Text('Seleccione su distrito'),
+          value: _selectedDistrict,
+          onChanged: (newValue) {
+            setState(() {
+              _selectedDistrict = newValue;
+            });
+          },
+          items: this._districts.map((district) {
+            return DropdownMenuItem(
+              child: new Text(district.name, textAlign: TextAlign.center,),
+              value: district.id,
+            );
+          }).toList(),
+        )
+      )
+    );
+  } 
 
   @override
   Widget build(BuildContext context) {
@@ -216,8 +255,6 @@ class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              //Flexible(
-              //child:
               this._logo(),
               Flexible(
                 flex: 3,
@@ -227,6 +264,7 @@ class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
                     children: [
                       this._fetchingDepartments ? this._loading() : this._departmentDropdown(),
                       this._fetchingRegions ? this._loading() : this._regionsDropdown(),
+                      this._fetchingDistricts ? this._loading() : this._districtDropdown(),
                       this._ubicacionGps(),
                       this._nextButton(),
                     ],

@@ -1,3 +1,4 @@
+import 'package:agricultores_app/models/district.dart';
 import 'package:http/http.dart' as http;
 import 'token.dart';
 import 'dart:convert';
@@ -52,6 +53,30 @@ class LocationService {
       return regions;
     } else {
       throw Exception('Error al intentar obtener las regiones filtradas por el id de departamento $departmentId');
+    }
+  }
+
+  static Future<List<District> > getDistrictsByRegion(int regionId) async {
+    final accessToken = await Token.getToken(TokenType.access);
+
+    final response = await http.get(
+      MyHTTPConection.HTTP_URL + 'api/filter/districts/?region=$regionId',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer ' + accessToken,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      var districts = <District>[];
+      var json = jsonDecode(utf8.decode(response.bodyBytes));
+      for (var department in json) {
+        var v = District.fromJson(department);
+        districts.add(v);
+      }
+      return districts;
+    } else {
+      throw Exception('Error al intentar obtener los distritios filtrados por el id de región $regionId');
     }
   }
 }
