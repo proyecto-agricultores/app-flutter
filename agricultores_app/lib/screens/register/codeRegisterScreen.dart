@@ -70,6 +70,26 @@ class _CodeRegisterScreenState extends State<CodeRegisterScreen> {
                         onPressed: () async {
                           print(code);
                           final response =
+                              await CodeRegisterService.generateCode();
+                          print(response);
+                        },
+                        color: Colors.green[300],
+                        child: Text('Reenviar el código SMS',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 10,
+                            )),
+                      ),
+                      SizedBox(height: 10),
+                      FlatButton(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                        ),
+                        // onPressed: Token.generateOrRefreshToken(telephone, passwordController.text),
+                        onPressed: () async {
+                          print(code);
+                          final response =
                               await CodeRegisterService.sendCode(code);
                           print(response);
                           if (response == "ok") {

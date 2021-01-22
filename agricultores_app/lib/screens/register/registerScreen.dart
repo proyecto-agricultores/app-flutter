@@ -180,16 +180,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
             });
             try {
               final register = await RegisterService.createUser(
-                firstNameController.text,
-                lastNameController.text,
-                telephone,
-                dniOrRucController.text,
-                passwordController.text,
-                dniOrRuc
-              );
-              setState(() {
-                this.isLoading = false;
-              });
+                  firstNameController.text,
+                  lastNameController.text,
+                  telephone,
+                  dniOrRucController.text,
+                  passwordController.text,
+                  dniOrRuc);
               print(register);
               print(telephone);
               print(passwordController.text);
@@ -200,12 +196,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   builder: (BuildContext context) {
                     return AlertDialog(
                       title: Text('Número de teléfono ya registrado'),
-                      content: Text('Ya existe una cuenta registrada con el número de teléfono ingresado. Intente hacer log-in'),
+                      content: Text(
+                          'Ya existe una cuenta registrada con el número de teléfono ingresado. Intente hacer log-in'),
                       actions: <Widget>[
                         TextButton(
                           child: Text('Aceptar'),
                           onPressed: () {
-                            Navigator.of(context).popUntil((route) => route.isFirst);
+                            Navigator.of(context)
+                                .popUntil((route) => route.isFirst);
                           },
                         ),
                       ],
@@ -213,10 +211,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   },
                 );
               } else if (register == 'ok') {
-                await Token.generateOrRefreshToken(telephone, passwordController.text);
+                await Token.generateOrRefreshToken(
+                    telephone, passwordController.text);
                 await CodeRegisterService.generateCode();
-                Navigator.push(context, MaterialPageRoute(builder: (context) => CodeRegisterScreen()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CodeRegisterScreen()));
               }
+              setState(() {
+                this.isLoading = false;
+              });
             } catch (e) {
               print(e.toString());
             }
@@ -224,17 +229,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
         },
         color: Colors.green[400],
         child: this.isLoading
-          ? LinearProgressIndicator(
-            minHeight: 5,
-          )
-          : Text('Siguiente',
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-            )
-          ),
-      )
+            ? LinearProgressIndicator(
+                minHeight: 5,
+              )
+            : Text(
+                'Siguiente',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+      ),
     );
   }
 
@@ -259,24 +265,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    if (this.isLoading) {
-      return Container(
-        child: Text('loading')
-      );
-    } else {
-      return Scaffold(
-        appBar: AppBar(
-          title: Text('Registro'),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Registro'),
+      ),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(
+          horizontal: 40.0,
         ),
-        body: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(
-            horizontal: 40.0,
-          ),
-          child: Column(
-            children: [
-              this._logo(),
-              this._buildTelephoneNumber(),
-              Form(
+        child: Column(
+          children: [
+            this._logo(),
+            this._buildTelephoneNumber(),
+            Form(
                 key: _formKey,
                 child: Container(
                   alignment: Alignment.center,
@@ -289,12 +290,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       this._nextButton(),
                     ],
                   ),
-                )
-              ),
-            ],
-          )
+                )),
+          ],
         ),
-      );
-    }
+      ),
+    );
   }
 }

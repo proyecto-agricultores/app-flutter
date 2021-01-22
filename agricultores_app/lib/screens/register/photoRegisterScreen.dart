@@ -1,9 +1,12 @@
 import 'dart:io';
 
+import 'package:agricultores_app/services/uploadProfilePictureService.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:flutter/services.dart' show DeviceOrientation, SystemChrome;
+
+import 'locationRegisterScreen.dart';
 
 class PhotoRegisterScreen extends StatefulWidget {
   PhotoRegisterScreen({Key key}) : super(key: key);
@@ -15,6 +18,7 @@ class PhotoRegisterScreen extends StatefulWidget {
 class _PhotoRegisterScreenState extends State<PhotoRegisterScreen> {
   File _image;
   final picker = ImagePicker();
+  bool isLoading = false;
 
   Future getImage(ImageSource src) async {
     final pickedFile = await picker.getImage(source: src);
@@ -43,18 +47,18 @@ class _PhotoRegisterScreenState extends State<PhotoRegisterScreen> {
         automaticallyImplyLeading: false,
       ),
       body: Center(
-          child: SingleChildScrollView(
-              child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-            Image.asset(
-              'assets/images/logo.png',
-              scale: MediaQuery.of(context).size.height /
-                  MediaQuery.of(context).size.width,
-            ),
-            Flexible(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Image.asset(
+                'assets/images/logo.png',
+                scale: MediaQuery.of(context).size.height /
+                    MediaQuery.of(context).size.width,
+              ),
+              Flexible(
                 flex: 3,
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.8,
@@ -126,19 +130,49 @@ class _PhotoRegisterScreenState extends State<PhotoRegisterScreen> {
                           borderRadius: BorderRadius.circular(18.0),
                         ),
                         // onPressed: Token.generateOrRefreshToken(telephone, passwordController.text),
-                        onPressed: () {},
+                        onPressed: () async {
+                          setState(() {
+                            this.isLoading = true;
+                          });
+                          try {
+                            var response = await UploadProfilePictureService
+                                .uploadProfilePicture(_image.path);
+                            print(response);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LocationRegisterScreen(),
+                              ),
+                            );
+                          } catch (e) {
+                            print(e);
+                          }
+                          setState(() {
+                            this.isLoading = false;
+                          });
+                        },
                         color: Colors.green[400],
-                        child: Text('Siguiente',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            )),
+                        child: this.isLoading
+                            ? LinearProgressIndicator(
+                                minHeight: 5,
+                              )
+                            : Text(
+                                'Siguiente',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
                       )
                     ],
                   ),
-                )),
-          ]))),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
