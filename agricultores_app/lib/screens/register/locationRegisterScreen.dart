@@ -142,6 +142,10 @@ class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
             _selectedDepartment = newValue;
             _departmentIsSelected = true;
             _fetchingRegions = true;
+            this._regions = [Region(id: 0, name: '')];
+            this._selectedRegion = null;
+            this._districts = [District(id: 0, name: '')];
+            this._selectedDistrict = null;
             this._getRegions();
           });
         },
@@ -195,6 +199,8 @@ class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
               _selectedRegion = newValue;
               _regionIsSelected = true;
               _fetchingDistricts = true;
+              this._districts = [District(id: 0, name: '')];
+              this._selectedDistrict = null;
               this._getDistricts();
             });
           },
