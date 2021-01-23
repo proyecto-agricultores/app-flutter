@@ -1,5 +1,4 @@
 import 'package:agricultores_app/screens/register/codeRegisterScreen.dart';
-import 'package:agricultores_app/services/authService.dart';
 import 'package:agricultores_app/services/codeRegisterService.dart';
 import 'package:agricultores_app/services/registerService.dart';
 import 'package:agricultores_app/services/token.dart';
@@ -215,9 +214,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     telephone, passwordController.text);
                 await CodeRegisterService.generateCode();
                 Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => CodeRegisterScreen()));
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CodeRegisterScreen(),
+                  ),
+                );
               }
               setState(() {
                 this.isLoading = false;
@@ -278,20 +279,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
             this._logo(),
             this._buildTelephoneNumber(),
             Form(
-              key: _formKey,
-              child: Container(
-                alignment: Alignment.center,
-                child: Column(
-                  children: [
-                    this._buildFirstName(),
-                    this._buildLastName(),
-                    this._buildDniOrRuc(),
-                    this._buildPassword(),
-                    this._nextButton(),
-                  ],
-                ),
-              )
-            ),
+                key: _formKey,
+                child: Container(
+                  alignment: Alignment.center,
+                  child: Column(
+                    children: [
+                      this._buildFirstName(),
+                      this._buildLastName(),
+                      this._buildDniOrRuc(),
+                      this._buildPassword(),
+                      this._nextButton(),
+                    ],
+                  ),
+                )),
           ],
         ),
       ),

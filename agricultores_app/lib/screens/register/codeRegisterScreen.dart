@@ -1,5 +1,4 @@
 import 'package:agricultores_app/screens/register/photoRegisterScreen.dart';
-import 'package:agricultores_app/services/authService.dart';
 import 'package:agricultores_app/services/codeRegisterService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show DeviceOrientation, SystemChrome;

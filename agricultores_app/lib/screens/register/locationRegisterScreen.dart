@@ -1,7 +1,7 @@
 import 'package:agricultores_app/models/departmentModel.dart';
 import 'package:agricultores_app/models/district.dart';
 import 'package:agricultores_app/models/regionModel.dart';
-import 'package:agricultores_app/screens/homeScreen.dart';
+import 'package:agricultores_app/screens/register/rolRegisterScreen.dart';
 import 'package:agricultores_app/services/locationService.dart';
 import 'package:agricultores_app/services/token.dart';
 import 'package:agricultores_app/services/updateUbigeoService.dart';
@@ -166,10 +166,11 @@ class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
         var response = await UpdateUbigeoService.updateUbigeo(
             _selectedDistrict.toString(), _lat, _lon);
         print(response);
-        Navigator.of(context).popUntil((route) => route.isFirst);
-        Navigator.pushReplacement(
+        Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),
+          MaterialPageRoute(
+            builder: (context) => RolRegisterScreen(),
+          ),
         );
       },
       color: Colors.green[400],

@@ -1,14 +1,9 @@
-import 'package:agricultores_app/screens/register/photoRegisterScreen.dart';
-import 'package:agricultores_app/services/authService.dart';
-import 'package:agricultores_app/services/codeRegisterService.dart';
-import 'package:agricultores_app/services/token.dart';
 import 'package:agricultores_app/services/updateRolService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show DeviceOrientation, SystemChrome;
 
-import 'package:flutter_verification_code/flutter_verification_code.dart';
-
 import '../../app_icons.dart';
+import '../homeScreen.dart';
 
 class RolRegisterScreen extends StatefulWidget {
   RolRegisterScreen({Key key}) : super(key: key);
@@ -19,11 +14,6 @@ class RolRegisterScreen extends StatefulWidget {
 
 class _RolRegisterScreenState extends State<RolRegisterScreen> {
   String code;
-  @override
-  void initState() {
-    super.initState();
-    Token.generateOrRefreshToken("+51999999999", "1112");
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +53,13 @@ class _RolRegisterScreenState extends State<RolRegisterScreen> {
                       FlatButton(
                         onPressed: () {
                           UpdateRolService.updateRol("ag");
+                          Navigator.of(context)
+                              .popUntil((route) => route.isFirst);
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => HomeScreen()),
+                          );
                         },
                         child: Column(
                           children: <Widget>[
@@ -79,6 +76,13 @@ class _RolRegisterScreenState extends State<RolRegisterScreen> {
                       FlatButton(
                         onPressed: () {
                           UpdateRolService.updateRol("co");
+                          Navigator.of(context)
+                              .popUntil((route) => route.isFirst);
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => HomeScreen()),
+                          );
                         },
                         child: Column(
                           children: <Widget>[
@@ -95,6 +99,13 @@ class _RolRegisterScreenState extends State<RolRegisterScreen> {
                       FlatButton(
                         onPressed: () {
                           UpdateRolService.updateRol('an');
+                          Navigator.of(context)
+                              .popUntil((route) => route.isFirst);
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => HomeScreen()),
+                          );
                         },
                         child: Column(
                           children: <Widget>[
