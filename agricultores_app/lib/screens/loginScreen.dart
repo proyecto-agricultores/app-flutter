@@ -16,6 +16,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final passwordController = TextEditingController();
   String telephone;
+  bool isLoading = false;
 
   @override
   void dispose() {
@@ -106,6 +107,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 // onPressed: Token.generateOrRefreshToken(telephone, passwordController.text),
                 onPressed: () async {
+                  setState(() {
+                    this.isLoading = true;
+                  });
                   await Token.setToken(TokenType.access, '');
                   await Token.setToken(TokenType.refresh, '');
                   try {
@@ -116,6 +120,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       MaterialPageRoute(builder: (context) => HomeScreen()),
                     );
                   } catch (e) {
+                    setState(() {
+                      this.isLoading = false;
+                    });
                     print(e.toString());
                     return showDialog<void>(
                       context: context,
@@ -139,12 +146,18 @@ class _LoginScreenState extends State<LoginScreen> {
                   }
                 },
                 color: Colors.green[400],
-                child: Text('Ingresar',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    )),
+                child: this.isLoading
+                    ? LinearProgressIndicator(
+                        minHeight: 5,
+                      )
+                    : Text(
+                        'Ingresar',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
               )
             ],
           ),

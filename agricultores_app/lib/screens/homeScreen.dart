@@ -49,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18.0),
                         ),
-                        onPressed: () {
+                        onPressed: () async {
                           Token.logout();
                           return Navigator.pushReplacement(
                             context,
