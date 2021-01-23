@@ -1,4 +1,3 @@
-import 'package:agricultores_app/services/token.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show DeviceOrientation, SystemChrome;
 
@@ -10,13 +9,6 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
-  String code;
-  @override
-  void initState() {
-    super.initState();
-    Token.generateOrRefreshToken("+51999999999", "1112");
-  }
-
   @override
   Widget build(BuildContext context) {
     WidgetsFlutterBinding.ensureInitialized();
