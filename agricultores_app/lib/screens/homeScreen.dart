@@ -1,4 +1,5 @@
 import 'package:agricultores_app/screens/loginScreen.dart';
+import 'package:agricultores_app/screens/profileScreen.dart';
 import 'package:agricultores_app/services/token.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show DeviceOrientation, SystemChrome;
@@ -57,6 +58,25 @@ class _HomeScreenState extends State<HomeScreen> {
                         },
                         color: Colors.green[400],
                         child: Text('Logout',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            )),
+                      ),
+                      FlatButton(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                        ),
+                        onPressed: () async {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ProfileScreen()),
+                          );
+                        },
+                        color: Colors.green[400],
+                        child: Text('Profile',
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,

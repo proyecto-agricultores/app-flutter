@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:agricultores_app/services/token.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 
 import 'package:agricultores_app/global/myHTTPConnection.dart';
 
@@ -24,6 +25,7 @@ class UploadProfilePictureService {
         File(filename).readAsBytes().asStream(),
         File(filename).lengthSync(),
         filename: filename.split("/").last,
+        contentType: MediaType('image', 'jpeg'),
       ),
     );
 
