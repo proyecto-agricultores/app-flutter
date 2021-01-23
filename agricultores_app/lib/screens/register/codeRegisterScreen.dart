@@ -15,6 +15,7 @@ class CodeRegisterScreen extends StatefulWidget {
 
 class _CodeRegisterScreenState extends State<CodeRegisterScreen> {
   String code;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -31,64 +32,34 @@ class _CodeRegisterScreenState extends State<CodeRegisterScreen> {
         automaticallyImplyLeading: false,
       ),
       body: Center(
-          child: SingleChildScrollView(
-              child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-            Image.asset(
-              'assets/images/logo.png',
-              scale: MediaQuery.of(context).size.height /
-                  MediaQuery.of(context).size.width,
-            ),
-            Flexible(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Image.asset(
+                'assets/images/logo.png',
+                scale: MediaQuery.of(context).size.height /
+                    MediaQuery.of(context).size.width,
+              ),
+              Flexible(
                 flex: 3,
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.8,
                   child: Column(
                     children: [
                       SizedBox(height: 40),
+                      Text(
+                          'Ingrese el código a continuación recibido por mensaje de texto: '),
+                      SizedBox(height: 20),
                       VerificationCode(
                         length: 4,
-                        onCompleted: (String value) {
+                        onCompleted: (String value) async {
                           setState(() {
                             code = value;
+                            isLoading = true;
                           });
-                          print(value);
-                        },
-                        onEditing: (bool value) {
-                          print(value);
-                        },
-                      ),
-                      SizedBox(height: 40),
-                      FlatButton(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                        ),
-                        // onPressed: Token.generateOrRefreshToken(telephone, passwordController.text),
-                        onPressed: () async {
-                          print(code);
-                          final response =
-                              await CodeRegisterService.generateCode();
-                          print(response);
-                        },
-                        color: Colors.green[300],
-                        child: Text('Reenviar el código SMS',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 10,
-                            )),
-                      ),
-                      SizedBox(height: 10),
-                      FlatButton(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                        ),
-                        // onPressed: Token.generateOrRefreshToken(telephone, passwordController.text),
-                        onPressed: () async {
-                          print(code);
                           final response =
                               await CodeRegisterService.sendCode(code);
                           print(response);
@@ -99,6 +70,9 @@ class _CodeRegisterScreenState extends State<CodeRegisterScreen> {
                                   builder: (context) => PhotoRegisterScreen()),
                             );
                           } else if (response == "incorrect-code") {
+                            setState(() {
+                              isLoading = false;
+                            });
                             return showDialog<void>(
                               context: context,
                               barrierDismissible: true,
@@ -120,18 +94,41 @@ class _CodeRegisterScreenState extends State<CodeRegisterScreen> {
                             );
                           }
                         },
-                        color: Colors.green[400],
-                        child: Text('Siguiente',
+                        onEditing: (bool value) {
+                          print(value);
+                        },
+                      ),
+                      SizedBox(height: 40),
+                      this.isLoading
+                          ? CircularProgressIndicator()
+                          : Container(),
+                      FlatButton(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                        ),
+                        // onPressed: Token.generateOrRefreshToken(telephone, passwordController.text),
+                        onPressed: () async {
+                          print(code);
+                          final response =
+                              await CodeRegisterService.generateCode();
+                          print(response);
+                        },
+                        color: Colors.green[300],
+                        child: Text('Reenviar el código SMS',
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
-                              fontSize: 16,
+                              fontSize: 10,
                             )),
-                      )
+                      ),
                     ],
                   ),
-                )),
-          ]))),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
