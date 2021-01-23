@@ -22,6 +22,12 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Cosecha utiliza la camara.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Cosecha necesita tu ubicación</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Cosecha utiliza fotos.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

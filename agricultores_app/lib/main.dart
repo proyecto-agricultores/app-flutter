@@ -1,9 +1,9 @@
-import 'package:agricultores_app/services/authService.dart';
+import 'package:agricultores_app/screens/loadingScreen.dart';
+import 'package:agricultores_app/screens/homeScreen.dart';
 import 'package:agricultores_app/services/helloWorldService.dart';
-import 'package:agricultores_app/services/token.dart';
-import 'package:agricultores_app/screens/loginScreen.dart';
 import 'package:flutter/material.dart';
 import 'MyColors.dart';
+import 'screens/loginScreen.dart';
 
 void main() {
   runApp(MyApp());
@@ -22,7 +22,18 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         fontFamily: 'Poppins',
       ),
-      home: LoginScreen(),  
+      home: FutureBuilder(
+        future: HelloWorldService.getHelloWorld(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.hasData) {
+            return HomeScreen();
+          } else if (snapshot.hasError) {
+            return LoginScreen();
+          } else {
+            return LoadingScreen();
+          }
+        },
+      ),
     );
   }
 }
