@@ -25,6 +25,11 @@ class Token {
     }
   }
 
+  static void logout() {
+    setToken(TokenType.access, '');
+    setToken(TokenType.refresh, '');
+  }
+
   static generateOrRefreshToken(phoneNumber, password) async {
     try {
       final refreshToken = await Token.getToken(TokenType.refresh);
@@ -35,10 +40,10 @@ class Token {
 
       final hw = await HelloWorldService.getHelloWorld();
       print(hw.toString());
-    } 
-    catch(e) {
+    } catch (e) {
       print(e.toString());
-      final tokenGenerator = await AuthenticateService.authenticate(phoneNumber, password);
+      final tokenGenerator =
+          await AuthenticateService.authenticate(phoneNumber, password);
       await Token.setToken(TokenType.access, tokenGenerator.access);
       await Token.setToken(TokenType.refresh, tokenGenerator.refresh);
 

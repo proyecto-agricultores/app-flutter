@@ -1,3 +1,4 @@
+import 'package:agricultores_app/screens/homeScreen.dart';
 import 'package:agricultores_app/screens/register/registerScreen.dart';
 import 'package:agricultores_app/services/token.dart';
 import 'package:flutter/material.dart';
@@ -87,11 +88,9 @@ class _LoginScreenState extends State<LoginScreen> {
               new GestureDetector(
                 onTap: () {
                   Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => RegisterScreen()
-                    )
-                  );
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => RegisterScreen()));
                 },
                 child: new Text(
                   "Regístrate aquí",
@@ -112,13 +111,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   try {
                     await Token.generateOrRefreshToken(
                         telephone, passwordController.text);
-                    await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Scaffold(
-                                  appBar:
-                                      AppBar(title: const Text('Logged In')),
-                                )));
+                    await Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomeScreen()),
+                    );
                   } catch (e) {
                     print(e.toString());
                     return showDialog<void>(
@@ -144,12 +140,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 },
                 color: Colors.green[400],
                 child: Text('Ingresar',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  )
-                ),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    )),
               )
             ],
           ),
