@@ -3,7 +3,6 @@ import 'package:agricultores_app/models/district.dart';
 import 'package:agricultores_app/models/regionModel.dart';
 import 'package:agricultores_app/screens/register/rolRegisterScreen.dart';
 import 'package:agricultores_app/services/locationService.dart';
-import 'package:agricultores_app/services/token.dart';
 import 'package:agricultores_app/services/updateUbigeoService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show DeviceOrientation, SystemChrome;
@@ -32,11 +31,11 @@ class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
   bool _regionIsSelected = false;
   double _lat = 0.0;
   double _lon = 0.0;
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    Token.generateOrRefreshToken("+51969999869", "1112");
     this._getDepartments();
     this._getGPSLocation();
   }
@@ -163,8 +162,14 @@ class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
         borderRadius: BorderRadius.circular(18.0),
       ),
       onPressed: () async {
+        setState(() {
+          this.isLoading = true;
+        });
         var response = await UpdateUbigeoService.updateUbigeo(
             _selectedDistrict.toString(), _lat, _lon);
+        setState(() {
+          this.isLoading = false;
+        });
         print(response);
         Navigator.push(
           context,
@@ -174,14 +179,18 @@ class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
         );
       },
       color: Colors.green[400],
-      child: Text(
-        'Siguiente',
-        style: TextStyle(
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-          fontSize: 16,
-        ),
-      ),
+      child: this.isLoading
+          ? LinearProgressIndicator(
+              minHeight: 5,
+            )
+          : Text(
+              'Siguiente',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
     );
   }
 

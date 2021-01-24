@@ -29,12 +29,14 @@ class AuthenticateService {
   static Future<AuthenticateUser> refresh(String refreshToken) async {
     final response = await http.post(
       MyHTTPConection.HTTP_URL + 'api/token/refresh/',
-      headers: <String, String> {
+      headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8'
       },
-      body: jsonEncode(<String, String> {
-        'refresh': refreshToken,
-      })
+      body: jsonEncode(
+        <String, String>{
+          'refresh': refreshToken,
+        },
+      ),
     );
     if (response.statusCode == 200) {
       return AuthenticateUser.fromJsonRefresh(jsonDecode(response.body));

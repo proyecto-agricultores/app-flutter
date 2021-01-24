@@ -113,7 +113,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   await Token.setToken(TokenType.access, '');
                   await Token.setToken(TokenType.refresh, '');
                   try {
-                    await Token.generateOrRefreshToken(
+                    await Token.generateTokenFromUserAndPassword(
                         telephone, passwordController.text);
                     await Navigator.pushReplacement(
                       context,
