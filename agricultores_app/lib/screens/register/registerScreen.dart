@@ -210,7 +210,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   },
                 );
               } else if (register == 'ok') {
-                await Token.generateOrRefreshToken(
+                await Token.generateTokenFromUserAndPassword(
                     telephone, passwordController.text);
                 await CodeRegisterService.generateCode();
                 Navigator.push(
@@ -279,19 +279,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
             this._logo(),
             this._buildTelephoneNumber(),
             Form(
-                key: _formKey,
-                child: Container(
-                  alignment: Alignment.center,
-                  child: Column(
-                    children: [
-                      this._buildFirstName(),
-                      this._buildLastName(),
-                      this._buildDniOrRuc(),
-                      this._buildPassword(),
-                      this._nextButton(),
-                    ],
-                  ),
-                )),
+              key: _formKey,
+              child: Container(
+                alignment: Alignment.center,
+                child: Column(
+                  children: [
+                    this._buildFirstName(),
+                    this._buildLastName(),
+                    this._buildDniOrRuc(),
+                    this._buildPassword(),
+                    this._nextButton(),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),

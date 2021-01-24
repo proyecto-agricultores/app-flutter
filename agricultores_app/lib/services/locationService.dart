@@ -1,6 +1,5 @@
+import 'package:agricultores_app/interceptor/httpInterceptor.dart';
 import 'package:agricultores_app/models/district.dart';
-import 'package:http/http.dart' as http;
-import 'token.dart';
 import 'dart:convert';
 
 import 'package:agricultores_app/global/myHTTPConnection.dart';
@@ -8,15 +7,9 @@ import 'package:agricultores_app/models/departmentModel.dart';
 import 'package:agricultores_app/models/regionModel.dart';
 
 class LocationService {
-  static Future<List<Department> > getDepartments() async {
-    final accessToken = await Token.getToken(TokenType.access);
-
-    final response = await http.get(
+  static Future<List<Department>> getDepartments() async {
+    final response = await HTTPClient.getClient(WithToken.yes).get(
       MyHTTPConection.HTTP_URL + 'departments/',
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer ' + accessToken,
-      },
     );
 
     if (response.statusCode == 200) {
@@ -32,15 +25,9 @@ class LocationService {
     }
   }
 
-  static Future<List<Region> > getRegionsByDepartment(int departmentId) async {
-    final accessToken = await Token.getToken(TokenType.access);
-
-    final response = await http.get(
+  static Future<List<Region>> getRegionsByDepartment(int departmentId) async {
+    final response = await HTTPClient.getClient(WithToken.yes).get(
       MyHTTPConection.HTTP_URL + 'api/filter/regions/?department=$departmentId',
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer ' + accessToken,
-      },
     );
 
     if (response.statusCode == 200) {
@@ -52,19 +39,14 @@ class LocationService {
       }
       return regions;
     } else {
-      throw Exception('Error al intentar obtener las regiones filtradas por el id de departamento $departmentId');
+      throw Exception(
+          'Error al intentar obtener las regiones filtradas por el id de departamento $departmentId');
     }
   }
 
-  static Future<List<District> > getDistrictsByRegion(int regionId) async {
-    final accessToken = await Token.getToken(TokenType.access);
-
-    final response = await http.get(
+  static Future<List<District>> getDistrictsByRegion(int regionId) async {
+    final response = await HTTPClient.getClient(WithToken.yes).get(
       MyHTTPConection.HTTP_URL + 'api/filter/districts/?region=$regionId',
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer ' + accessToken,
-      },
     );
 
     if (response.statusCode == 200) {
@@ -76,7 +58,8 @@ class LocationService {
       }
       return districts;
     } else {
-      throw Exception('Error al intentar obtener los distritios filtrados por el id de región $regionId');
+      throw Exception(
+          'Error al intentar obtener los distritios filtrados por el id de región $regionId');
     }
   }
 }

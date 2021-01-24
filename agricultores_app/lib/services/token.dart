@@ -1,5 +1,4 @@
 import 'package:agricultores_app/services/authService.dart';
-import 'package:agricultores_app/services/helloWorldService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum TokenType { access, refresh }
@@ -30,31 +29,26 @@ class Token {
     setToken(TokenType.refresh, '');
   }
 
-  static generateOrRefreshToken(phoneNumber, password) async {
+  static generateTokenFromUserAndPassword(phoneNumber, password) async {
+    final tokenGenerator =
+        await AuthenticateService.authenticate(phoneNumber, password);
+    await Token.setToken(TokenType.access, tokenGenerator.access);
+    await Token.setToken(TokenType.refresh, tokenGenerator.refresh);
+
+    final access = await Token.getToken(TokenType.access);
+    final refresh = await Token.getToken(TokenType.refresh);
+
+    print(access);
+    print(refresh);
+  }
+
+  static refreshToken() async {
     try {
       final refreshToken = await Token.getToken(TokenType.refresh);
       final tokenGenerator = await AuthenticateService.refresh(refreshToken);
-
       await Token.setToken(TokenType.access, tokenGenerator.access);
-      await Token.setToken(TokenType.refresh, tokenGenerator.refresh);
-
-      final hw = await HelloWorldService.getHelloWorld();
-      print(hw.toString());
     } catch (e) {
-      print(e.toString());
-      final tokenGenerator =
-          await AuthenticateService.authenticate(phoneNumber, password);
-      await Token.setToken(TokenType.access, tokenGenerator.access);
-      await Token.setToken(TokenType.refresh, tokenGenerator.refresh);
-
-      final access = await Token.getToken(TokenType.access);
-      final refresh = await Token.getToken(TokenType.refresh);
-
-      print(access);
-      print(refresh);
-
-      final hw = await HelloWorldService.getHelloWorld();
-      print(hw.toString());
+      throw new Exception('Cant Refresh');
     }
   }
 }
