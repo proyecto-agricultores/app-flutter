@@ -126,7 +126,7 @@ class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
   Widget _departmentDropdown() {
     return Container(
       height: MediaQuery.of(context).size.height * 0.04,
-      width: MediaQuery.of(context).size.height * 0.8,
+      width: MediaQuery.of(context).size.width * 0.8,
       child: DropdownButton(
         isExpanded: true,
         hint: Text('Seleccione su departamento'),
