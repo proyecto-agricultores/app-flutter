@@ -91,7 +91,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               )
             : SABT(
-                child: Text(snapshot.data.firstName),
+                child: snapshot.data.firstName != null
+                    ? Text(snapshot.data.firstName)
+                    : Text("Sin Nombre"),
               ),
         collapseMode: CollapseMode.pin,
         centerTitle: true,
@@ -155,6 +157,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: CircleAvatar(),
         ),
       );
+    } else if (snapshot.data.profilePicture == null) {
+      return Container(
+        height: 150,
+        width: 150,
+        margin: EdgeInsets.only(bottom: 70),
+        child: CircleAvatar(
+          backgroundImage: AssetImage("assets/images/user-placeholder.png"),
+        ),
+      );
     } else {
       return Container(
         height: 150,
@@ -185,7 +196,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   borderRadius: BorderRadius.all(Radius.circular(60)),
                   color: Colors.blue[50],
                 ),
-                child: Center(child: Text(snapshot.data.ubigeo)),
+                child: Center(
+                    child: snapshot.data.ubigeo != null
+                        ? Text(snapshot.data.ubigeo)
+                        : Text('Sin Ubicación')),
               )
             : Shimmer.fromColors(
                 baseColor: Colors.black12,
@@ -260,7 +274,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ],
               );
-            } else {
+            } else if (snapshot.hasData) {
               return Column(
                 children: [
                   Icon(
@@ -342,6 +356,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ],
               );
+            } else {
+              return Container();
             }
           } else {
             return this._shimerPub();
