@@ -23,4 +23,18 @@ class MyPubService {
       throw Exception('Error al recuperar la información del usuario.');
     }
   }
+
+  static Future getPubinUserById(int id) async {
+    final response = await HTTPClient.getClient(WithToken.yes).get(
+      MyHTTPConection.HTTP_URL + 'myPub/' + id.toString() + '/',
+    );
+
+    if (response.statusCode == 200) {
+      var json = jsonDecode(utf8.decode(response.bodyBytes));
+      return MyPub.fromJson(json[0]);
+    } else {
+      throw Exception(
+          'Error al recuperar la información en publicación por ID.');
+    }
+  }
 }

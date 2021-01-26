@@ -1,4 +1,5 @@
 import 'package:agricultores_app/screens/STAB.dart';
+import 'package:agricultores_app/screens/cultivos/cultivoScreen.dart';
 import 'package:agricultores_app/services/myProfileService.dart';
 import 'package:agricultores_app/services/myPubService.dart';
 import 'package:flutter/material.dart';
@@ -257,7 +258,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         future: MyPubService.getPubinUser(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
-            // data loaded:
             final listResponse = snapshot.data;
             if (listResponse.isEmpty) {
               return Column(
@@ -292,57 +292,71 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ListView.separated(
                           physics: const NeverScrollableScrollPhysics(),
                           itemBuilder: (BuildContext context, int index) {
-                            return Column(
-                              children: <Widget>[
-                                Container(
-                                  alignment: Alignment.center,
-                                  child: Image(
-                                    height: 150,
-                                    width: MediaQuery.of(context).size.width,
-                                    fit: BoxFit.cover,
-                                    image: listResponse[index].pictureURL ==
-                                            null
-                                        ? AssetImage("assets/images/papas.jpg")
-                                        : NetworkImage(
-                                            listResponse[index].pictureURL),
+                            return InkWell(
+                              onTap: () => {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => CultivoScreen(
+                                      cultivoId: listResponse[index].id,
+                                      titulo: listResponse[index].supplieName,
+                                    ),
                                   ),
-                                ),
-                                Row(
-                                  children: [
-                                    Text("Producto: "),
-                                    Text(
-                                      listResponse[index].supplieName,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
+                                )
+                              },
+                              child: Column(
+                                children: <Widget>[
+                                  Container(
+                                    alignment: Alignment.center,
+                                    child: Image(
+                                      height: 150,
+                                      width: MediaQuery.of(context).size.width,
+                                      fit: BoxFit.cover,
+                                      image: listResponse[index].pictureURL ==
+                                              null
+                                          ? AssetImage(
+                                              "assets/images/papas.jpg")
+                                          : NetworkImage(
+                                              listResponse[index].pictureURL),
                                     ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Text('Cantidad: '),
-                                    Text(
-                                      listResponse[index].quantity.toString(),
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
-                                      listResponse[index].unit,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Text('Costo: '),
-                                    Text(listResponse[index]
-                                        .unitPrice
-                                        .toString()),
-                                    Text(' x '),
-                                    Text(listResponse[index].unit),
-                                  ],
-                                ),
-                              ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text("Producto: "),
+                                      Text(
+                                        listResponse[index].supplieName,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text('Cantidad: '),
+                                      Text(
+                                        listResponse[index].quantity.toString(),
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        listResponse[index].unit,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text('Costo: '),
+                                      Text(listResponse[index]
+                                          .unitPrice
+                                          .toString()),
+                                      Text(' x '),
+                                      Text(listResponse[index].unit),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             );
                           },
                           separatorBuilder: (BuildContext context, int index) =>
@@ -350,7 +364,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           itemCount: listResponse.length,
                           padding: const EdgeInsets.all(8),
                           shrinkWrap: true,
-                        )
+                        ),
                       ],
                     ),
                   ),
