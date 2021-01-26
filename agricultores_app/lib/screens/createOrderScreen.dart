@@ -1,7 +1,10 @@
-import 'package:agricultores_app/models/supplyModel.dart';
-import 'package:agricultores_app/services/supplyService.dart';
+import 'package:agricultores_app/models/priceUnitModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import 'package:agricultores_app/models/supplyModel.dart';
+import 'package:agricultores_app/services/supplyService.dart';
+import 'package:agricultores_app/models/areaUnitModel.dart';
 
 class CreateOrderScreen extends StatefulWidget {
   CreateOrderScreen({Key key, this.title}) : super(key: key);
@@ -15,8 +18,12 @@ class CreateOrderScreen extends StatefulWidget {
 class _CreateOrderScreenState extends State<CreateOrderScreen> {
 
   int _selectedSupply;
+  String _selectedAreaUnit = 'hm2';
+  String _selectedPriceUnit = 'sac';
   static final TextInputFormatter floatNumbers =
       FilteringTextInputFormatter.allow(RegExp(r'[+-]?([0-9]*[.])?[0-9]+'));
+  static final TextInputFormatter digitsOnly =
+      FilteringTextInputFormatter.allow(RegExp(r'[0-9]'));
   TextEditingController quantityController = new TextEditingController();
   TextEditingController priceController = new TextEditingController();
   DateTime _sowingDate = DateTime.now();
@@ -69,31 +76,125 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
   }
 
   Widget _quantityInput() {
-    return TextFormField(
-      keyboardType: TextInputType.number,
-      inputFormatters: [floatNumbers],
-      controller: quantityController,
-      validator: (value) {
-        return value.isEmpty ? 'Ingrese una cantidad' : null;
-      },
-      decoration: new InputDecoration(
-        hintText: "Ingrese la cantidad de kg's requeridos",
-        labelText: "Kilogramos",
-      ),
+    return Column(
+      children: [
+        SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            'Cultivo',
+            style: TextStyle(
+              fontWeight: FontWeight.bold
+            ),
+          )
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Expanded(
+              flex: 1,
+              child: TextFormField(
+                keyboardType: TextInputType.number,
+                inputFormatters: [floatNumbers],
+                controller: quantityController,
+                textAlign: TextAlign.center,
+                validator: (value) {
+                  return value.isEmpty ? 'Ingrese una cantidad' : null;
+                },
+                decoration: new InputDecoration(
+                  //labelText: "Total",
+                  contentPadding: EdgeInsets.zero
+                ),
+              )
+            ),
+            SizedBox(width: MediaQuery.of(context).size.width * 0.05),
+            Expanded(
+              flex: 3,
+              child: Container(
+                child: DropdownButton(
+                  isExpanded: true,
+                  value: _selectedAreaUnit,
+                  onChanged: (newValue) {
+                    setState(() {
+                      _selectedAreaUnit = newValue;
+                    });
+                  },
+                  items: AreaUnit.getAreaUnits().map((areaUnit) {
+                    return DropdownMenuItem(
+                      child: new Text(
+                        areaUnit.fullName,
+                        textAlign: TextAlign.center,
+                      ),
+                      value: areaUnit.abbreviation
+                    );
+                  }).toList(),
+                ),
+              )
+            )
+          ]
+        )
+      ]
     );
   }
 
   Widget _priceInput() {
-    return TextFormField(
-      controller: priceController,
-      keyboardType: TextInputType.numberWithOptions(decimal: true),
-      validator: (value) {
-        return value.isEmpty ? 'Ingrese el precio' : null;
-      },
-      decoration: new InputDecoration(
-        hintText: 'Ingrese el precio por kilo en soles',
-        labelText: 'Precio (S/.)',
-      )
+    return Column(
+      children: [
+        SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            'Precio en nuevos soles (S/.)',
+            style: TextStyle(
+              fontWeight: FontWeight.bold
+            )
+          )
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Expanded(
+              flex: 1,
+              child: TextFormField(
+                controller: priceController,
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
+                inputFormatters: [digitsOnly],
+                validator: (value) {
+                  return value.isEmpty ? 'Ingrese el precio' : null;
+                },
+                decoration: new InputDecoration(
+                )
+              )
+            ),
+            SizedBox(width: MediaQuery.of(context).size.width * 0.05),
+            Expanded(
+              flex: 3,
+              child: Container(
+                child: DropdownButton(
+                  isExpanded: true,
+                  value: _selectedPriceUnit,
+                  onChanged: (newValue) {
+                    setState(() {
+                      _selectedPriceUnit = newValue;
+                    });
+                  },
+                  items: PriceUnit.getPriceUnits().map((priceUnit) {
+                    return DropdownMenuItem(
+                      child: new Text(
+                        priceUnit.fullName,
+                        textAlign: TextAlign.center,
+                      ),
+                      value: priceUnit.abbreviation
+                    );
+                  }).toList(),
+                ),
+              )
+            )
+          ],
+        )
+      ],
     );
   }
 
@@ -224,6 +325,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                       this._pickSowingDate(),
                       Divider(color: Colors.grey[800]),
                       this._pickHarvestDate(),
+                      Divider(color: Colors.grey[800]),
                       this._nextButton(),
                       this._cancelButton()
                     ]
