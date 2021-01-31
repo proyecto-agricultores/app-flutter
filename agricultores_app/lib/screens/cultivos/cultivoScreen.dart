@@ -1,3 +1,4 @@
+import 'package:agricultores_app/screens/cultivos/editarCutivoScreen.dart';
 import 'package:agricultores_app/services/myPubService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show DeviceOrientation, SystemChrome;
@@ -133,8 +134,19 @@ class _CultivoScreenState extends State<CultivoScreen> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(18.0),
                             ),
-                            onPressed: () {},
                             color: Colors.green[400],
+                            onPressed: () async {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => EditarCultivoScreen(
+                                    cultivoId: this.cultivoId,
+                                    titulo: this.titulo,
+                                    dataCultivo: snapshot.data,
+                                  ),
+                                ),
+                              );
+                            },
                             child: Text(
                               'Editar',
                               style: TextStyle(
