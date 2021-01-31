@@ -160,7 +160,34 @@ class _CultivoScreenState extends State<CultivoScreen> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(18.0),
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text('¿Estás seguro?'),
+                                    content: Text(
+                                        '¿Estas seguro que deseas eliminar el cultivo? Recuerda que esta acción es permanente.'),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        child: Text('Cancelar'),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                      TextButton(
+                                        child: Text('Eliminar'),
+                                        onPressed: () {
+                                          MyPubService.delete(this.cultivoId);
+                                          Navigator.of(context).popUntil(
+                                              (route) => route.isFirst);
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
                             color: Colors.red[700],
                             child: Text(
                               'Eliminar',

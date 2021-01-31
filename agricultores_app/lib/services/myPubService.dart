@@ -73,7 +73,7 @@ class MyPubService {
     final response = await HTTPClient.getClient(WithToken.yes).delete(
       MyHTTPConection.HTTP_URL + 'myPub/' + id.toString() + '/',
     );
-    if (response.statusCode == 200) {
+    if (response.statusCode == 204) {
       return 'OK';
     } else {
       throw Exception('Error al eliminar.');
