@@ -2,32 +2,36 @@ class MyPub {
   final int id;
   final String supplieName;
   final String pictureURL;
-  final String unit;
-  final int quantity;
+  final String weightUnit;
+  final double unitPrice;
+  final String areaUnit;
+  final double area;
   final DateTime harvestDate;
   final DateTime sowingDate;
-  final double unitPrice;
 
-  MyPub(
-      {this.id,
-      this.supplieName,
-      this.pictureURL,
-      this.unit,
-      this.quantity,
-      this.harvestDate,
-      this.sowingDate,
-      this.unitPrice});
+  MyPub({
+    this.id,
+    this.supplieName,
+    this.pictureURL,
+    this.weightUnit,
+    this.unitPrice,
+    this.areaUnit,
+    this.area,
+    this.harvestDate,
+    this.sowingDate,
+  });
 
   factory MyPub.fromJson(Map<String, dynamic> json) {
     return MyPub(
       id: json['id'],
       supplieName: json['supplies']['name'],
       pictureURL: json['picture_URL'],
-      unit: json['unit'],
-      quantity: json['quantity'],
+      weightUnit: json['weight_unit'],
+      unitPrice: json['unit_price'],
+      areaUnit: json['area_unit'],
+      area: json['area'],
       harvestDate: DateTime.parse(json['harvest_date']),
       sowingDate: DateTime.parse(json['sowing_date']),
-      unitPrice: json['unit_price'],
     );
   }
 }

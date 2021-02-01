@@ -1,4 +1,5 @@
 import 'package:agricultores_app/screens/STAB.dart';
+import 'package:agricultores_app/screens/cultivos/crearCutivoScreen.dart';
 import 'package:agricultores_app/screens/cultivos/cultivoScreen.dart';
 import 'package:agricultores_app/services/myProfileService.dart';
 import 'package:agricultores_app/services/myPubService.dart';
@@ -37,6 +38,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       this._ubicacion(snapshot, false),
                       this._verMapa(),
                       this._contactar(),
+                      this._agregarCultivo(),
                       this._carruselCultivos(false),
                     ],
                   ),
@@ -252,6 +254,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  Widget _agregarCultivo() {
+    return Container(
+      margin: EdgeInsets.only(bottom: 15),
+      child: RaisedButton(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(18.0),
+        ),
+        onPressed: () async {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CrearCultivoScreen(),
+            ),
+          );
+        },
+        color: Colors.green[900],
+        textColor: Colors.white,
+        child: Text("Añadir Cultivo"),
+      ),
+    );
+  }
+
   Widget _carruselCultivos(bool isLoading) {
     if (!isLoading) {
       return FutureBuilder(
@@ -334,12 +358,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     children: [
                                       Text('Cantidad: '),
                                       Text(
-                                        listResponse[index].quantity.toString(),
+                                        listResponse[index].area.toString(),
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold),
                                       ),
                                       Text(
-                                        listResponse[index].unit,
+                                        listResponse[index].areaUnit,
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold),
                                       ),
@@ -352,7 +376,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           .unitPrice
                                           .toString()),
                                       Text(' x '),
-                                      Text(listResponse[index].unit),
+                                      Text(listResponse[index].weightUnit),
                                     ],
                                   ),
                                 ],

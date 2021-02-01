@@ -55,8 +55,6 @@ class _EditarCultivoScreenState extends State<EditarCultivoScreen> {
 
   static final TextInputFormatter digitsOnly =
       FilteringTextInputFormatter.allow(RegExp(r'[0-9]'));
-  static final TextInputFormatter lettersOnly =
-      FilteringTextInputFormatter.allow(RegExp(r'^[^0-9]+$'));
 
   InputDecoration _buildInputDecoration(String placeholder) {
     return InputDecoration(

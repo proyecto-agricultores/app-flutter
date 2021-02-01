@@ -204,42 +204,6 @@ class _CultivoScreenState extends State<CultivoScreen> {
                   }
                 },
               ),
-              // Flexible(
-              //   flex: 3,
-              //   child: Container(
-              //     width: MediaQuery.of(context).size.width * 0.8,
-              //     child: Column(
-              //       children: [
-              //         FlatButton(
-              //           shape: RoundedRectangleBorder(
-              //             borderRadius: BorderRadius.circular(18.0),
-              //           ),
-              //           onPressed: () {},
-              //           color: Colors.green[400],
-              //           child: Text('Botton 1',
-              //               style: TextStyle(
-              //                 color: Colors.white,
-              //                 fontWeight: FontWeight.bold,
-              //                 fontSize: 16,
-              //               )),
-              //         ),
-              //         FlatButton(
-              //           shape: RoundedRectangleBorder(
-              //             borderRadius: BorderRadius.circular(18.0),
-              //           ),
-              //           onPressed: () {},
-              //           color: Colors.green[400],
-              //           child: Text('Botton 2',
-              //               style: TextStyle(
-              //                 color: Colors.white,
-              //                 fontWeight: FontWeight.bold,
-              //                 fontSize: 16,
-              //               )),
-              //         )
-              //       ],
-              //     ),
-              //   ),
-              // ),
             ],
           ),
         ),
