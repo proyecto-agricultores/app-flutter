@@ -356,17 +356,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                   Row(
                                     children: [
-                                      Text('Cantidad: '),
-                                      Text(
-                                        listResponse[index].area.toString(),
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                        listResponse[index].areaUnit,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
+                                      Text('Área: '),
+                                      Text(listResponse[index].area.toString()),
+                                      Text(' '),
+                                      Text(listResponse[index].areaUnit),
                                     ],
                                   ),
                                   Row(

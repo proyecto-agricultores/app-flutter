@@ -87,15 +87,10 @@ class _CultivoScreenState extends State<CultivoScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text('Cantidad: '),
-                              Text(
-                                snapshot.data.quantity.toString(),
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              Text(
-                                snapshot.data.unit,
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
+                              Text('Área: '),
+                              Text(snapshot.data.area.toString()),
+                              Text(' '),
+                              Text(snapshot.data.areaUnit),
                             ],
                           ),
                           Row(
@@ -104,7 +99,7 @@ class _CultivoScreenState extends State<CultivoScreen> {
                               Text('Costo: '),
                               Text(snapshot.data.unitPrice.toString()),
                               Text(' x '),
-                              Text(snapshot.data.unit),
+                              Text(snapshot.data.weightUnit),
                             ],
                           ),
                           Row(
