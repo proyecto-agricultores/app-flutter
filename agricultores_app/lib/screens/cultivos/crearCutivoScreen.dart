@@ -1,24 +1,14 @@
 import 'dart:io';
-import 'package:agricultores_app/models/areaUnitModel.dart';
 import 'package:agricultores_app/models/myPubModel.dart';
-import 'package:agricultores_app/models/priceUnitModel.dart';
-import 'package:agricultores_app/models/supplyModel.dart';
 import 'package:agricultores_app/services/myPubService.dart';
-import 'package:agricultores_app/services/supplysService.dart';
-import 'package:agricultores_app/widgets/cultivos_orders/cosechaCalendar.dart';
-import 'package:agricultores_app/widgets/cultivos_orders/cosechaTextFormField.dart';
+import 'package:agricultores_app/widgets/cultivos_orders/cosechaForm.dart';
 import 'package:agricultores_app/widgets/cultivos_orders/imageCarouselWidget.dart';
-import 'package:agricultores_app/widgets/cultivos_orders/supplyDropdown.dart';
-import 'package:agricultores_app/widgets/cultivos_orders/unitDropdown.dart';
-import 'package:agricultores_app/widgets/general/separator.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+import 'package:agricultores_app/widgets/general/divider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'
     show
         DeviceOrientation,
-        FilteringTextInputFormatter,
-        SystemChrome,
-        TextInputFormatter;
+        SystemChrome;
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
@@ -52,6 +42,7 @@ class _CrearCultivoScreenState extends State<CrearCultivoScreen> {
   String areaUnit = "hm2";
   int supplyID = 1;
 
+  final DateFormat formatter = DateFormat('dd-MM-yyyy');
   final _formKey = new GlobalKey<FormState>();
 
   updateDate(DateTime picked, TextEditingController dateController) {
@@ -75,8 +66,6 @@ class _CrearCultivoScreenState extends State<CrearCultivoScreen> {
       },
     );
   }
-
-  final DateFormat formatter = DateFormat('dd-MM-yyyy');
 
   _onPressed() async {
     if (_formKey.currentState
@@ -146,6 +135,24 @@ class _CrearCultivoScreenState extends State<CrearCultivoScreen> {
     }
   }
 
+  updateSupply(newValue) {
+    setState(() {
+      this.supplyID = newValue;
+    });
+  }
+
+  updateWeightUnit(newValue) {
+    setState(() {
+      this.weightUnit = newValue;
+    });
+  }
+
+  updateAreaUnit(newValue) {
+    setState(() {
+      this.areaUnit = newValue;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     WidgetsFlutterBinding.ensureInitialized();
@@ -172,80 +179,24 @@ class _CrearCultivoScreenState extends State<CrearCultivoScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   ImageCarousel(images: this._images, getImage: this.getImage),
-                  Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        SupplyDropdown(
-                          supplyID: this.supplyID,
-                          updateSupply: (newValue) => setState(() {this.supplyID = newValue;})
-                        ),
-                        Separator(height: 0.01),
-                        UnitDropdown(
-                          initialUnit: this.weightUnit,
-                          updateUnit: (newValue) => setState(() {this.weightUnit = newValue;}),
-                          items: PriceUnit.getPriceUnits()
-                        ),
-                        Separator(height: 0.01),
-                        CosechaTextFormField(
-                          validator: "El campo Precio no puede ser vacío",
-                          text: "Precio unitario x ",
-                          controller: this.unitPriceController,
-                          unit: this.weightUnit,
-                        ),
-                        Separator(height: 0.01),
-                        UnitDropdown(
-                          initialUnit: this.areaUnit,
-                          updateUnit: (newValue) => setState(() {this.areaUnit = newValue;}),
-                          items: AreaUnit.getAreaUnits()
-                        ), 
-                        Separator(height: 0.01),
-                        CosechaTextFormField(
-                          validator: "El campo Área no puede ser vacío",
-                          text: "Área en ",
-                          controller: this.areaController,
-                          unit: this.areaUnit,
-                        ),
-                        Separator(height: 0.01),
-                        CosechaCalendar(
-                          updateDate: this.updateDate,
-                          controller: this.sowingDateController,
-                          selectedDate: this.selectedSowingDate,
-                          label: "Fecha de siembra"
-                        ),
-                        Separator(height: 0.01),
-                        CosechaCalendar(
-                          updateDate: this.updateDate,
-                          controller: this.harvestDateController,
-                          selectedDate: this.selectedHarvestDate,
-                          label: "Fecha de cosecha"
-                        ),
-                        SizedBox(height: 20),
-                        Container(
-                          child: FlatButton(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
-                            ),
-                            onPressed: () async {
-                              this._onPressed();
-                            },
-                            color: Colors.green[400],
-                            child: this.isLoading
-                              ? LinearProgressIndicator(
-                                  minHeight: 5,
-                                )
-                              : Text(
-                                  'Crear Cultivo',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                          ),
-                        ),
-                      ]
-                    )
+                  CosechaDivider(),
+                  CosechaForm(
+                    supplyID: this.supplyID,
+                    updateSupply: this.updateSupply,
+                    unitPriceController: this.unitPriceController,
+                    weightUnit: this.weightUnit,
+                    updateWeightUnit: this.updateWeightUnit,
+                    areaController: this.areaController,
+                    areaUnit: this.areaUnit,
+                    updateAreaUnit: this.updateAreaUnit,
+                    updateDate: this.updateDate,
+                    sowingDateController: this.sowingDateController,
+                    selectedSowingDate: this.selectedSowingDate,
+                    harvestDateController: this.harvestDateController,
+                    selectedHarvestDate: this.selectedHarvestDate,
+                    onPressed: this._onPressed,
+                    isLoading: this.isLoading,
+                    formKey: this._formKey,
                   )
                 ]
               )

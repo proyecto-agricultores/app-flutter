@@ -9,7 +9,7 @@ class UnitDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButton<String>(
+    return DropdownButtonFormField<String>(
       value: this.initialUnit,
       icon: Icon(Icons.arrow_downward),
       onChanged: (String newValue) {
@@ -25,6 +25,10 @@ class UnitDropdown extends StatelessWidget {
           value: priceUnit.abbreviation,
         );
       }).toList(),
+      decoration: InputDecoration(
+        labelText: "Unidad",
+        enabledBorder: UnderlineInputBorder( borderSide: BorderSide(color: Colors.white)),
+      ),
     );
   }
 }

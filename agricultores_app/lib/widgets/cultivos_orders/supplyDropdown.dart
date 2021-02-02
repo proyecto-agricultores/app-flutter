@@ -19,7 +19,7 @@ class SupplyDropdown extends StatelessWidget {
         } else {
           List<Supply> listResponse =
               snapshot.data;
-          return DropdownButton(
+          return DropdownButtonFormField(
             value: supplyID,
             icon: Icon(Icons.arrow_downward),
             onChanged: (newValue) {
@@ -31,6 +31,10 @@ class SupplyDropdown extends StatelessWidget {
                 value: item.id,
               );
             }).toList(),
+            decoration: new InputDecoration(
+              labelText: "Insumo",
+              enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+            ),
           );
         }
       },

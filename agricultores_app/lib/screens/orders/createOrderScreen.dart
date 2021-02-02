@@ -70,7 +70,8 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
           );
         }).toList(),
         decoration: new InputDecoration(
-          labelText: "Insumo"
+          labelText: "Insumo",
+          enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
         ),
       )
     );

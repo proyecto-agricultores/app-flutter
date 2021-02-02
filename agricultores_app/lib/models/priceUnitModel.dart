@@ -8,6 +8,6 @@ class PriceUnit {
   }
 
   static List<PriceUnit> getPriceUnits() {
-    return [PriceUnit('ton', 'la tonelada'), PriceUnit('kg', 'el kilo')];
+    return [PriceUnit('ton', 'toneladas'), PriceUnit('kg', 'kilogramos')];
   }
 }
