@@ -119,7 +119,7 @@ class CosechaForm extends StatelessWidget {
             )
             :
             Text(
-              'Crear Cultivo',
+              this.buttonText,
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
