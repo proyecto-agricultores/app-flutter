@@ -6,16 +6,16 @@ import 'package:agricultores_app/models/supplyModel.dart';
 import 'package:agricultores_app/services/supplyService.dart';
 import 'package:agricultores_app/models/areaUnitModel.dart';
 
-class CreateOrderScreen extends StatefulWidget {
-  CreateOrderScreen({Key key, this.title}) : super(key: key);
+class UpdateOrderScreen extends StatefulWidget {
+  UpdateOrderScreen({Key key, this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _CreateOrderScreenState createState() => _CreateOrderScreenState();
+  _UpdateOrderScreenState createState() => _UpdateOrderScreenState();
 }
 
-class _CreateOrderScreenState extends State<CreateOrderScreen> {
+class _UpdateOrderScreenState extends State<UpdateOrderScreen> {
 
   int _selectedSupply;
   String _selectedAreaUnit = 'hm2';
@@ -28,6 +28,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
   TextEditingController priceController = new TextEditingController();
   DateTime _sowingDate = DateTime.now();
   DateTime _harvestDate = DateTime.now();
+  final _harvestDateController = new TextEditingController();
   bool _isLoading = false;
 
   final _formKey = new GlobalKey<FormState>();
@@ -198,75 +199,6 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
     );
   }
 
-  Future<void> _selectSowingDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
-      context: context,
-      initialDate: _sowingDate,
-      firstDate: DateTime(2015, 8),
-      lastDate: DateTime(2101));
-    if (picked != null && picked != _sowingDate)
-      setState(() {
-        _sowingDate = picked;
-      });
-  }
-
-  Widget _pickSowingDate() {
-    String date = "${_sowingDate.toLocal()}".split(' ')[0];
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.grey[200],
-          ),
-          child: Text(date),
-        ),
-        SizedBox(width: MediaQuery.of(context).size.height * 0.05,),
-        RaisedButton(
-          onPressed: () => _selectSowingDate(context),
-          child: Text('Seleccionar fecha de siembra'),
-        ),
-      ],
-    );
-  }
-
-  Future<void> _selectHarvestDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
-      context: context,
-      initialDate: _harvestDate,
-      firstDate: DateTime(2015, 8),
-      lastDate: DateTime(2101));
-    if (picked != null && picked != _harvestDate)
-      setState(() {
-        _harvestDate = picked;
-      });
-  }
-
-  Widget _pickHarvestDate() {
-    String date = "${_harvestDate.toLocal()}".split(' ')[0];
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.grey[200],
-          ),
-          child: Text(date),
-        ),
-        SizedBox(width: MediaQuery.of(context).size.height * 0.05,),
-        RaisedButton(
-          onPressed: () => _selectHarvestDate(context),
-          child: Text(
-            'Seleccionar fecha de cosecha',
-            softWrap: false,
-            overflow: TextOverflow.fade,
-            maxLines: 1,
-          ),
-        ),
-      ],
-    );
-  }
-
   Widget _nextButton() {
     return FlatButton(
       shape: RoundedRectangleBorder(
@@ -322,9 +254,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                       this._quantityInput(),
                       this._priceInput(),
                       SizedBox(height: MediaQuery.of(context).size.height * 0.02,),
-                      this._pickSowingDate(),
                       Divider(color: Colors.grey[800]),
-                      this._pickHarvestDate(),
                       Divider(color: Colors.grey[800]),
                       this._nextButton(),
                       this._cancelButton()
@@ -360,6 +290,52 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
               fontSize: 16
             )
         )
+    );
+  }
+
+  _selectDate(BuildContext context, DateTime selectedDate,
+      TextEditingController _dateController) async {
+    final DateTime picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(2021),
+      lastDate: DateTime(2100),
+    );
+    if (picked != null && picked != selectedDate)
+      setState(
+        () {
+          selectedDate = picked;
+          var date =
+              "${picked.toLocal().day}-${picked.toLocal().month}-${picked.toLocal().year}";
+          _dateController.text = date;
+        },
+      );
+  }
+
+  Widget _calendarioChristian() {
+    return GestureDetector(
+      onTap: () => _selectDate(
+        context,
+        _harvestDate,
+        _harvestDateController,
+      ),
+      child: AbsorbPointer(
+        child: TextFormField(
+          // onSaved: (val) {
+          //   task.date = selectedHarvestDate;
+          // },
+          controller: _harvestDateController,
+          decoration: InputDecoration(
+            labelText: "Fecha de Cosecha",
+            icon: Icon(Icons.calendar_today),
+          ),
+          validator: (value) {
+            if (value.isEmpty)
+              return "Please enter a date for your task";
+            return null;
+          },
+        ),
+      ),
     );
   }
 
