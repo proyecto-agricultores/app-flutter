@@ -1,3 +1,4 @@
+import 'package:agricultores_app/screens/orders/createOrderScreen.dart';
 import 'package:agricultores_app/screens/loadingScreen.dart';
 import 'package:agricultores_app/screens/homeScreen.dart';
 import 'package:agricultores_app/services/helloWorldService.dart';
@@ -25,7 +26,8 @@ class MyApp extends StatelessWidget {
         future: HelloWorldService.getHelloWorld(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
-            return HomeScreen();
+            //return HomeScreen();
+            return CreateOrderScreen();
           } else if (snapshot.hasError) {
             return LoginScreen();
           } else {
