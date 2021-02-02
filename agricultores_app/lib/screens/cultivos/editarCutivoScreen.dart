@@ -1,3 +1,4 @@
+import 'package:agricultores_app/models/myPubModel.dart';
 import 'package:agricultores_app/services/myPubService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'
@@ -44,12 +45,13 @@ class _EditarCultivoScreenState extends State<EditarCultivoScreen> {
   DateTime selectedSowingDate = DateTime.now();
 
   final suppliesController = TextEditingController();
-  final pictureURLController = TextEditingController();
-  final quantityController = TextEditingController();
+  final pictureURLsController = TextEditingController();
+  final areaController = TextEditingController();
   final unitPriceController = TextEditingController();
   final harvestDateController = TextEditingController();
   final sowingDateController = TextEditingController();
-  String unitValue = "Kg";
+  String weightUnit = "kg";
+  String areaUnit = "hm2";
 
   final _formKey = new GlobalKey<FormState>();
 
@@ -95,11 +97,12 @@ class _EditarCultivoScreenState extends State<EditarCultivoScreen> {
   @override
   void initState() {
     super.initState();
-    quantityController.text = dataCultivo.quantity.toString();
+    weightUnit = dataCultivo.weightUnit;
     unitPriceController.text = dataCultivo.unitPrice.toString();
+    areaUnit = dataCultivo.areaUnit;
+    areaController.text = dataCultivo.area.toString();
     harvestDateController.text = formatter.format(dataCultivo.harvestDate);
     sowingDateController.text = formatter.format(dataCultivo.sowingDate);
-    unitValue = dataCultivo.unit;
   }
 
   @override
@@ -133,15 +136,24 @@ class _EditarCultivoScreenState extends State<EditarCultivoScreen> {
                           children: [
                             Column(
                               children: [
-                                TextFormField(
-                                  keyboardType: TextInputType.number,
-                                  inputFormatters: [digitsOnly],
-                                  controller: quantityController,
-                                  validator: (value) => value.isEmpty
-                                      ? "El campo Nombres no puede ser vacío"
-                                      : null,
-                                  maxLength: 30,
-                                  decoration: _buildInputDecoration("Cantidad"),
+                                DropdownButton<String>(
+                                  value: weightUnit,
+                                  icon: Icon(Icons.arrow_downward),
+                                  onChanged: (String newValue) {
+                                    setState(() {
+                                      weightUnit = newValue;
+                                    });
+                                  },
+                                  items: <String>[
+                                    'kg',
+                                    'ton',
+                                  ].map<DropdownMenuItem<String>>(
+                                      (String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
                                 ),
                                 this._separator(),
                                 TextFormField(
@@ -152,20 +164,21 @@ class _EditarCultivoScreenState extends State<EditarCultivoScreen> {
                                       ? "El campo Nombres no puede ser vacío"
                                       : null,
                                   maxLength: 30,
-                                  decoration:
-                                      _buildInputDecoration("Precio unitario"),
+                                  decoration: _buildInputDecoration(
+                                      "Precio unitario x " + weightUnit),
                                 ),
+                                this._separator(),
                                 DropdownButton<String>(
-                                  value: unitValue,
+                                  value: areaUnit,
                                   icon: Icon(Icons.arrow_downward),
                                   onChanged: (String newValue) {
                                     setState(() {
-                                      unitValue = newValue;
+                                      areaUnit = newValue;
                                     });
                                   },
                                   items: <String>[
-                                    'Kg',
-                                    'g',
+                                    'hm2',
+                                    'm2',
                                   ].map<DropdownMenuItem<String>>(
                                       (String value) {
                                     return DropdownMenuItem<String>(
@@ -174,6 +187,19 @@ class _EditarCultivoScreenState extends State<EditarCultivoScreen> {
                                     );
                                   }).toList(),
                                 ),
+                                this._separator(),
+                                TextFormField(
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: [digitsOnly],
+                                  controller: areaController,
+                                  validator: (value) => value.isEmpty
+                                      ? "El campo Nombres no puede ser vacío"
+                                      : null,
+                                  maxLength: 30,
+                                  decoration: _buildInputDecoration(
+                                      "Área en " + areaUnit),
+                                ),
+                                this._separator(),
                                 GestureDetector(
                                   onTap: () => _selectDate(
                                     context,
@@ -182,9 +208,6 @@ class _EditarCultivoScreenState extends State<EditarCultivoScreen> {
                                   ),
                                   child: AbsorbPointer(
                                     child: TextFormField(
-                                      // onSaved: (val) {
-                                      //   task.date = selectedHarvestDate;
-                                      // },
                                       controller: harvestDateController,
                                       decoration: InputDecoration(
                                         labelText: "Fecha de Cosecha",
@@ -192,7 +215,7 @@ class _EditarCultivoScreenState extends State<EditarCultivoScreen> {
                                       ),
                                       validator: (value) {
                                         if (value.isEmpty)
-                                          return "Please enter a date for your task";
+                                          return "Por favor ingresar una fecha.";
                                         return null;
                                       },
                                     ),
@@ -214,7 +237,7 @@ class _EditarCultivoScreenState extends State<EditarCultivoScreen> {
                                       ),
                                       validator: (value) {
                                         if (value.isEmpty)
-                                          return "Please enter a date for your task";
+                                          return "Por favor ingresar una fecha.";
                                         return null;
                                       },
                                     ),
@@ -234,21 +257,26 @@ class _EditarCultivoScreenState extends State<EditarCultivoScreen> {
                                         try {
                                           final update =
                                               await MyPubService.update(
-                                            this.cultivoId,
-                                            null,
-                                            this.unitValue,
-                                            int.parse(
-                                              quantityController.text,
-                                            ),
-                                            formatter.parse(
-                                                harvestDateController.text),
-                                            formatter.parse(
-                                                sowingDateController.text),
-                                            double.parse(
-                                              unitPriceController.text,
+                                            MyPub(
+                                              id: this.cultivoId,
+                                              supplieName: null,
+                                              pictureURLs: null,
+                                              weightUnit: this.weightUnit,
+                                              unitPrice: double.parse(
+                                                unitPriceController.text,
+                                              ),
+                                              areaUnit: this.areaUnit,
+                                              area: double.parse(
+                                                areaController.text,
+                                              ),
+                                              harvestDate: formatter.parse(
+                                                harvestDateController.text,
+                                              ),
+                                              sowingDate: formatter.parse(
+                                                sowingDateController.text,
+                                              ),
                                             ),
                                           );
-
                                           setState(() {
                                             this.isLoading = false;
                                           });

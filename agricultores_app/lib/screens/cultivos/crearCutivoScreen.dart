@@ -1,4 +1,8 @@
 import 'dart:io';
+import 'package:agricultores_app/models/myPubModel.dart';
+import 'package:agricultores_app/models/supplyModel.dart';
+import 'package:agricultores_app/services/myPubService.dart';
+import 'package:agricultores_app/services/supplysService.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'
@@ -32,11 +36,13 @@ class _CrearCultivoScreenState extends State<CrearCultivoScreen> {
 
   final suppliesController = TextEditingController();
   final pictureURLController = TextEditingController();
-  final quantityController = TextEditingController();
+  final areaController = TextEditingController();
   final unitPriceController = TextEditingController();
   final harvestDateController = TextEditingController();
   final sowingDateController = TextEditingController();
-  String unitValue = "Kg";
+  String weightUnit = "kg";
+  String areaUnit = "hm2";
+  int supplyID = 1;
 
   final _formKey = new GlobalKey<FormState>();
 
@@ -177,16 +183,53 @@ class _CrearCultivoScreenState extends State<CrearCultivoScreen> {
                               children: [
                                 Column(
                                   children: [
-                                    TextFormField(
-                                      keyboardType: TextInputType.number,
-                                      inputFormatters: [digitsOnly],
-                                      controller: quantityController,
-                                      validator: (value) => value.isEmpty
-                                          ? "El campo Nombres no puede ser vacío"
-                                          : null,
-                                      maxLength: 30,
-                                      decoration:
-                                          _buildInputDecoration("Cantidad"),
+                                    FutureBuilder(
+                                      future: SupplyService.getSupplys(),
+                                      builder: (context, snapshot) {
+                                        if (!snapshot.hasData) {
+                                          return Center(
+                                              child:
+                                                  CircularProgressIndicator());
+                                        } else {
+                                          List<Supply> listResponse =
+                                              snapshot.data;
+                                          return DropdownButton(
+                                            value: supplyID,
+                                            icon: Icon(Icons.arrow_downward),
+                                            onChanged: (newValue) {
+                                              setState(() {
+                                                supplyID = newValue;
+                                              });
+                                            },
+                                            items: listResponse.map((item) {
+                                              return DropdownMenuItem(
+                                                child: Text(item.name),
+                                                value: item.id,
+                                              );
+                                            }).toList(),
+                                          );
+                                        }
+                                      },
+                                    ),
+                                    this._separator(),
+                                    DropdownButton<String>(
+                                      value: weightUnit,
+                                      icon: Icon(Icons.arrow_downward),
+                                      onChanged: (String newValue) {
+                                        setState(() {
+                                          weightUnit = newValue;
+                                        });
+                                      },
+                                      items: <String>[
+                                        'kg',
+                                        'ton',
+                                      ].map<DropdownMenuItem<String>>(
+                                          (String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
                                     ),
                                     this._separator(),
                                     TextFormField(
@@ -199,19 +242,20 @@ class _CrearCultivoScreenState extends State<CrearCultivoScreen> {
                                           : null,
                                       maxLength: 30,
                                       decoration: _buildInputDecoration(
-                                          "Precio unitario"),
+                                          "Precio unitario x " + weightUnit),
                                     ),
+                                    this._separator(),
                                     DropdownButton<String>(
-                                      value: unitValue,
+                                      value: areaUnit,
                                       icon: Icon(Icons.arrow_downward),
                                       onChanged: (String newValue) {
                                         setState(() {
-                                          unitValue = newValue;
+                                          areaUnit = newValue;
                                         });
                                       },
                                       items: <String>[
-                                        'Kg',
-                                        'g',
+                                        'hm2',
+                                        'm2',
                                       ].map<DropdownMenuItem<String>>(
                                           (String value) {
                                         return DropdownMenuItem<String>(
@@ -220,6 +264,19 @@ class _CrearCultivoScreenState extends State<CrearCultivoScreen> {
                                         );
                                       }).toList(),
                                     ),
+                                    this._separator(),
+                                    TextFormField(
+                                      keyboardType: TextInputType.number,
+                                      inputFormatters: [digitsOnly],
+                                      controller: areaController,
+                                      validator: (value) => value.isEmpty
+                                          ? "El campo Nombres no puede ser vacío"
+                                          : null,
+                                      maxLength: 30,
+                                      decoration: _buildInputDecoration(
+                                          "Área en " + areaUnit),
+                                    ),
+                                    this._separator(),
                                     GestureDetector(
                                       onTap: () => _selectDate(
                                         context,
@@ -235,7 +292,7 @@ class _CrearCultivoScreenState extends State<CrearCultivoScreen> {
                                           ),
                                           validator: (value) {
                                             if (value.isEmpty)
-                                              return "Please enter a date for your task";
+                                              return "Por favor ingresar una fecha.";
                                             return null;
                                           },
                                         ),
@@ -257,13 +314,12 @@ class _CrearCultivoScreenState extends State<CrearCultivoScreen> {
                                           ),
                                           validator: (value) {
                                             if (value.isEmpty)
-                                              return "Please enter a date for your task";
+                                              return "Por favor ingresar una fecha.";
                                             return null;
                                           },
                                         ),
                                       ),
                                     ),
-                                    this._separator(),
                                     SizedBox(height: 20),
                                     Container(
                                       child: FlatButton(
@@ -278,48 +334,61 @@ class _CrearCultivoScreenState extends State<CrearCultivoScreen> {
                                               this.isLoading = true;
                                             });
                                             try {
-                                              // final update =
-                                              //     await MyPubService.update(
-                                              //   this.cultivoId,
-                                              //   null,
-                                              //   this.unitValue,
-                                              //   int.parse(
-                                              //     quantityController.text,
-                                              //   ),
-                                              //   formatter.parse(
-                                              //       harvestDateController.text),
-                                              //   formatter.parse(
-                                              //       sowingDateController.text),
-                                              //   double.parse(
-                                              //     unitPriceController.text,
-                                              //   ),
-                                              // );
+                                              final crearCultivoResponse =
+                                                  await MyPubService.create(
+                                                supplyID,
+                                                MyPub(
+                                                  weightUnit: this.weightUnit,
+                                                  unitPrice: double.parse(
+                                                    unitPriceController.text,
+                                                  ),
+                                                  areaUnit: this.areaUnit,
+                                                  area: double.parse(
+                                                    areaController.text,
+                                                  ),
+                                                  harvestDate: formatter.parse(
+                                                    harvestDateController.text,
+                                                  ),
+                                                  sowingDate: formatter.parse(
+                                                    sowingDateController.text,
+                                                  ),
+                                                ),
+                                              );
 
-                                              // setState(() {
-                                              //   this.isLoading = false;
-                                              // });
-                                              // return showDialog<void>(
-                                              //   context: context,
-                                              //   barrierDismissible: true,
-                                              //   builder: (BuildContext context) {
-                                              //     return AlertDialog(
-                                              //       title: Text(
-                                              //           'Cambios realizados correctamente.'),
-                                              //       content: Text(
-                                              //           'Se acaba de actualizar el cultivo con nuevos datos.'),
-                                              //       actions: <Widget>[
-                                              //         TextButton(
-                                              //           child: Text('OK!'),
-                                              //           onPressed: () {
-                                              //             Navigator.of(context)
-                                              //                 .popUntil((route) =>
-                                              //                     route.isFirst);
-                                              //           },
-                                              //         ),
-                                              //       ],
-                                              //     );
-                                              //   },
-                                              // );
+                                              for (var image in _images) {
+                                                await MyPubService
+                                                    .appendPubPicture(
+                                                        crearCultivoResponse.id,
+                                                        image.path);
+                                              }
+
+                                              setState(() {
+                                                this.isLoading = false;
+                                              });
+                                              return showDialog<void>(
+                                                context: context,
+                                                barrierDismissible: true,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return AlertDialog(
+                                                    title: Text(
+                                                        'Cultivo creado correctamente.'),
+                                                    content: Text(
+                                                        'Se acaba de crear el cultivo. Ahora lo podrás encontrar en tu perfil.'),
+                                                    actions: <Widget>[
+                                                      TextButton(
+                                                        child: Text('OK!'),
+                                                        onPressed: () {
+                                                          Navigator.of(context)
+                                                              .popUntil((route) =>
+                                                                  route
+                                                                      .isFirst);
+                                                        },
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              );
                                             } catch (e) {
                                               throw e;
                                             }

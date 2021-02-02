@@ -1,7 +1,7 @@
 class MyPub {
   final int id;
   final String supplieName;
-  final String pictureURL;
+  final List<String> pictureURLs;
   final String weightUnit;
   final double unitPrice;
   final String areaUnit;
@@ -12,7 +12,7 @@ class MyPub {
   MyPub({
     this.id,
     this.supplieName,
-    this.pictureURL,
+    this.pictureURLs,
     this.weightUnit,
     this.unitPrice,
     this.areaUnit,
@@ -25,7 +25,7 @@ class MyPub {
     return MyPub(
       id: json['id'],
       supplieName: json['supplies']['name'],
-      pictureURL: json['picture_URL'],
+      pictureURLs: json['picture_URL'],
       weightUnit: json['weight_unit'],
       unitPrice: json['unit_price'],
       areaUnit: json['area_unit'],

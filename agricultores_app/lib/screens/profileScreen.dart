@@ -336,7 +336,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       height: 150,
                                       width: MediaQuery.of(context).size.width,
                                       fit: BoxFit.cover,
-                                      image: listResponse[index].pictureURL ==
+                                      image: listResponse[index].pictureURLs ==
                                               null
                                           ? AssetImage(
                                               "assets/images/papas.jpg")

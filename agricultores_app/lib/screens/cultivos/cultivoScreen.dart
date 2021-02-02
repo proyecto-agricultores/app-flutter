@@ -68,9 +68,9 @@ class _CultivoScreenState extends State<CultivoScreen> {
                               height: 300,
                               width: MediaQuery.of(context).size.width,
                               fit: BoxFit.cover,
-                              image: snapshot.data.pictureURL == null
+                              image: snapshot.data.pictureURLs == null
                                   ? AssetImage("assets/images/papas.jpg")
-                                  : NetworkImage(snapshot.data.pictureURL),
+                                  : NetworkImage(snapshot.data.pictureURLs),
                             ),
                           ),
                           SizedBox(height: 20),
