@@ -1,3 +1,5 @@
+import 'package:agricultores_app/screens/cultivos/crearCutivoScreen.dart';
+import 'package:agricultores_app/screens/homeScreen.dart';
 import 'package:agricultores_app/screens/orders/createOrderScreen.dart';
 import 'package:agricultores_app/screens/register/registerScreen.dart';
 import 'package:agricultores_app/services/token.dart';
@@ -117,8 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         telephone, passwordController.text);
                     await Navigator.pushReplacement(
                       context,
-                      //MaterialPageRoute(builder: (context) => HomeScreen()),
-                      MaterialPageRoute(builder: (context) => CreateOrderScreen()),
+                      MaterialPageRoute(builder: (context) => HomeScreen()),
                     );
                   } catch (e) {
                     setState(() {
