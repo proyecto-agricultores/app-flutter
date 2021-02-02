@@ -1,8 +1,16 @@
 import 'dart:io';
+import 'package:agricultores_app/models/areaUnitModel.dart';
 import 'package:agricultores_app/models/myPubModel.dart';
+import 'package:agricultores_app/models/priceUnitModel.dart';
 import 'package:agricultores_app/models/supplyModel.dart';
 import 'package:agricultores_app/services/myPubService.dart';
 import 'package:agricultores_app/services/supplysService.dart';
+import 'package:agricultores_app/widgets/cultivos_orders/cosechaCalendar.dart';
+import 'package:agricultores_app/widgets/cultivos_orders/cosechaTextFormField.dart';
+import 'package:agricultores_app/widgets/cultivos_orders/imageCarouselWidget.dart';
+import 'package:agricultores_app/widgets/cultivos_orders/supplyDropdown.dart';
+import 'package:agricultores_app/widgets/cultivos_orders/unitDropdown.dart';
+import 'package:agricultores_app/widgets/general/separator.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'
@@ -46,41 +54,12 @@ class _CrearCultivoScreenState extends State<CrearCultivoScreen> {
 
   final _formKey = new GlobalKey<FormState>();
 
-  static final TextInputFormatter digitsOnly =
-      FilteringTextInputFormatter.allow(RegExp(r'[0-9]'));
-
-  InputDecoration _buildInputDecoration(String placeholder) {
-    return InputDecoration(
-      labelText: placeholder,
-      counterText: "",
-      border: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.green),
-        borderRadius: const BorderRadius.all(const Radius.circular(20.0)),
-      ),
+  updateDate(DateTime picked, TextEditingController dateController) {
+    setState(() {
+        var date = "${picked.toLocal().day}-${picked.toLocal().month}-${picked.toLocal().year}";
+        dateController.text = date;
+      },
     );
-  }
-
-  SizedBox _separator() {
-    return SizedBox(height: MediaQuery.of(context).size.height * 0.01);
-  }
-
-  _selectDate(BuildContext context, DateTime selectedDate,
-      TextEditingController _dateController) async {
-    final DateTime picked = await showDatePicker(
-      context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime(2021),
-      lastDate: DateTime(2100),
-    );
-    if (picked != null && picked != selectedDate)
-      setState(
-        () {
-          selectedDate = picked;
-          var date =
-              "${picked.toLocal().day}-${picked.toLocal().month}-${picked.toLocal().year}";
-          _dateController.text = date;
-        },
-      );
   }
 
   Future getImage(ImageSource src) async {
@@ -98,6 +77,74 @@ class _CrearCultivoScreenState extends State<CrearCultivoScreen> {
   }
 
   final DateFormat formatter = DateFormat('dd-MM-yyyy');
+
+  _onPressed() async {
+    if (_formKey.currentState
+        .validate()) {
+      setState(() {
+        this.isLoading = true;
+      });
+      try {
+        final crearCultivoResponse =
+            await MyPubService.create(
+          supplyID,
+          MyPub(
+            weightUnit: this.weightUnit,
+            unitPrice: double.parse(
+              unitPriceController.text,
+            ),
+            areaUnit: this.areaUnit,
+            area: double.parse(
+              areaController.text,
+            ),
+            harvestDate: formatter.parse(
+              harvestDateController.text,
+            ),
+            sowingDate: formatter.parse(
+              sowingDateController.text,
+            ),
+          ),
+        );
+
+        for (var image in _images) {
+          await MyPubService
+              .appendPubPicture(
+                  crearCultivoResponse.id,
+                  image.path);
+        }
+
+        setState(() {
+          this.isLoading = false;
+        });
+        return showDialog<void>(
+          context: context,
+          barrierDismissible: true,
+          builder:
+              (BuildContext context) {
+            return AlertDialog(
+              title: Text(
+                  'Cultivo creado correctamente.'),
+              content: Text(
+                  'Se acaba de crear el cultivo. Ahora lo podrás encontrar en tu perfil.'),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('OK!'),
+                  onPressed: () {
+                    Navigator.of(context)
+                        .popUntil((route) =>
+                            route
+                                .isFirst);
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      } catch (e) {
+        throw e;
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -124,307 +171,88 @@ class _CrearCultivoScreenState extends State<CrearCultivoScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  _images.isNotEmpty
-                      ? Container(
-                          child: CarouselSlider(
-                            options: CarouselOptions(
-                              height: 200.0,
-                              viewportFraction: 0.6,
-                              enableInfiniteScroll: false,
-                              enlargeCenterPage: true,
-                            ),
-                            items: _images
-                                .map(
-                                  (item) => Container(
-                                    height: 500.0,
-                                    decoration: new BoxDecoration(
-                                      color: const Color(0xff7c94b6),
-                                      image: DecorationImage(
-                                        image: new FileImage(item),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                )
-                                .toList(),
-                          ),
-                        )
-                      : Container(),
-                  SizedBox(height: 30),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text("Agregar Imágenes: "),
-                      SizedBox(width: 10),
-                      FloatingActionButton(
-                        onPressed: () => getImage(ImageSource.camera),
-                        tooltip: 'Pick Image',
-                        child: Icon(Icons.add_a_photo),
-                        heroTag: 'camera',
-                      ),
-                      SizedBox(width: 10),
-                      FloatingActionButton(
-                        onPressed: () => getImage(ImageSource.gallery),
-                        tooltip: 'Pick Image From Library',
-                        child: Icon(Icons.photo_library),
-                        heroTag: 'library',
-                      )
-                    ],
-                  ),
-                  SizedBox(height: 50),
-                  Container(
+                  ImageCarousel(images: this._images, getImage: this.getImage),
+                  Form(
+                    key: _formKey,
                     child: Column(
                       children: [
-                        Form(
-                          key: _formKey,
-                          child: Container(
-                            alignment: Alignment.center,
-                            child: Column(
-                              children: [
-                                Column(
-                                  children: [
-                                    FutureBuilder(
-                                      future: SupplyService.getSupplys(),
-                                      builder: (context, snapshot) {
-                                        if (!snapshot.hasData) {
-                                          return Center(
-                                              child:
-                                                  CircularProgressIndicator());
-                                        } else {
-                                          List<Supply> listResponse =
-                                              snapshot.data;
-                                          return DropdownButton(
-                                            value: supplyID,
-                                            icon: Icon(Icons.arrow_downward),
-                                            onChanged: (newValue) {
-                                              setState(() {
-                                                supplyID = newValue;
-                                              });
-                                            },
-                                            items: listResponse.map((item) {
-                                              return DropdownMenuItem(
-                                                child: Text(item.name),
-                                                value: item.id,
-                                              );
-                                            }).toList(),
-                                          );
-                                        }
-                                      },
-                                    ),
-                                    this._separator(),
-                                    DropdownButton<String>(
-                                      value: weightUnit,
-                                      icon: Icon(Icons.arrow_downward),
-                                      onChanged: (String newValue) {
-                                        setState(() {
-                                          weightUnit = newValue;
-                                        });
-                                      },
-                                      items: <String>[
-                                        'kg',
-                                        'ton',
-                                      ].map<DropdownMenuItem<String>>(
-                                          (String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(value),
-                                        );
-                                      }).toList(),
-                                    ),
-                                    this._separator(),
-                                    TextFormField(
-                                      keyboardType:
-                                          TextInputType.numberWithOptions(
-                                              decimal: true, signed: true),
-                                      controller: unitPriceController,
-                                      validator: (value) => value.isEmpty
-                                          ? "El campo Nombres no puede ser vacío"
-                                          : null,
-                                      maxLength: 30,
-                                      decoration: _buildInputDecoration(
-                                          "Precio unitario x " + weightUnit),
-                                    ),
-                                    this._separator(),
-                                    DropdownButton<String>(
-                                      value: areaUnit,
-                                      icon: Icon(Icons.arrow_downward),
-                                      onChanged: (String newValue) {
-                                        setState(() {
-                                          areaUnit = newValue;
-                                        });
-                                      },
-                                      items: <String>[
-                                        'hm2',
-                                        'm2',
-                                      ].map<DropdownMenuItem<String>>(
-                                          (String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(value),
-                                        );
-                                      }).toList(),
-                                    ),
-                                    this._separator(),
-                                    TextFormField(
-                                      keyboardType: TextInputType.number,
-                                      inputFormatters: [digitsOnly],
-                                      controller: areaController,
-                                      validator: (value) => value.isEmpty
-                                          ? "El campo Nombres no puede ser vacío"
-                                          : null,
-                                      maxLength: 30,
-                                      decoration: _buildInputDecoration(
-                                          "Área en " + areaUnit),
-                                    ),
-                                    this._separator(),
-                                    GestureDetector(
-                                      onTap: () => _selectDate(
-                                        context,
-                                        selectedHarvestDate,
-                                        harvestDateController,
-                                      ),
-                                      child: AbsorbPointer(
-                                        child: TextFormField(
-                                          controller: harvestDateController,
-                                          decoration: InputDecoration(
-                                            labelText: "Fecha de Cosecha",
-                                            icon: Icon(Icons.calendar_today),
-                                          ),
-                                          validator: (value) {
-                                            if (value.isEmpty)
-                                              return "Por favor ingresar una fecha.";
-                                            return null;
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                    this._separator(),
-                                    GestureDetector(
-                                      onTap: () => _selectDate(
-                                        context,
-                                        selectedSowingDate,
-                                        sowingDateController,
-                                      ),
-                                      child: AbsorbPointer(
-                                        child: TextFormField(
-                                          controller: sowingDateController,
-                                          decoration: InputDecoration(
-                                            labelText: "Fecha de Siembra",
-                                            icon: Icon(Icons.calendar_today),
-                                          ),
-                                          validator: (value) {
-                                            if (value.isEmpty)
-                                              return "Por favor ingresar una fecha.";
-                                            return null;
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(height: 20),
-                                    Container(
-                                      child: FlatButton(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(18.0),
-                                        ),
-                                        onPressed: () async {
-                                          if (_formKey.currentState
-                                              .validate()) {
-                                            setState(() {
-                                              this.isLoading = true;
-                                            });
-                                            try {
-                                              final crearCultivoResponse =
-                                                  await MyPubService.create(
-                                                supplyID,
-                                                MyPub(
-                                                  weightUnit: this.weightUnit,
-                                                  unitPrice: double.parse(
-                                                    unitPriceController.text,
-                                                  ),
-                                                  areaUnit: this.areaUnit,
-                                                  area: double.parse(
-                                                    areaController.text,
-                                                  ),
-                                                  harvestDate: formatter.parse(
-                                                    harvestDateController.text,
-                                                  ),
-                                                  sowingDate: formatter.parse(
-                                                    sowingDateController.text,
-                                                  ),
-                                                ),
-                                              );
-
-                                              for (var image in _images) {
-                                                await MyPubService
-                                                    .appendPubPicture(
-                                                        crearCultivoResponse.id,
-                                                        image.path);
-                                              }
-
-                                              setState(() {
-                                                this.isLoading = false;
-                                              });
-                                              return showDialog<void>(
-                                                context: context,
-                                                barrierDismissible: true,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return AlertDialog(
-                                                    title: Text(
-                                                        'Cultivo creado correctamente.'),
-                                                    content: Text(
-                                                        'Se acaba de crear el cultivo. Ahora lo podrás encontrar en tu perfil.'),
-                                                    actions: <Widget>[
-                                                      TextButton(
-                                                        child: Text('OK!'),
-                                                        onPressed: () {
-                                                          Navigator.of(context)
-                                                              .popUntil((route) =>
-                                                                  route
-                                                                      .isFirst);
-                                                        },
-                                                      ),
-                                                    ],
-                                                  );
-                                                },
-                                              );
-                                            } catch (e) {
-                                              throw e;
-                                            }
-                                          }
-                                        },
-                                        color: Colors.green[400],
-                                        child: this.isLoading
-                                            ? LinearProgressIndicator(
-                                                minHeight: 5,
-                                              )
-                                            : Text(
-                                                'Crear Cultivo',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 16,
-                                                ),
-                                              ),
-                                      ),
-                                    ),
-                                    SizedBox(height: 100),
-                                  ],
-                                ),
-                              ],
+                        SupplyDropdown(
+                          supplyID: this.supplyID,
+                          updateSupply: (newValue) => setState(() {this.supplyID = newValue;})
+                        ),
+                        Separator(height: 0.01),
+                        UnitDropdown(
+                          initialUnit: this.weightUnit,
+                          updateUnit: (newValue) => setState(() {this.weightUnit = newValue;}),
+                          items: PriceUnit.getPriceUnits()
+                        ),
+                        Separator(height: 0.01),
+                        CosechaTextFormField(
+                          validator: "El campo Precio no puede ser vacío",
+                          text: "Precio unitario x ",
+                          controller: this.unitPriceController,
+                          unit: this.weightUnit,
+                        ),
+                        Separator(height: 0.01),
+                        UnitDropdown(
+                          initialUnit: this.areaUnit,
+                          updateUnit: (newValue) => setState(() {this.areaUnit = newValue;}),
+                          items: AreaUnit.getAreaUnits()
+                        ), 
+                        Separator(height: 0.01),
+                        CosechaTextFormField(
+                          validator: "El campo Área no puede ser vacío",
+                          text: "Área en ",
+                          controller: this.areaController,
+                          unit: this.areaUnit,
+                        ),
+                        Separator(height: 0.01),
+                        CosechaCalendar(
+                          updateDate: this.updateDate,
+                          controller: this.sowingDateController,
+                          selectedDate: this.selectedSowingDate,
+                          label: "Fecha de siembra"
+                        ),
+                        Separator(height: 0.01),
+                        CosechaCalendar(
+                          updateDate: this.updateDate,
+                          controller: this.harvestDateController,
+                          selectedDate: this.selectedHarvestDate,
+                          label: "Fecha de cosecha"
+                        ),
+                        SizedBox(height: 20),
+                        Container(
+                          child: FlatButton(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
                             ),
+                            onPressed: () async {
+                              this._onPressed();
+                            },
+                            color: Colors.green[400],
+                            child: this.isLoading
+                              ? LinearProgressIndicator(
+                                  minHeight: 5,
+                                )
+                              : Text(
+                                  'Crear Cultivo',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
+                      ]
+                    )
+                  )
+                ]
+              )
+            )
+          )
+        ]
+      )
     );
   }
 }

@@ -3,6 +3,8 @@ import 'package:agricultores_app/screens/homeScreen.dart';
 import 'package:agricultores_app/screens/orders/createOrderScreen.dart';
 import 'package:agricultores_app/screens/register/registerScreen.dart';
 import 'package:agricultores_app/services/token.dart';
+import 'package:agricultores_app/widgets/cultivos_orders/unitDropdown.dart';
+import 'package:agricultores_app/widgets/test_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
@@ -119,7 +121,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         telephone, passwordController.text);
                     await Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => HomeScreen()),
+                      // MaterialPageRoute(builder: (context) => HomeScreen()),
+                      MaterialPageRoute(builder: (context) => CrearCultivoScreen()),
                     );
                   } catch (e) {
                     setState(() {

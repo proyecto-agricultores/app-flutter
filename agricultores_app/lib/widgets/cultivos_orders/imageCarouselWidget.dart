@@ -3,38 +3,17 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-class ImageCarousel extends StatefulWidget {
-  ImageCarousel({this.images});
+class ImageCarousel extends StatelessWidget{
+  ImageCarousel({this.images, this.getImage});
   final List<File> images;
-
-  @override
-  State<StatefulWidget> createState() => _ImageCarouselState(this.images);
-}
-
-class _ImageCarouselState extends State<ImageCarousel>{
-  _ImageCarouselState(this._images);
-  final List<File> _images;
+  final getImage;
   final picker = ImagePicker();
-
-  Future _getImage(ImageSource src) async {
-    final pickedFile = await picker.getImage(source: src);
-
-    setState(
-      () {
-        if (pickedFile != null) {
-          _images.add(File(pickedFile.path));
-        } else {
-          print('No image selected.');
-        }
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        _images.isNotEmpty 
+        images.isNotEmpty 
           ? Container(
               child: CarouselSlider(
                 options: CarouselOptions(
@@ -43,7 +22,7 @@ class _ImageCarouselState extends State<ImageCarousel>{
                   enableInfiniteScroll: false,
                   enlargeCenterPage: true,
                 ),
-                items: _images
+                items: images
                     .map(
                       (item) => Container(
                         height: 500.0,
@@ -67,14 +46,14 @@ class _ImageCarouselState extends State<ImageCarousel>{
             Text("Agregar Imágenes: "),
             SizedBox(width: 10),
             FloatingActionButton(
-              onPressed: () => this._getImage(ImageSource.camera),
+              onPressed: () => this.getImage(ImageSource.camera),
               tooltip: 'Pick Image',
               child: Icon(Icons.add_a_photo),
               heroTag: 'camera',
             ),
             SizedBox(width: 10),
             FloatingActionButton(
-              onPressed: () => this._getImage(ImageSource.gallery),
+              onPressed: () => this.getImage(ImageSource.gallery),
               tooltip: 'Pick Image From Library',
               child: Icon(Icons.photo_library),
               heroTag: 'library',

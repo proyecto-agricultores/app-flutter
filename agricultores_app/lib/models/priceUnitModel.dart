@@ -8,6 +8,6 @@ class PriceUnit {
   }
 
   static List<PriceUnit> getPriceUnits() {
-    return [PriceUnit('sac', 'el saco'), PriceUnit('kg', 'el kilo'), PriceUnit('g', 'el gramo')];
+    return [PriceUnit('ton', 'la tonelada'), PriceUnit('kg', 'el kilo')];
   }
 }
