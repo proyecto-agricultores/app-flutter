@@ -197,6 +197,7 @@ class _CrearCultivoScreenState extends State<CrearCultivoScreen> {
                     onPressed: this._onPressed,
                     isLoading: this.isLoading,
                     formKey: this._formKey,
+                    buttonText: 'Crear Cultivo',
                   )
                 ]
               )

@@ -28,6 +28,7 @@ class CosechaForm extends StatelessWidget {
       this.onPressed,
       this.isLoading,
       this.formKey,
+      this.buttonText,
     }
   );
 
@@ -47,6 +48,7 @@ class CosechaForm extends StatelessWidget {
   final onPressed;
   final isLoading;
   final formKey;
+  final buttonText;
   
   @override
   Widget build(BuildContext context) {
