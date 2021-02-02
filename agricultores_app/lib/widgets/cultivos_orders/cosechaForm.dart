@@ -29,6 +29,7 @@ class CosechaForm extends StatelessWidget {
       this.isLoading,
       this.formKey,
       this.buttonText,
+      this.hasSupply,
     }
   );
 
@@ -49,6 +50,7 @@ class CosechaForm extends StatelessWidget {
   final isLoading;
   final formKey;
   final buttonText;
+  final hasSupply;
   
   @override
   Widget build(BuildContext context) {
@@ -56,10 +58,14 @@ class CosechaForm extends StatelessWidget {
       key: formKey,
       child: Column(
         children: [
+          this.hasSupply
+          ?
           SupplyDropdown(
             supplyID: this.supplyID,
             updateSupply: updateSupply
-          ),
+          )
+          :
+          Container(),
           Separator(height: 0.01),
           CosechaDivider(),
           Separator(height: 0.01),

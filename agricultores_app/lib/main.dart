@@ -29,8 +29,7 @@ class MyApp extends StatelessWidget {
         future: HelloWorldService.getHelloWorld(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
-            // return HomeScreen();
-            return CreateOrderScreen();
+            return HomeScreen();
           } else if (snapshot.hasError) {
             return LoginScreen();
           } else {

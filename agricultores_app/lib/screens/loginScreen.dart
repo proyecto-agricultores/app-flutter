@@ -121,8 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         telephone, passwordController.text);
                     await Navigator.pushReplacement(
                       context,
-                      // MaterialPageRoute(builder: (context) => HomeScreen()),
-                      MaterialPageRoute(builder: (context) => CreateOrderScreen()),
+                      MaterialPageRoute(builder: (context) => HomeScreen()),
                     );
                   } catch (e) {
                     setState(() {
