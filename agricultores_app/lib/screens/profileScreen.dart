@@ -1,6 +1,11 @@
+import 'package:agricultores_app/screens/STAB.dart';
+import 'package:agricultores_app/screens/cultivos/crearCutivoScreen.dart';
+import 'package:agricultores_app/screens/cultivos/cultivoScreen.dart';
 import 'package:agricultores_app/services/myProfileService.dart';
+import 'package:agricultores_app/services/myPubService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ProfileScreen extends StatefulWidget {
   ProfileScreen({Key key, this.title}) : super(key: key);
@@ -25,17 +30,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
           if (snapshot.hasData) {
             return CustomScrollView(
               slivers: [
-                this._appBar(snapshot, true),
+                this._appBar(snapshot, false),
                 SliverToBoxAdapter(
                   child: Column(
                     children: <Widget>[
                       SizedBox(height: 30),
-                      this._ubicacion(),
+                      this._ubicacion(snapshot, false),
                       this._verMapa(),
                       this._contactar(),
-                      this._carruselCultivos(),
-                      this._carruselCultivos(),
-                      this._carruselCultivos(),
+                      this._agregarCultivo(),
+                      this._carruselCultivos(false),
                     ],
                   ),
                 ),
@@ -44,17 +48,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
           } else {
             return CustomScrollView(
               slivers: [
-                this._appBar(snapshot, false),
+                this._appBar(snapshot, true),
                 SliverToBoxAdapter(
                   child: Column(
                     children: <Widget>[
                       SizedBox(height: 30),
-                      this._ubicacion(),
+                      this._ubicacion(snapshot, true),
                       this._verMapa(),
                       this._contactar(),
-                      this._carruselCultivos(),
-                      this._carruselCultivos(),
-                      this._carruselCultivos(),
+                      this._carruselCultivos(true),
                     ],
                   ),
                 ),
@@ -66,10 +68,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _appBar(AsyncSnapshot snapshot, bool fromUrl) {
+  Widget _appBar(AsyncSnapshot snapshot, bool isLoading) {
     return SliverAppBar(
       floating: true,
       snap: true,
+      pinned: true,
       expandedHeight: 300.0,
       backgroundColor: Colors.indigo,
       title: Text("Título"),
@@ -80,12 +83,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       ),
       flexibleSpace: FlexibleSpaceBar(
-        title: fromUrl ? Text(snapshot.data.firstName) : Text("Nombre"),
+        title: isLoading
+            ? Shimmer.fromColors(
+                baseColor: Colors.black12,
+                highlightColor: Colors.black,
+                child: Container(
+                  width: 90.0,
+                  height: 20.0,
+                  color: Colors.black,
+                ),
+              )
+            : SABT(
+                child: snapshot.data.firstName != null
+                    ? Text(snapshot.data.firstName)
+                    : Text("Sin Nombre"),
+              ),
         collapseMode: CollapseMode.pin,
+        centerTitle: true,
         background: Stack(
           alignment: Alignment.bottomCenter,
           children: [
-            this._profilePicture(snapshot, fromUrl),
+            this._profilePicture(snapshot, isLoading),
           ],
         ),
       ),
@@ -130,14 +148,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _profilePicture(AsyncSnapshot snapshot, bool fromURL) {
-    if (fromURL) {
+  Widget _profilePicture(AsyncSnapshot snapshot, bool isLoading) {
+    if (isLoading) {
+      return Container(
+        height: 150,
+        width: 150,
+        margin: EdgeInsets.only(bottom: 70),
+        child: Shimmer.fromColors(
+          baseColor: Colors.black12,
+          highlightColor: Colors.black,
+          child: CircleAvatar(),
+        ),
+      );
+    } else if (snapshot.data.profilePicture == null) {
       return Container(
         height: 150,
         width: 150,
         margin: EdgeInsets.only(bottom: 70),
         child: CircleAvatar(
-          backgroundImage: NetworkImage(snapshot.data.profilePicture),
+          backgroundImage: AssetImage("assets/images/user-placeholder.png"),
         ),
       );
     } else {
@@ -146,13 +175,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
         width: 150,
         margin: EdgeInsets.only(bottom: 70),
         child: CircleAvatar(
-          backgroundImage: AssetImage('assets/images/user-placeholder.png'),
+          backgroundImage: NetworkImage(snapshot.data.profilePicture),
         ),
       );
     }
   }
 
-  Widget _ubicacion() {
+  Widget _ubicacion(AsyncSnapshot snapshot, bool isLoading) {
     return Column(
       children: [
         Icon(
@@ -161,20 +190,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
           size: 50,
         ),
         Text("Me encuentras en"),
-        Container(
-          width: 250,
-          height: 50,
-          margin: EdgeInsets.only(bottom: 20, top: 20),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(
-              Radius.circular(60),
-            ),
-            color: Colors.blue[50],
-          ),
-          child: Center(
-            child: Text("Sayan, Huara (Lima)"),
-          ),
-        ),
+        !isLoading
+            ? Container(
+                width: 250,
+                height: 50,
+                margin: EdgeInsets.only(bottom: 20, top: 20),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(60)),
+                  color: Colors.blue[50],
+                ),
+                child: Center(
+                    child: snapshot.data.ubigeo != null
+                        ? Text(snapshot.data.ubigeo)
+                        : Text('Sin Ubicación')),
+              )
+            : Shimmer.fromColors(
+                baseColor: Colors.black12,
+                highlightColor: Colors.black,
+                child: Container(
+                  width: 250,
+                  height: 50,
+                  margin: EdgeInsets.only(bottom: 20, top: 20),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(60),
+                    ),
+                    color: Colors.blue[50],
+                  ),
+                ),
+              ),
       ],
     );
   }
@@ -210,39 +254,165 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _carruselCultivos() {
-    return Stack(
-      children: <Widget>[
-        Container(
-          alignment: Alignment.center,
-          child: Image(
-            image: AssetImage("assets/images/papas.jpg"),
-          ),
+  Widget _agregarCultivo() {
+    return Container(
+      margin: EdgeInsets.only(bottom: 15),
+      child: RaisedButton(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(18.0),
         ),
-        Positioned.fill(
-          child: Align(
-            alignment: Alignment.bottomCenter,
-            child: RaisedButton(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18.0),
-                side: BorderSide(color: Colors.green),
-              ),
-              onPressed: () {
-                print("Hello");
-              },
-              color: Colors.green,
-              textColor: Colors.white,
-              child: Text(
-                "Ver todos los cultivos".toUpperCase(),
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+        onPressed: () async {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CrearCultivoScreen(),
             ),
+          );
+        },
+        color: Colors.green[900],
+        textColor: Colors.white,
+        child: Text("Añadir Cultivo"),
+      ),
+    );
+  }
+
+  Widget _carruselCultivos(bool isLoading) {
+    if (!isLoading) {
+      return FutureBuilder(
+        future: MyPubService.getPubinUser(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.hasData) {
+            final listResponse = snapshot.data;
+            if (listResponse.isEmpty) {
+              return Column(
+                children: [
+                  RaisedButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                      side: BorderSide(color: Colors.green),
+                    ),
+                    onPressed: () {},
+                    color: Colors.green,
+                    textColor: Colors.white,
+                    child: Text("Crear mi primer cultivo aquí".toUpperCase()),
+                  ),
+                ],
+              );
+            } else if (snapshot.hasData) {
+              return Column(
+                children: [
+                  Icon(
+                    Icons.agriculture_outlined,
+                    color: Colors.indigo[900],
+                    size: 50,
+                  ),
+                  Text(
+                    'Mis Cultivos',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                  ),
+                  SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        ListView.separated(
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (BuildContext context, int index) {
+                            return InkWell(
+                              onTap: () => {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => CultivoScreen(
+                                      cultivoId: listResponse[index].id,
+                                      titulo: listResponse[index].supplieName,
+                                    ),
+                                  ),
+                                )
+                              },
+                              child: Column(
+                                children: <Widget>[
+                                  Container(
+                                    alignment: Alignment.center,
+                                    child: Image(
+                                      height: 150,
+                                      width: MediaQuery.of(context).size.width,
+                                      fit: BoxFit.cover,
+                                      image: listResponse[index].pictureURLs ==
+                                              null
+                                          ? AssetImage(
+                                              "assets/images/papas.jpg")
+                                          : NetworkImage(
+                                              listResponse[index].pictureURL),
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text("Producto: "),
+                                      Text(
+                                        listResponse[index].supplieName,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text('Área: '),
+                                      Text(listResponse[index].area.toString()),
+                                      Text(' '),
+                                      Text(listResponse[index].areaUnit),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text('Costo: '),
+                                      Text(listResponse[index]
+                                          .unitPrice
+                                          .toString()),
+                                      Text(' x '),
+                                      Text(listResponse[index].weightUnit),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                          separatorBuilder: (BuildContext context, int index) =>
+                              const Divider(),
+                          itemCount: listResponse.length,
+                          padding: const EdgeInsets.all(8),
+                          shrinkWrap: true,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            } else {
+              return Container();
+            }
+          } else {
+            return this._shimerPub();
+          }
+        },
+      );
+    } else {
+      return this._shimerPub();
+    }
+  }
+
+  Widget _shimerPub() {
+    return Shimmer.fromColors(
+      baseColor: Colors.black12,
+      highlightColor: Colors.black,
+      child: Column(
+        children: [
+          Container(
+            height: 150,
+            width: MediaQuery.of(context).size.width,
+            color: Colors.white,
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
