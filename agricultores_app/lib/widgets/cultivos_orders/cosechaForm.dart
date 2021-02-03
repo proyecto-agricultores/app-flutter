@@ -2,6 +2,7 @@ import 'package:agricultores_app/models/areaUnitModel.dart';
 import 'package:agricultores_app/models/priceUnitModel.dart';
 import 'package:agricultores_app/widgets/cultivos_orders/supplyDropdown.dart';
 import 'package:agricultores_app/widgets/cultivos_orders/unitDropdown.dart';
+import 'package:agricultores_app/widgets/general/cancelButton.dart';
 import 'package:agricultores_app/widgets/general/divider.dart';
 import 'package:agricultores_app/widgets/general/separator.dart';
 import 'package:flutter/material.dart';
@@ -133,6 +134,7 @@ class CosechaForm extends StatelessWidget {
               ),
             ),
           ),
+          CancelButton(),
         ]
       )
     );

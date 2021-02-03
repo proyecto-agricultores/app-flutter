@@ -198,6 +198,7 @@ class _CrearCultivoScreenState extends State<CrearCultivoScreen> {
                     isLoading: this.isLoading,
                     formKey: this._formKey,
                     buttonText: 'Crear Cultivo',
+                    hasSupply: true,
                   )
                 ]
               )
