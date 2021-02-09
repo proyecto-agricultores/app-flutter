@@ -4,6 +4,7 @@ import 'package:agricultores_app/models/regionModel.dart';
 import 'package:agricultores_app/screens/register/rolRegisterScreen.dart';
 import 'package:agricultores_app/services/locationService.dart';
 import 'package:agricultores_app/services/updateUbigeoService.dart';
+import 'package:agricultores_app/widgets/general/cosechaLogo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show DeviceOrientation, SystemChrome;
 import 'package:location/location.dart';
@@ -64,20 +65,6 @@ class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
       this._districts = response;
       this._fetchingDistricts = false;
     });
-  }
-
-  Widget _logo() {
-    return Column(
-      children: [
-        SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-        Image.asset(
-          'assets/images/logo.png',
-          scale: MediaQuery.of(context).size.height /
-              MediaQuery.of(context).size.width,
-        ),
-        SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-      ],
-    );
   }
 
   void _getGPSLocation() async {
@@ -279,7 +266,7 @@ class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              this._logo(),
+              CosechaLogo(scale: 5.0),
               Flexible(
                 flex: 3,
                 child: Container(

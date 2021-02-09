@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:agricultores_app/services/uploadProfilePictureService.dart';
+import 'package:agricultores_app/widgets/general/cosechaLogo.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -53,11 +54,7 @@ class _PhotoRegisterScreenState extends State<PhotoRegisterScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Image.asset(
-                'assets/images/logo.png',
-                scale: MediaQuery.of(context).size.height /
-                    MediaQuery.of(context).size.width,
-              ),
+              CosechaLogo(scale: 5.0),
               Flexible(
                 flex: 3,
                 child: Container(

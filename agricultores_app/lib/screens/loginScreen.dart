@@ -4,6 +4,7 @@ import 'package:agricultores_app/screens/orders/createOrderScreen.dart';
 import 'package:agricultores_app/screens/register/registerScreen.dart';
 import 'package:agricultores_app/services/token.dart';
 import 'package:agricultores_app/widgets/cultivos_orders/unitDropdown.dart';
+import 'package:agricultores_app/widgets/general/cosechaLogo.dart';
 import 'package:agricultores_app/widgets/test_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
@@ -40,11 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Image.asset(
-                'assets/images/logo.png',
-                height: 150,
-                width: 150,
-              ),
+              CosechaLogo(scale: 5.0,),
               SizedBox(height: 50),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,

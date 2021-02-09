@@ -1,5 +1,6 @@
 import 'package:agricultores_app/screens/register/photoRegisterScreen.dart';
 import 'package:agricultores_app/services/codeRegisterService.dart';
+import 'package:agricultores_app/widgets/general/cosechaLogo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show DeviceOrientation, SystemChrome;
 
@@ -37,11 +38,7 @@ class _CodeRegisterScreenState extends State<CodeRegisterScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Image.asset(
-                'assets/images/logo.png',
-                scale: MediaQuery.of(context).size.height /
-                    MediaQuery.of(context).size.width,
-              ),
+              CosechaLogo(scale: 5.0,),
               Flexible(
                 flex: 3,
                 child: Container(
