@@ -126,7 +126,6 @@ class _PhotoRegisterScreenState extends State<PhotoRegisterScreen> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18.0),
                         ),
-                        // onPressed: Token.generateOrRefreshToken(telephone, passwordController.text),
                         onPressed: () async {
                           setState(() {
                             this.isLoading = true;
@@ -161,6 +160,28 @@ class _PhotoRegisterScreenState extends State<PhotoRegisterScreen> {
                                   fontSize: 16,
                                 ),
                               ),
+                      ),
+                      FlatButton(
+                        child: Text(
+                          "Continuar sin foto",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          )
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                        ),
+                        color: Colors.green[400],
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => LocationRegisterScreen(),
+                             )
+                          );
+                        }
                       )
                     ],
                   ),
