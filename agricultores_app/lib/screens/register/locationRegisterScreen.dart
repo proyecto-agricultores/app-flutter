@@ -1,7 +1,7 @@
 import 'package:agricultores_app/models/departmentModel.dart';
 import 'package:agricultores_app/models/district.dart';
 import 'package:agricultores_app/models/regionModel.dart';
-import 'package:agricultores_app/screens/register/rolRegisterScreen.dart';
+import 'package:agricultores_app/screens/register/roleRegisterScreen.dart';
 import 'package:agricultores_app/services/locationService.dart';
 import 'package:agricultores_app/services/updateUbigeoService.dart';
 import 'package:agricultores_app/widgets/general/cosechaLogo.dart';
@@ -161,7 +161,7 @@ class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => RolRegisterScreen(),
+            builder: (context) => RoleRegisterScreen(),
           ),
         );
       },

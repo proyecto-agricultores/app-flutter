@@ -6,26 +6,48 @@ import 'package:flutter/services.dart' show DeviceOrientation, SystemChrome;
 import '../../app_icons.dart';
 import '../homeScreen.dart';
 
-class RolRegisterScreen extends StatefulWidget {
-  RolRegisterScreen({Key key}) : super(key: key);
+class RoleRegisterScreen extends StatefulWidget {
+  RoleRegisterScreen({Key key}) : super(key: key);
 
   @override
-  _RolRegisterScreenState createState() => _RolRegisterScreenState();
+  _RoleRegisterScreenState createState() => _RoleRegisterScreenState();
 }
 
-class _RolRegisterScreenState extends State<RolRegisterScreen> {
+class _RoleRegisterScreenState extends State<RoleRegisterScreen> {
   String code;
 
   Widget _roleButton(String roleAbbreviation, String fullRole, IconData icon) {
     return FlatButton(
       onPressed: () {
-        UpdateRolService.updateRol(roleAbbreviation);
-        Navigator.of(context)
-            .popUntil((route) => route.isFirst);
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => HomeScreen()),
+        return showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("Confirmar rol"),
+              content: Text("¿Está seguro de que usted es un " + fullRole + "?"),
+              actions: [
+                FlatButton(
+                  child: Text("No"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                FlatButton(
+                  child: Text("Sí"),
+                  onPressed: () {
+                    UpdateRolService.updateRol(roleAbbreviation);
+                    Navigator.of(context)
+                        .popUntil((route) => route.isFirst);
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => HomeScreen()),
+                    );
+                  },
+                )
+              ],
+            );
+          },
         );
       },
       child: Column(
