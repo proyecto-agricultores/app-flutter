@@ -112,7 +112,7 @@ class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
 
   Widget _departmentDropdown() {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.04,
+      height: MediaQuery.of(context).size.height * 0.07,
       width: MediaQuery.of(context).size.width * 0.8,
       child: DropdownButton(
         isExpanded: true,
@@ -191,8 +191,8 @@ class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
     return IgnorePointer(
         ignoring: !_departmentIsSelected,
         child: Container(
-            height: MediaQuery.of(context).size.height * 0.04,
-            width: MediaQuery.of(context).size.height * 0.8,
+            height: MediaQuery.of(context).size.height * 0.07,
+            width: MediaQuery.of(context).size.height * .8,
             child: DropdownButton(
               isExpanded: true,
               hint: Text('Seleccione su región'),
@@ -223,7 +223,7 @@ class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
     return IgnorePointer(
         ignoring: !_departmentIsSelected || !_regionIsSelected,
         child: Container(
-            height: MediaQuery.of(context).size.height * 0.04,
+            height: MediaQuery.of(context).size.height * 0.07,
             width: MediaQuery.of(context).size.height * 0.8,
             child: DropdownButton(
               isExpanded: true,
