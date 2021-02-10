@@ -1,5 +1,4 @@
 import 'package:agricultores_app/screens/register/codeRegisterScreen.dart';
-import 'package:agricultores_app/services/codeRegisterService.dart';
 import 'package:agricultores_app/services/registerService.dart';
 import 'package:agricultores_app/services/token.dart';
 import 'package:agricultores_app/widgets/general/cosechaLogo.dart';
@@ -213,7 +212,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
               } else if (register == 'ok') {
                 await Token.generateTokenFromUserAndPassword(
                     telephone, passwordController.text);
-                await CodeRegisterService.generateCode();
                 Navigator.push(
                   context,
                   MaterialPageRoute(
