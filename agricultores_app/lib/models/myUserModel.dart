@@ -5,14 +5,17 @@ class MyUser {
   final String role;
   final String profilePicture;
   final String ubigeo;
+  final isVerified;
 
-  MyUser(
-      {this.id,
-      this.firstName,
-      this.lastName,
-      this.role,
-      this.profilePicture,
-      this.ubigeo});
+  MyUser({
+    this.id,
+    this.firstName,
+    this.lastName,
+    this.role,
+    this.profilePicture,
+    this.ubigeo,
+    this.isVerified,
+  });
 
   factory MyUser.fromJson(Map<String, dynamic> json) {
     return MyUser(
@@ -22,6 +25,7 @@ class MyUser {
       role: json['role'],
       ubigeo: json['district'],
       profilePicture: json['profile_picture_URL'],
+      isVerified: json['is_verified'],
     );
   }
 }
