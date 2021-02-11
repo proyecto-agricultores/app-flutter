@@ -1,9 +1,11 @@
 import 'package:agricultores_app/screens/homeScreen.dart';
 import 'package:agricultores_app/screens/register/registerScreen.dart';
+import 'package:agricultores_app/services/myProfileService.dart';
 import 'package:agricultores_app/services/token.dart';
 import 'package:agricultores_app/widgets/general/cosechaLogo.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({Key key, this.title}) : super(key: key);
@@ -112,6 +114,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   try {
                     await Token.generateTokenFromUserAndPassword(
                         telephone, passwordController.text);
+                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    final user = await MyProfileService.getLoggedinUser();
+                    await prefs.setString('role', user.role);
                     await Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (context) => HomeScreen()),
