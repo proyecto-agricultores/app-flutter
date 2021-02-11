@@ -4,6 +4,7 @@ import 'package:agricultores_app/services/token.dart';
 import 'package:agricultores_app/widgets/general/cosechaLogo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show DeviceOrientation, SystemChrome;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key key}) : super(key: key);
@@ -13,6 +14,14 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+  _getRole() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final role = await prefs.get('role');
+    return role;
+  }
+
+  
   @override
   Widget build(BuildContext context) {
     WidgetsFlutterBinding.ensureInitialized();
@@ -66,10 +75,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           borderRadius: BorderRadius.circular(18.0),
                         ),
                         onPressed: () async {
+                          final role = await this._getRole();
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ProfileScreen()),
+                                builder: (context) => ProfileScreen(role: role)),
                           );
                         },
                         color: Colors.green[400],
