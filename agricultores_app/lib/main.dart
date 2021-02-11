@@ -5,6 +5,7 @@ import 'package:agricultores_app/screens/register/locationRegisterScreen.dart';
 import 'package:agricultores_app/screens/register/roleRegisterScreen.dart';
 import 'package:agricultores_app/services/myProfileService.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'MyColors.dart';
 import 'screens/loginScreen.dart';
 
@@ -13,6 +14,11 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+
+  _setRole(role) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('role', role);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +35,7 @@ class MyApp extends StatelessWidget {
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
             final user = snapshot.data;
+            _setRole(user.role);
             if (!user.isVerified) {
               return CodeRegisterScreen();
             } else if (user.ubigeo == "") {
