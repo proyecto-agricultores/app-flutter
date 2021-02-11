@@ -1,15 +1,7 @@
-import 'package:agricultores_app/screens/cultivos/crearCutivoScreen.dart';
 import 'package:agricultores_app/screens/homeScreen.dart';
-import 'package:agricultores_app/screens/orders/createOrderScreen.dart';
-import 'package:agricultores_app/screens/register/codeRegisterScreen.dart';
-import 'package:agricultores_app/screens/register/locationRegisterScreen.dart';
 import 'package:agricultores_app/screens/register/registerScreen.dart';
-import 'package:agricultores_app/screens/register/roleRegisterScreen.dart';
-import 'package:agricultores_app/services/myProfileService.dart';
 import 'package:agricultores_app/services/token.dart';
-import 'package:agricultores_app/widgets/cultivos_orders/unitDropdown.dart';
 import 'package:agricultores_app/widgets/general/cosechaLogo.dart';
-import 'package:agricultores_app/widgets/test_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
@@ -120,28 +112,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   try {
                     await Token.generateTokenFromUserAndPassword(
                         telephone, passwordController.text);
-                    final user = await MyProfileService.getLoggedinUser();
-                    if (!user.isVerified) {
-                      await Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => CodeRegisterScreen()),
-                      );
-                    } else if (user.ubigeo == "") {
-                      await Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => LocationRegisterScreen()),
-                      );
-                    } else if (user.role == null) {
-                      await Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => RoleRegisterScreen()),
-                      );
-                    } else {
-                      await Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => HomeScreen()),
-                      );
-                    }
+                    await Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomeScreen()),
+                    );
                   } catch (e) {
                     setState(() {
                       this.isLoading = false;
