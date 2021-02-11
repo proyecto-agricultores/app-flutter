@@ -14,19 +14,6 @@ void main() {
 
 class MyApp extends StatelessWidget {
 
-  Future<Widget> _getScreen() async {
-    final user = await MyProfileService.getLoggedinUser();
-    if (!user.isVerified) {
-      return CodeRegisterScreen();
-    } else if (user.ubigeo == "") {
-      return LocationRegisterScreen();
-    } else if (user.role == null) {
-      return RoleRegisterScreen();
-    } else {
-      return HomeScreen();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
