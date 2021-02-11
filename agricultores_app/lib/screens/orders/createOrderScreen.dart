@@ -164,6 +164,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                     isLoading: this._isLoading,
                     formKey: this._formKey,
                     buttonText: 'Crear Orden',
+                    hasSupply: true,
                   )
                 ]
               )

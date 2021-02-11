@@ -1,11 +1,11 @@
 import 'package:agricultores_app/screens/STAB.dart';
 import 'package:agricultores_app/screens/cultivos/crearCutivoScreen.dart';
 import 'package:agricultores_app/screens/cultivos/cultivoScreen.dart';
+import 'package:agricultores_app/screens/orders/createOrderScreen.dart';
 import 'package:agricultores_app/services/myProfileService.dart';
 import 'package:agricultores_app/services/myPubService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -45,7 +45,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       this._ubicacion(snapshot, false),
                       this._verMapa(),
                       this._contactar(),
-                      this._agregarCultivo(),
+                      this._agregarCultivoUOrden(),
                       this._carruselCultivos(false),
                     ],
                   ),
@@ -81,7 +81,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       snap: true,
       pinned: true,
       expandedHeight: 300.0,
-      backgroundColor: this.role == 'ag' ? Color(0xff09B44D) : Color(0xffffcc99),
+      backgroundColor: this.role == 'ag' ? Color(0xff09B44D) : Color(0xfffc6e08),
       title: Text("Título"),
       shape: ContinuousRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -261,7 +261,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _agregarCultivo() {
+  Widget _agregarCultivoUOrden() {
     return Container(
       margin: EdgeInsets.only(bottom: 15),
       child: RaisedButton(
@@ -272,13 +272,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => CrearCultivoScreen(),
+              //builder: (context) => this.role == 'ag' ? CrearCultivoScreen() : CreateOrderScreen(),
+              builder: (context) {
+                if (this.role == 'ag') {
+                  return CrearCultivoScreen();
+                } else {
+                  return CreateOrderScreen();
+                }
+              }
             ),
           );
         },
         color: Colors.green[900],
         textColor: Colors.white,
-        child: Text("Añadir Cultivo"),
+        child: this.role == 'ag' ? Text("Añadir Cultivo") : Text("Añadir Orden"),
       ),
     );
   }
@@ -290,22 +297,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
             final listResponse = snapshot.data;
-            if (listResponse.isEmpty) {
-              return Column(
-                children: [
-                  RaisedButton(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
-                      side: BorderSide(color: Colors.green),
-                    ),
-                    onPressed: () {},
-                    color: Colors.green,
-                    textColor: Colors.white,
-                    child: Text("Crear mi primer cultivo aquí".toUpperCase()),
-                  ),
-                ],
-              );
-            } else if (snapshot.hasData) {
+            if (snapshot.hasData) {
               return Column(
                 children: [
                   Icon(
