@@ -5,18 +5,25 @@ import 'package:agricultores_app/services/myProfileService.dart';
 import 'package:agricultores_app/services/myPubService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ProfileScreen extends StatefulWidget {
-  ProfileScreen({Key key, this.title}) : super(key: key);
+  ProfileScreen({Key key, this.title, this.role}) : super(key: key);
 
   final String title;
+  final String role;
 
   @override
-  _ProfileScreenState createState() => _ProfileScreenState();
+  _ProfileScreenState createState() => _ProfileScreenState(role: role);
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+
+  _ProfileScreenState({this.role});
+
+  final role;
+  
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -74,7 +81,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       snap: true,
       pinned: true,
       expandedHeight: 300.0,
-      backgroundColor: Colors.indigo,
+      backgroundColor: this.role == 'ag' ? Color(0xff09B44D) : Color(0xffffcc99),
       title: Text("Título"),
       shape: ContinuousRectangleBorder(
         borderRadius: BorderRadius.only(
