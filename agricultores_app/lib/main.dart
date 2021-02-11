@@ -2,7 +2,11 @@ import 'package:agricultores_app/screens/cultivos/crearCutivoScreen.dart';
 import 'package:agricultores_app/screens/orders/createOrderScreen.dart';
 import 'package:agricultores_app/screens/loadingScreen.dart';
 import 'package:agricultores_app/screens/homeScreen.dart';
+import 'package:agricultores_app/screens/register/codeRegisterScreen.dart';
+import 'package:agricultores_app/screens/register/locationRegisterScreen.dart';
+import 'package:agricultores_app/screens/register/roleRegisterScreen.dart';
 import 'package:agricultores_app/services/helloWorldService.dart';
+import 'package:agricultores_app/services/myProfileService.dart';
 import 'package:agricultores_app/widgets/cultivos_orders/unitDropdown.dart';
 import 'package:agricultores_app/widgets/test_widget.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +18,20 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+
+  Future<Widget> _getScreen() async {
+    final user = await MyProfileService.getLoggedinUser();
+    if (!user.isVerified) {
+      return CodeRegisterScreen();
+    } else if (user.ubigeo == "") {
+      return LocationRegisterScreen();
+    } else if (user.role == null) {
+      return RoleRegisterScreen();
+    } else {
+      return HomeScreen();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -26,10 +43,19 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Poppins',
       ),
       home: FutureBuilder(
-        future: HelloWorldService.getHelloWorld(),
+        future: MyProfileService.getLoggedinUser(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
-            return HomeScreen();
+            final user = snapshot.data;
+            if (!user.isVerified) {
+              return CodeRegisterScreen();
+            } else if (user.ubigeo == "") {
+              return LocationRegisterScreen();
+            } else if (user.role == null) {
+              return RoleRegisterScreen();
+            } else {
+              return HomeScreen();
+            }
           } else if (snapshot.hasError) {
             return LoginScreen();
           } else {
