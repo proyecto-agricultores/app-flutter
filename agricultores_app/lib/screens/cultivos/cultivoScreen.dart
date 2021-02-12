@@ -1,5 +1,6 @@
 import 'package:agricultores_app/screens/cultivos/editarCutivoScreen.dart';
 import 'package:agricultores_app/services/myPubService.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show DeviceOrientation, SystemChrome;
 import 'package:intl/intl.dart';
@@ -63,14 +64,24 @@ class _CultivoScreenState extends State<CultivoScreen> {
                       child: Column(
                         children: [
                           Container(
-                            alignment: Alignment.center,
-                            child: Image(
-                              height: 300,
-                              width: MediaQuery.of(context).size.width,
-                              fit: BoxFit.cover,
-                              image: snapshot.data.pictureURLs == null
-                                  ? AssetImage("assets/images/papas.jpg")
-                                  : NetworkImage(snapshot.data.pictureURLs),
+                            child: CarouselSlider(
+                              options: CarouselOptions(
+                                height: 200.0,
+                                viewportFraction: 0.6,
+                                enableInfiniteScroll: false,
+                                enlargeCenterPage: true,
+                              ),
+                              items: snapshot.data.pictureURLs
+                                  .map<Widget>((item) => Container(
+                                        child: Center(
+                                          child: Image.network(
+                                            item.replaceAll('https', 'http'),
+                                            fit: BoxFit.cover,
+                                            height: 200,
+                                          ),
+                                        ),
+                                      ))
+                                  .toList(),
                             ),
                           ),
                           SizedBox(height: 20),
