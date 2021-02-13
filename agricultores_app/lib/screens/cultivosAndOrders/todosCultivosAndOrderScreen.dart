@@ -1,26 +1,28 @@
-import 'package:agricultores_app/screens/STAB.dart';
-import 'package:agricultores_app/screens/cultivos/crearCutivoScreen.dart';
-import 'package:agricultores_app/screens/cultivos/cultivoScreen.dart';
-import 'package:agricultores_app/screens/orders/createOrderScreen.dart';
+import 'package:agricultores_app/screens/cultivosAndOrders/cultivos/crearCutivoScreen.dart';
+import 'package:agricultores_app/screens/cultivosAndOrders/cultivoAndOrderScreen.dart';
+import 'package:agricultores_app/screens/cultivosAndOrders/orders/createOrderScreen.dart';
+import 'package:agricultores_app/services/myOrderService.dart';
 import 'package:agricultores_app/services/myProfileService.dart';
 import 'package:agricultores_app/services/myPubService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:shimmer/shimmer.dart';
 
-class TodosCultivosScreen extends StatefulWidget {
-  TodosCultivosScreen({Key key, this.title, this.role}) : super(key: key);
+class TodosCultivosAndOrdersScreen extends StatefulWidget {
+  TodosCultivosAndOrdersScreen({Key key, this.title, this.role})
+      : super(key: key);
 
   final String title;
   final String role;
 
   @override
-  _TodosCultivosScreenState createState() =>
-      _TodosCultivosScreenState(role: role);
+  _TodosCultivosAndOrdersScreenState createState() =>
+      _TodosCultivosAndOrdersScreenState(role: role);
 }
 
-class _TodosCultivosScreenState extends State<TodosCultivosScreen> {
-  _TodosCultivosScreenState({this.role});
+class _TodosCultivosAndOrdersScreenState
+    extends State<TodosCultivosAndOrdersScreen> {
+  _TodosCultivosAndOrdersScreenState({this.role});
 
   final role;
 
@@ -94,7 +96,9 @@ class _TodosCultivosScreenState extends State<TodosCultivosScreen> {
   Widget _carruselCultivos(bool isLoading) {
     if (!isLoading) {
       return FutureBuilder(
-        future: MyPubService.getPubinUser(),
+        future: this.role == 'ag'
+            ? MyPubService.getPubinUser()
+            : MyOrderService.getOrdersFromUser(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
             final listResponse = snapshot.data;
@@ -121,9 +125,10 @@ class _TodosCultivosScreenState extends State<TodosCultivosScreen> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => CultivoScreen(
+                                    builder: (context) => CultivoAndOrderScreen(
                                       cultivoId: listResponse[index].id,
                                       titulo: listResponse[index].supplieName,
+                                      role: this.role,
                                     ),
                                   ),
                                 )
@@ -136,12 +141,15 @@ class _TodosCultivosScreenState extends State<TodosCultivosScreen> {
                                       height: 150,
                                       width: MediaQuery.of(context).size.width,
                                       fit: BoxFit.cover,
-                                      image: listResponse[index].pictureURLs ==
-                                              null
-                                          ? AssetImage(
-                                              "assets/images/papas.jpg")
-                                          : NetworkImage(listResponse[index]
-                                              .pictureURLs[0]),
+                                      image: this.role == 'ag'
+                                          ? (listResponse[index].pictureURLs ==
+                                                  null
+                                              ? AssetImage(
+                                                  "assets/images/papas.jpg")
+                                              : NetworkImage(listResponse[index]
+                                                  .pictureURLs[0]))
+                                          : AssetImage(
+                                              "assets/images/order.jpg"),
                                     ),
                                   ),
                                   Row(

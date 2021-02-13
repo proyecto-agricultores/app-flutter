@@ -1,33 +1,42 @@
-import 'package:agricultores_app/screens/cultivos/editarCutivoScreen.dart';
+import 'package:agricultores_app/screens/cultivosAndOrders/cultivos/editarCutivoScreen.dart';
+import 'package:agricultores_app/services/myOrderService.dart';
 import 'package:agricultores_app/services/myPubService.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show DeviceOrientation, SystemChrome;
 import 'package:intl/intl.dart';
 
-class CultivoScreen extends StatefulWidget {
+import 'orders/editOrderScreen.dart';
+
+class CultivoAndOrderScreen extends StatefulWidget {
   final int cultivoId;
   final String titulo;
+  final String role;
 
-  const CultivoScreen({
+  const CultivoAndOrderScreen({
     Key key,
     @required this.cultivoId,
     @required this.titulo,
+    @required this.role,
   }) : super(key: key);
 
   @override
-  _CultivoScreenState createState() => _CultivoScreenState(
+  _CultivoAndOrderScreenState createState() => _CultivoAndOrderScreenState(
         cultivoId,
         titulo,
+        role,
       );
 }
 
-class _CultivoScreenState extends State<CultivoScreen> {
-  final int cultivoId;
+class _CultivoAndOrderScreenState extends State<CultivoAndOrderScreen> {
+  final int pubOrOrderId;
   final String titulo;
-  _CultivoScreenState(
-    this.cultivoId,
+  final role;
+
+  _CultivoAndOrderScreenState(
+    this.pubOrOrderId,
     this.titulo,
+    this.role,
   );
 
   @override
@@ -51,7 +60,9 @@ class _CultivoScreenState extends State<CultivoScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               FutureBuilder(
-                future: MyPubService.getPubinUserById(cultivoId),
+                future: this.role == 'ag'
+                    ? MyPubService.getPubinUserById(pubOrOrderId)
+                    : MyOrderService.getOrderFromUserById(pubOrOrderId),
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
                   if (!snapshot.hasData) {
                     // while data is loading:
@@ -63,27 +74,30 @@ class _CultivoScreenState extends State<CultivoScreen> {
                     return Container(
                       child: Column(
                         children: [
-                          Container(
-                            child: CarouselSlider(
-                              options: CarouselOptions(
-                                height: 200.0,
-                                viewportFraction: 0.6,
-                                enableInfiniteScroll: false,
-                                enlargeCenterPage: true,
-                              ),
-                              items: snapshot.data.pictureURLs
-                                  .map<Widget>((item) => Container(
-                                        child: Center(
-                                          child: Image.network(
-                                            item.replaceAll('https', 'http'),
-                                            fit: BoxFit.cover,
-                                            height: 200,
-                                          ),
-                                        ),
-                                      ))
-                                  .toList(),
-                            ),
-                          ),
+                          this.role == 'ag'
+                              ? Container(
+                                  child: CarouselSlider(
+                                    options: CarouselOptions(
+                                      height: 200.0,
+                                      viewportFraction: 0.6,
+                                      enableInfiniteScroll: false,
+                                      enlargeCenterPage: true,
+                                    ),
+                                    items: snapshot.data.pictureURLs
+                                        .map<Widget>((item) => Container(
+                                              child: Center(
+                                                child: Image.network(
+                                                  item.replaceAll(
+                                                      'https', 'http'),
+                                                  fit: BoxFit.cover,
+                                                  height: 200,
+                                                ),
+                                              ),
+                                            ))
+                                        .toList(),
+                                  ),
+                                )
+                              : Container(),
                           SizedBox(height: 20),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -116,7 +130,10 @@ class _CultivoScreenState extends State<CultivoScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text("Siembra: ",
+                              Text(
+                                  this.role == 'ag'
+                                      ? "Siembra: "
+                                      : "Deseada de Siembra: ",
                                   style:
                                       TextStyle(fontWeight: FontWeight.bold)),
                               Text(
@@ -127,7 +144,10 @@ class _CultivoScreenState extends State<CultivoScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text("Cosecha: ",
+                              Text(
+                                  this.role == 'ag'
+                                      ? "Cosecha: "
+                                      : "Deseada de Cosecha: ",
                                   style:
                                       TextStyle(fontWeight: FontWeight.bold)),
                               Text(
@@ -145,11 +165,17 @@ class _CultivoScreenState extends State<CultivoScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => EditarCultivoScreen(
-                                    cultivoId: this.cultivoId,
-                                    titulo: this.titulo,
-                                    dataCultivo: snapshot.data,
-                                  ),
+                                  builder: (context) => this.role == 'ag'
+                                      ? EditarCultivoScreen(
+                                          cultivoId: this.pubOrOrderId,
+                                          titulo: this.titulo,
+                                          dataCultivo: snapshot.data,
+                                        )
+                                      : UpdateOrderScreen(
+                                          ordenId: this.pubOrOrderId,
+                                          titulo: this.titulo,
+                                          dataOrden: snapshot.data,
+                                        ),
                                 ),
                               );
                             },
@@ -184,7 +210,11 @@ class _CultivoScreenState extends State<CultivoScreen> {
                                       TextButton(
                                         child: Text('Eliminar'),
                                         onPressed: () {
-                                          MyPubService.delete(this.cultivoId);
+                                          this.role == 'ag'
+                                              ? MyPubService.delete(
+                                                  this.pubOrOrderId)
+                                              : MyOrderService.delete(
+                                                  pubOrOrderId);
                                           Navigator.of(context).popUntil(
                                               (route) => route.isFirst);
                                         },

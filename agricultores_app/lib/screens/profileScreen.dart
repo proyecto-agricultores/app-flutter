@@ -1,8 +1,9 @@
 import 'package:agricultores_app/screens/STAB.dart';
-import 'package:agricultores_app/screens/cultivos/crearCutivoScreen.dart';
-import 'package:agricultores_app/screens/cultivos/cultivoScreen.dart';
-import 'package:agricultores_app/screens/orders/createOrderScreen.dart';
-import 'package:agricultores_app/screens/todosCultivosScreen.dart';
+import 'package:agricultores_app/screens/cultivosAndOrders/cultivos/crearCutivoScreen.dart';
+import 'package:agricultores_app/screens/cultivosAndOrders/cultivoAndOrderScreen.dart';
+import 'package:agricultores_app/screens/cultivosAndOrders/orders/createOrderScreen.dart';
+import 'package:agricultores_app/screens/cultivosAndOrders/todosCultivosAndOrderScreen.dart';
+import 'package:agricultores_app/services/myOrderService.dart';
 import 'package:agricultores_app/services/myProfileService.dart';
 import 'package:agricultores_app/services/myPubService.dart';
 import 'package:flutter/material.dart';
@@ -277,11 +278,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 //builder: (context) => this.role == 'ag' ? CrearCultivoScreen() : CreateOrderScreen(),
                 builder: (context) {
               if (this.role == 'ag') {
-                return TodosCultivosScreen(
+                return TodosCultivosAndOrdersScreen(
                   role: this.role,
                 );
               } else {
-                return TodosCultivosScreen(
+                return TodosCultivosAndOrdersScreen(
                   role: this.role,
                 );
               }
@@ -329,7 +330,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _carruselCultivos(bool isLoading) {
     if (!isLoading) {
       return FutureBuilder(
-        future: MyPubService.getPubinUser(),
+        future: this.role == 'ag'
+            ? MyPubService.getPubinUser()
+            : MyOrderService.getOrdersFromUser(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
             final listResponse = snapshot.data;
@@ -360,9 +363,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => CultivoScreen(
+                                  builder: (context) => CultivoAndOrderScreen(
                                     cultivoId: listResponse[index].id,
                                     titulo: listResponse[index].supplieName,
+                                    role: this.role,
                                   ),
                                 ),
                               )
@@ -375,11 +379,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     height: 150,
                                     width: MediaQuery.of(context).size.width *
                                         0.75,
-                                    image: listResponse[index].pictureURLs ==
-                                            null
-                                        ? AssetImage("assets/images/papas.jpg")
-                                        : NetworkImage(
-                                            listResponse[index].pictureURLs[0]),
+                                    image: this.role == 'ag'
+                                        ? (listResponse[index].pictureURLs ==
+                                                null
+                                            ? AssetImage(
+                                                "assets/images/papas.jpg")
+                                            : NetworkImage(listResponse[index]
+                                                .pictureURLs[0]))
+                                        : AssetImage("assets/images/order.jpg"),
                                   ),
                                 ),
                                 Row(
