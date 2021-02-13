@@ -33,7 +33,6 @@ class _TodosCultivosAndOrdersScreenState
         title: this.role == 'ag'
             ? Text("Todos mis Cultivos")
             : Text("Todas mis Ordenes"),
-        automaticallyImplyLeading: false,
       ),
       body: FutureBuilder(
         future: MyProfileService.getLoggedinUser(),
