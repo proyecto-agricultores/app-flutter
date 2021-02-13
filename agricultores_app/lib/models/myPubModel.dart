@@ -22,10 +22,12 @@ class MyPub {
   });
 
   factory MyPub.fromJson(Map<String, dynamic> json) {
+    var genreIdsFromJson = json['picture_URLs'];
+    List<String> pictureURLsTemp = new List<String>.from(genreIdsFromJson);
     return MyPub(
       id: json['id'],
       supplieName: json['supplies']['name'],
-      pictureURLs: json['picture_URL'],
+      pictureURLs: pictureURLsTemp,
       weightUnit: json['weight_unit'],
       unitPrice: json['unit_price'],
       areaUnit: json['area_unit'],
