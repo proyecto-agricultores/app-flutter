@@ -354,7 +354,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Container(
                       padding: EdgeInsets.symmetric(
                           horizontal: 16.0, vertical: 24.0),
-                      height: MediaQuery.of(context).size.height * 0.35,
+                      height: MediaQuery.of(context).size.height * 0.45,
                       child: ListView.separated(
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (BuildContext context, int index) {
