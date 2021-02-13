@@ -1,3 +1,4 @@
+import 'package:agricultores_app/screens/filters/filterCropsAndOrdersScreen.dart';
 import 'package:agricultores_app/screens/loginScreen.dart';
 import 'package:agricultores_app/screens/profileScreen.dart';
 import 'package:agricultores_app/services/token.dart';
@@ -57,10 +58,25 @@ class _HomeScreenState extends State<HomeScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ProfileScreen(role: role)),
+                              builder: (context) => ProfileScreen(role: role)
+                            ),
                           );
                         },
                         text: 'Profile',
+                        isLoading: false,
+                      ),
+                      CosechaGreenButton(
+                        onPressed: () async {
+                          final role = await this._getRole();
+                          final title = role == 'ag' ? 'Buscar órdenes' : 'Buscar cultivos';
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => FilterCropsAndOrdersScreen(title: title, role: role)
+                            ),
+                          );
+                        },
+                        text: 'Buscar',
                         isLoading: false,
                       ),
                       CosechaGreenButton(
@@ -69,7 +85,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           return Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => LoginScreen()),
+                              builder: (context) => LoginScreen()
+                            ),
                           );
                         },
                         text: 'Logout',
