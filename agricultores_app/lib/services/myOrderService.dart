@@ -18,7 +18,25 @@ class MyOrderService {
       }
       return list;
     } else {
-      throw Exception('Error al recuperar la información del usuario.');
+      throw Exception('Error al recuperar la orden del usuario.');
+    }
+  }
+
+  static Future getFeaturedOrdersFromUser() async {
+    final response = await HTTPClient.getClient(WithToken.yes).get(
+      MyHTTPConection.HTTP_URL + 'myFeaturedOrder/',
+    );
+
+    if (response.statusCode == 200) {
+      var list = <MyOrder>[];
+      var json = jsonDecode(utf8.decode(response.bodyBytes));
+      for (var element in json) {
+        var v = MyOrder.fromJson(element);
+        list.add(v);
+      }
+      return list;
+    } else {
+      throw Exception('Error al recuperar la orden del usuario.');
     }
   }
 
