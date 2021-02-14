@@ -1,4 +1,4 @@
-import 'package:agricultores_app/screens/filters/filterCropsAndOrdersScreen.dart';
+//import 'package:agricultores_app/screens/filters/filterCropsAndOrdersScreen.dart';
 import 'package:agricultores_app/screens/loginScreen.dart';
 import 'package:agricultores_app/screens/profileScreen.dart';
 import 'package:agricultores_app/services/token.dart';
@@ -7,6 +7,8 @@ import 'package:agricultores_app/widgets/general/cosechaLogo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show DeviceOrientation, SystemChrome;
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'buscadorAgricultoresScreen.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key key}) : super(key: key);
@@ -72,7 +74,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => FilterCropsAndOrdersScreen(title: title, role: role)
+                              //builder: (context) => FilterCropsAndOrdersScreen(title: title, role: role)
+                                builder: (context) => buscadorAgricultoresScreen(role: role)
+
                             ),
                           );
                         },
