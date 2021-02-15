@@ -54,6 +54,20 @@ class MyOrderService {
     }
   }
 
+  static Future getOrderById(int id) async {
+    final response = await HTTPClient.getClient(WithToken.yes).get(
+      MyHTTPConection.HTTP_URL + 'order/' + id.toString() + '/',
+    );
+
+    if (response.statusCode == 200) {
+      var json = jsonDecode(utf8.decode(response.bodyBytes));
+      return MyOrder.fromJson(json);
+    } else {
+      throw Exception(
+          'Error al recuperar la información en publicación por ID.');
+    }
+  }
+
   static Future update(MyOrder myOrder) async {
     final response = await HTTPClient.getClient(WithToken.yes).put(
       MyHTTPConection.HTTP_URL + 'myOrder/' + myOrder.id.toString() + '/',

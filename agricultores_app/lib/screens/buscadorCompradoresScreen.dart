@@ -1,7 +1,6 @@
 import 'package:agricultores_app/screens/STAB.dart';
-import 'package:agricultores_app/screens/cultivos/crearCutivoScreen.dart';
-import 'package:agricultores_app/screens/cultivos/cultivoScreen.dart';
-import 'package:agricultores_app/screens/orders/createOrderScreen.dart';
+import 'package:agricultores_app/screens/cultivosAndOrders/cultivos/crearCutivoScreen.dart';
+import 'package:agricultores_app/screens/cultivosAndOrders/orders/createOrderScreen.dart';
 import 'package:agricultores_app/screens/userProfileScreen.dart';
 import 'package:agricultores_app/services/myProfileService.dart';
 import 'package:agricultores_app/services/userFilterService.dart';
@@ -16,15 +15,15 @@ class BuscadorCompradoresScreen extends StatefulWidget {
   final String role;
 
   @override
-  _BuscadorCompradoresScreenState createState() => _BuscadorCompradoresScreenState(role: role);
+  _BuscadorCompradoresScreenState createState() =>
+      _BuscadorCompradoresScreenState(role: role);
 }
 
 class _BuscadorCompradoresScreenState extends State<BuscadorCompradoresScreen> {
-
   _BuscadorCompradoresScreenState({this.role});
 
   final role;
-  
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -95,8 +94,8 @@ class _BuscadorCompradoresScreenState extends State<BuscadorCompradoresScreen> {
                 ),
               )
             : SABT(
-                child: Text("Resultados de compradores",   style: TextStyle(fontSize: 12))
-              ),
+                child: Text("Resultados de compradores",
+                    style: TextStyle(fontSize: 12))),
         collapseMode: CollapseMode.pin,
         centerTitle: true,
       ),
@@ -141,7 +140,6 @@ class _BuscadorCompradoresScreenState extends State<BuscadorCompradoresScreen> {
     );
   }
 
-
   Widget _carruselUsuarios(bool isLoading) {
     if (!isLoading) {
       return FutureBuilder(
@@ -166,10 +164,11 @@ class _BuscadorCompradoresScreenState extends State<BuscadorCompradoresScreen> {
                                     builder: (context) => UserProfileScreen(
                                       id: listResponse[index].id,
                                       firstName: listResponse[index].firstName,
-                                      lastName:  listResponse[index].lastName,
-                                      role:  listResponse[index].role,
-                                      profilePicture:  listResponse[index].profilePicture,
-                                      ubigeo:  listResponse[index].ubigeo,
+                                      lastName: listResponse[index].lastName,
+                                      role: listResponse[index].role,
+                                      profilePicture:
+                                          listResponse[index].profilePicture,
+                                      ubigeo: listResponse[index].ubigeo,
                                     ),
                                   ),
                                 )
@@ -177,49 +176,59 @@ class _BuscadorCompradoresScreenState extends State<BuscadorCompradoresScreen> {
                               child: Column(
                                 children: <Widget>[
                                   Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: <Widget>[
                                         Container(
                                             height: 80,
                                             width: 80,
                                             margin: EdgeInsets.only(right: 40),
                                             child: CircleAvatar(
-                                                backgroundImage: listResponse[index].profilePicture ==
-                                                    null
-                                                    ?  AssetImage("assets/images/user-placeholder.png")
+                                                backgroundImage: listResponse[
+                                                                index]
+                                                            .profilePicture ==
+                                                        null
+                                                    ? AssetImage(
+                                                        "assets/images/user-placeholder.png")
                                                     : NetworkImage(
-                                                    listResponse[index].profilePicture)
-                                            )
-                                        ),
-                                        Column(
-                                            children: <Widget>[
-
-                                              Row(
-                                                children: [
-                                                  Text(
-                                                    (listResponse[index].firstName == null ? "": (listResponse[index].firstName) )
-                                                        + " " +
-                                                        (listResponse[index].lastName== null? "": listResponse[index].lastName),
-                                                    style: TextStyle(
-                                                        fontWeight: FontWeight.bold),
-                                                  ),
-                                                ],
+                                                        listResponse[index]
+                                                            .profilePicture))),
+                                        Column(children: <Widget>[
+                                          Row(
+                                            children: [
+                                              Text(
+                                                (listResponse[index]
+                                                                .firstName ==
+                                                            null
+                                                        ? ""
+                                                        : (listResponse[index]
+                                                            .firstName)) +
+                                                    " " +
+                                                    (listResponse[index]
+                                                                .lastName ==
+                                                            null
+                                                        ? ""
+                                                        : listResponse[index]
+                                                            .lastName),
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
                                               ),
-                                              Row(
-                                                children: [
-                                                  Text(listResponse[index].ubigeo)
-                                                ],
-                                              )
-                                            ]
-                                        )
-                                      ]
-                                  )
+                                            ],
+                                          ),
+                                          Row(
+                                            children: [
+                                              Text(listResponse[index].ubigeo)
+                                            ],
+                                          )
+                                        ])
+                                      ])
                                 ],
                               ),
                             );
                           },
                           separatorBuilder: (BuildContext context, int index) =>
-                          const Divider(),
+                              const Divider(),
                           itemCount: listResponse.length,
                           padding: const EdgeInsets.all(8),
                           shrinkWrap: true,

@@ -1,7 +1,5 @@
 import 'package:agricultores_app/screens/STAB.dart';
-import 'package:agricultores_app/screens/cultivos/crearCutivoScreen.dart';
-import 'package:agricultores_app/screens/cultivos/cultivoScreen.dart';
-import 'package:agricultores_app/screens/orders/createOrderScreen.dart';
+import 'package:agricultores_app/screens/cultivosAndOrders/cultivoAndOrderScreen.dart';
 import 'package:agricultores_app/services/myProfileService.dart';
 import 'package:agricultores_app/services/myPubService.dart';
 import 'package:flutter/material.dart';
@@ -9,10 +7,15 @@ import 'package:flutter/rendering.dart';
 import 'package:shimmer/shimmer.dart';
 
 class UserProfileScreen extends StatefulWidget {
-  UserProfileScreen({Key key, this.id,
-    this.firstName, this.lastName,
-    this.profilePicture, this.ubigeo,
-    this.role}) : super(key: key);
+  UserProfileScreen(
+      {Key key,
+      this.id,
+      this.firstName,
+      this.lastName,
+      this.profilePicture,
+      this.ubigeo,
+      this.role})
+      : super(key: key);
 
   final String role;
   final int id;
@@ -21,10 +24,9 @@ class UserProfileScreen extends StatefulWidget {
   final String profilePicture;
   final String ubigeo;
 
-
   @override
-  _UserProfileScreenState createState() => _UserProfileScreenState(role, id, firstName,
-  lastName, profilePicture, ubigeo);
+  _UserProfileScreenState createState() => _UserProfileScreenState(
+      role, id, firstName, lastName, profilePicture, ubigeo);
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
@@ -35,10 +37,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   final String profilePicture;
   final String ubigeo;
 
-  _UserProfileScreenState(this.role, this.id,
-      this.firstName, this.lastName,
-      this.profilePicture, this.ubigeo,
-      );
+  _UserProfileScreenState(
+    this.role,
+    this.id,
+    this.firstName,
+    this.lastName,
+    this.profilePicture,
+    this.ubigeo,
+  );
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -96,7 +102,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       snap: true,
       pinned: true,
       expandedHeight: 300.0,
-      backgroundColor: this.role == 'ag' ? Color(0xff09B44D) : Color(0xfffc6e08),
+      backgroundColor:
+          this.role == 'ag' ? Color(0xff09B44D) : Color(0xfffc6e08),
       shape: ContinuousRectangleBorder(
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(60),
@@ -115,9 +122,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 ),
               )
             : SABT(
-                child: firstName != null
-                    ? Text(firstName)
-                    : Text("Sin Nombre"),
+                child: firstName != null ? Text(firstName) : Text("Sin Nombre"),
               ),
         collapseMode: CollapseMode.pin,
         centerTitle: true,
@@ -221,9 +226,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   color: Colors.blue[50],
                 ),
                 child: Center(
-                    child: ubigeo != null
-                        ? Text(ubigeo)
-                        : Text('Sin Ubicación')),
+                    child:
+                        ubigeo != null ? Text(ubigeo) : Text('Sin Ubicación')),
               )
             : Shimmer.fromColors(
                 baseColor: Colors.black12,
@@ -278,7 +282,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   Widget _carruselCultivos(bool isLoading) {
     if (!isLoading) {
       return FutureBuilder(
-        future: role=="ag"? MyPubService.getPubByUser(id): MyPubService.getOrdersByUser(id),
+        future: role == "ag"
+            ? MyPubService.getPubByUser(id)
+            : MyPubService.getOrdersByUser(id),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
             final listResponse = snapshot.data;
@@ -291,7 +297,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     size: 50,
                   ),
                   Text(
-                    role=="ag"? "Cultivos":"Órdenes",
+                    role == "ag" ? "Cultivos" : "Órdenes",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                   ),
                   SingleChildScrollView(
@@ -305,9 +311,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => CultivoScreen(
+                                    builder: (context) => CultivoAndOrderScreen(
                                       cultivoId: listResponse[index].id,
                                       titulo: listResponse[index].supplieName,
+                                      role: this.role,
+                                      isMyCultivoOrOrder: false,
                                     ),
                                   ),
                                 )
@@ -320,12 +328,17 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                       height: 150,
                                       width: MediaQuery.of(context).size.width,
                                       fit: BoxFit.cover,
-                                      image: listResponse[index].pictureURLs ==
-                                              null
-                                          ? AssetImage(
-                                              "assets/images/papas.jpg")
-                                          : NetworkImage(
-                                              listResponse[index].pictureURL),
+                                      image: this.role == 'ag'
+                                          ? (listResponse[index]
+                                                      .pictureURLs
+                                                      .length ==
+                                                  0
+                                              ? AssetImage(
+                                                  "assets/images/papas.jpg")
+                                              : NetworkImage(listResponse[index]
+                                                  .pictureURLs[0]))
+                                          : AssetImage(
+                                              "assets/images/order.jpg"),
                                     ),
                                   ),
                                   Row(

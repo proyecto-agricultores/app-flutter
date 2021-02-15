@@ -85,7 +85,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       expandedHeight: 300.0,
       backgroundColor:
           this.role == 'ag' ? Color(0xff09B44D) : Color(0xfffc6e08),
-      title: Text("Título"),
+      title: Text("Perfil"),
       shape: ContinuousRectangleBorder(
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(60),
@@ -367,6 +367,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     cultivoId: listResponse[index].id,
                                     titulo: listResponse[index].supplieName,
                                     role: this.role,
+                                    isMyCultivoOrOrder: true,
                                   ),
                                 ),
                               )

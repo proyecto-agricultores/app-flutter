@@ -12,12 +12,14 @@ class CultivoAndOrderScreen extends StatefulWidget {
   final int cultivoId;
   final String titulo;
   final String role;
+  final bool isMyCultivoOrOrder;
 
   const CultivoAndOrderScreen({
     Key key,
     @required this.cultivoId,
     @required this.titulo,
     @required this.role,
+    @required this.isMyCultivoOrOrder,
   }) : super(key: key);
 
   @override
@@ -25,6 +27,7 @@ class CultivoAndOrderScreen extends StatefulWidget {
         cultivoId,
         titulo,
         role,
+        isMyCultivoOrOrder,
       );
 }
 
@@ -32,11 +35,13 @@ class _CultivoAndOrderScreenState extends State<CultivoAndOrderScreen> {
   final int pubOrOrderId;
   final String titulo;
   final role;
+  final bool isMyCultivoOrOrder;
 
   _CultivoAndOrderScreenState(
     this.pubOrOrderId,
     this.titulo,
     this.role,
+    this.isMyCultivoOrOrder,
   );
 
   @override
@@ -61,8 +66,8 @@ class _CultivoAndOrderScreenState extends State<CultivoAndOrderScreen> {
             children: <Widget>[
               FutureBuilder(
                 future: this.role == 'ag'
-                    ? MyPubService.getPubinUserById(pubOrOrderId)
-                    : MyOrderService.getOrderFromUserById(pubOrOrderId),
+                    ? MyPubService.getPubById(pubOrOrderId)
+                    : MyOrderService.getOrderById(pubOrOrderId),
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
                   if (!snapshot.hasData) {
                     // while data is loading:
@@ -157,84 +162,95 @@ class _CultivoAndOrderScreenState extends State<CultivoAndOrderScreen> {
                             ],
                           ),
                           SizedBox(height: 20),
-                          FlatButton(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
-                            ),
-                            color: Colors.green[400],
-                            onPressed: () async {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => this.role == 'ag'
-                                      ? EditarCultivoScreen(
-                                          cultivoId: this.pubOrOrderId,
-                                          titulo: this.titulo,
-                                          dataCultivo: snapshot.data,
-                                        )
-                                      : UpdateOrderScreen(
-                                          ordenId: this.pubOrOrderId,
-                                          titulo: this.titulo,
-                                          dataOrden: snapshot.data,
+                          this.isMyCultivoOrOrder == true
+                              ? Column(
+                                  children: [
+                                    FlatButton(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(18.0),
+                                      ),
+                                      color: Colors.green[400],
+                                      onPressed: () async {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => this.role ==
+                                                    'ag'
+                                                ? EditarCultivoScreen(
+                                                    cultivoId:
+                                                        this.pubOrOrderId,
+                                                    titulo: this.titulo,
+                                                    dataCultivo: snapshot.data,
+                                                  )
+                                                : UpdateOrderScreen(
+                                                    ordenId: this.pubOrOrderId,
+                                                    titulo: this.titulo,
+                                                    dataOrden: snapshot.data,
+                                                  ),
+                                          ),
+                                        );
+                                      },
+                                      child: Text(
+                                        'Editar',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
                                         ),
-                                ),
-                              );
-                            },
-                            child: Text(
-                              'Editar',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ),
-                          FlatButton(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
-                            ),
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: Text('¿Estás seguro?'),
-                                    content: Text(
-                                        '¿Estas seguro que deseas eliminar el cultivo? Recuerda que esta acción es permanente.'),
-                                    actions: <Widget>[
-                                      TextButton(
-                                        child: Text('Cancelar'),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
                                       ),
-                                      TextButton(
-                                        child: Text('Eliminar'),
-                                        onPressed: () {
-                                          this.role == 'ag'
-                                              ? MyPubService.delete(
-                                                  this.pubOrOrderId)
-                                              : MyOrderService.delete(
-                                                  pubOrOrderId);
-                                          Navigator.of(context).popUntil(
-                                              (route) => route.isFirst);
-                                        },
+                                    ),
+                                    FlatButton(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(18.0),
                                       ),
-                                    ],
-                                  );
-                                },
-                              );
-                            },
-                            color: Colors.red[700],
-                            child: Text(
-                              'Eliminar',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
-                            ),
-                          )
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: Text('¿Estás seguro?'),
+                                              content: Text(
+                                                  '¿Estas seguro que deseas eliminar el cultivo? Recuerda que esta acción es permanente.'),
+                                              actions: <Widget>[
+                                                TextButton(
+                                                  child: Text('Cancelar'),
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                ),
+                                                TextButton(
+                                                  child: Text('Eliminar'),
+                                                  onPressed: () {
+                                                    this.role == 'ag'
+                                                        ? MyPubService.delete(
+                                                            this.pubOrOrderId)
+                                                        : MyOrderService.delete(
+                                                            pubOrOrderId);
+                                                    Navigator.of(context)
+                                                        .popUntil((route) =>
+                                                            route.isFirst);
+                                                  },
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      },
+                                      color: Colors.red[700],
+                                      child: Text(
+                                        'Eliminar',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : Container()
                         ],
                       ),
                     );

@@ -32,7 +32,7 @@ class MyPubService {
 
   static Future getPubByUser(int pk) async {
     final response = await HTTPClient.getClient(WithToken.yes).get(
-      MyHTTPConection.HTTP_URL + 'Pubs/'+ pk.toString()+'/',
+      MyHTTPConection.HTTP_URL + 'Pubs/' + pk.toString() + '/',
     );
 
     if (response.statusCode == 200) {
@@ -68,7 +68,7 @@ class MyPubService {
 
   static Future getOrdersByUser(int pk) async {
     final response = await HTTPClient.getClient(WithToken.yes).get(
-      MyHTTPConection.HTTP_URL + 'OrdersUser/'+ pk.toString()+'/',
+      MyHTTPConection.HTTP_URL + 'OrdersUser/' + pk.toString() + '/',
     );
 
     if (response.statusCode == 200) {
@@ -92,6 +92,20 @@ class MyPubService {
     if (response.statusCode == 200) {
       var json = jsonDecode(utf8.decode(response.bodyBytes));
       return MyPub.fromJson(json[0]);
+    } else {
+      throw Exception(
+          'Error al recuperar la información en publicación por ID.');
+    }
+  }
+
+  static Future getPubById(int id) async {
+    final response = await HTTPClient.getClient(WithToken.yes).get(
+      MyHTTPConection.HTTP_URL + 'publish/' + id.toString() + '/',
+    );
+
+    if (response.statusCode == 200) {
+      var json = jsonDecode(utf8.decode(response.bodyBytes));
+      return MyPub.fromJson(json);
     } else {
       throw Exception(
           'Error al recuperar la información en publicación por ID.');

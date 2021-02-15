@@ -128,6 +128,7 @@ class _TodosCultivosAndOrdersScreenState
                                       cultivoId: listResponse[index].id,
                                       titulo: listResponse[index].supplieName,
                                       role: this.role,
+                                      isMyCultivoOrOrder: true,
                                     ),
                                   ),
                                 )
