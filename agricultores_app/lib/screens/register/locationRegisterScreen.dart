@@ -1,4 +1,5 @@
 import 'package:agricultores_app/models/departmentModel.dart';
+import 'package:agricultores_app/widgets/general/loading.dart';
 import 'package:agricultores_app/models/district.dart';
 import 'package:agricultores_app/models/regionModel.dart';
 import 'package:agricultores_app/screens/register/roleRegisterScreen.dart';
@@ -11,6 +12,7 @@ import 'package:flutter/services.dart' show DeviceOrientation, SystemChrome;
 import 'package:location/location.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:agricultores_app/widgets/location/departmentDropdown.dart';
+import 'package:agricultores_app/widgets/location/locationDropdown.dart';
 
 class LocationRegisterScreen extends StatefulWidget {
   LocationRegisterScreen({Key key}) : super(key: key);
@@ -21,12 +23,13 @@ class LocationRegisterScreen extends StatefulWidget {
 
 class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
   String code;
-  List<Department> _departments;
+  List<Department> _departments = [Department(id: 0, name: '')];
   List<Region> _regions = [Region(id: 0, name: '')];
   List<District> _districts = [District(id: 0, name: '')];
   int _selectedDepartment;
   int _selectedRegion;
   int _selectedDistrict;
+  bool _fetchingDepartments = true;
   bool _fetchingRegions = false;
   bool _fetchingDistricts = false;
   bool _departmentIsSelected = false;
@@ -38,6 +41,7 @@ class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
   @override
   void initState() {
     super.initState();
+    this._getDepartments();
     this._getGPSLocation();
   }
 
@@ -226,6 +230,15 @@ class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
               }).toList(),
             )));
   }
+
+  void _getDepartments() async {
+    final response = await LocationService.getDepartments();
+    setState(() {
+      this._departments = response;
+      this._fetchingDepartments = false;
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
