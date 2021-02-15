@@ -40,9 +40,10 @@ class _DepartmentDropdownState extends State<DepartmentDropdown> {
     return this._fetchingDepartments
       ? CosechaLoading()
       : Container(
-      height: MediaQuery.of(context).size.height * 0.07,
+      height: MediaQuery.of(context).size.height * 0.11,
       width: MediaQuery.of(context).size.width * 0.8,
-      child: DropdownButton(
+      child: DropdownButtonFormField(
+        validator: (value) => value == null ? 'Campo requerido' : null,
         isExpanded: true,
         hint: Text('Seleccione su departamento'),
         value: this.selectedDepartment,

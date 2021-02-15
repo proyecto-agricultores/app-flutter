@@ -20,6 +20,7 @@ class LocationRegisterScreen extends StatefulWidget {
 }
 
 class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
+  final _formKey = new GlobalKey<FormState>();
   String code;
   List<Region> _regions = [Region(id: 0, name: '')];
   List<District> _districts = [District(id: 0, name: '')];
@@ -118,21 +119,23 @@ class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
         borderRadius: BorderRadius.circular(18.0),
       ),
       onPressed: () async {
-        setState(() {
-          this.isLoading = true;
-        });
-        var response = await UpdateUbigeoService.updateUbigeo(
-            _selectedDistrict.toString(), _lat, _lon);
-        setState(() {
-          this.isLoading = false;
-        });
-        print(response);
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => RoleRegisterScreen(),
-          ),
-        );
+        if (this._formKey.currentState.validate()) {
+          setState(() {
+            this.isLoading = true;
+          });
+          var response = await UpdateUbigeoService.updateUbigeo(
+              _selectedDistrict.toString(), _lat, _lon);
+          setState(() {
+            this.isLoading = false;
+          });
+          print(response);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => RoleRegisterScreen(),
+            ),
+          );
+        }
       },
       color: Colors.green[400],
       child: this.isLoading
@@ -154,12 +157,13 @@ class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
     return IgnorePointer(
         ignoring: !_departmentIsSelected,
         child: Container(
-            height: MediaQuery.of(context).size.height * 0.07,
+            height: MediaQuery.of(context).size.height * 0.11,
             width: MediaQuery.of(context).size.height * .8,
-            child: DropdownButton(
+            child: DropdownButtonFormField(
               isExpanded: true,
               hint: Text('Seleccione su región'),
               value: _selectedRegion,
+              validator: (value) => value == null ? 'Campo requerido' : null,
               onChanged: (newValue) {
                 setState(() {
                   _selectedRegion = newValue;
@@ -186,9 +190,10 @@ class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
     return IgnorePointer(
         ignoring: !_departmentIsSelected || !_regionIsSelected,
         child: Container(
-            height: MediaQuery.of(context).size.height * 0.07,
+            height: MediaQuery.of(context).size.height * 0.11,
             width: MediaQuery.of(context).size.height * 0.8,
-            child: DropdownButton(
+            child: DropdownButtonFormField(
+              validator: (value) => value == null ? 'Campo requerido' : null,
               isExpanded: true,
               hint: Text('Seleccione su distrito'),
               value: _selectedDistrict,
@@ -236,19 +241,26 @@ class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
                   width: MediaQuery.of(context).size.width * 0.8,
                   child: Column(
                     children: [
-                      DepartmentDropdown(
-                        onChanged: this._handleDepartmentChange,
-                      ),
-                      Separator(height: 0.02),
-                      this._fetchingRegions
-                          ? CosechaLoading()
-                          : this._regionsDropdown(),
-                      Separator(height: 0.02),
-                      this._fetchingDistricts
-                          ? CosechaLoading()
-                          : this._districtDropdown(),
-                      Separator(height: 0.05),
-                      this._nextButton(),
+                      Form(
+                        key: this._formKey,
+                        child: Column(
+                          children: [
+                            DepartmentDropdown(
+                              onChanged: this._handleDepartmentChange,
+                            ),
+                            Separator(height: 0.02),
+                            this._fetchingRegions
+                                ? CosechaLoading()
+                                : this._regionsDropdown(),
+                            Separator(height: 0.02),
+                            this._fetchingDistricts
+                                ? CosechaLoading()
+                                : this._districtDropdown(),
+                            Separator(height: 0.05),
+                            this._nextButton(),
+                          ]
+                        )
+                      )
                     ],
                   ),
                 ),

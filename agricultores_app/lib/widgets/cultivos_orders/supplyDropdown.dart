@@ -20,6 +20,7 @@ class SupplyDropdown extends StatelessWidget {
           List<Supply> listResponse =
               snapshot.data;
           return DropdownButtonFormField(
+            validator: (value) => value == null ? 'Campo requerido' : null,
             value: supplyID,
             icon: Icon(Icons.arrow_downward),
             onChanged: (newValue) {
