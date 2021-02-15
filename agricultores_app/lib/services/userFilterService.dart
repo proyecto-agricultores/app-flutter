@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:agricultores_app/interceptor/httpInterceptor.dart';
-import 'package:agricultores_app/models/agricultoresModel.dart';
+import 'package:agricultores_app/models/userModel.dart';
 import 'package:agricultores_app/models/myPubModel.dart';
 
 import 'package:agricultores_app/global/myHTTPConnection.dart';
@@ -11,22 +11,40 @@ import 'package:agricultores_app/services/token.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 
-class agricultoresFilterService {
+class UserFilterService {
   static Future getAgricultores() async {
     final response = await HTTPClient.getClient(WithToken.yes).get(
       MyHTTPConection.HTTP_URL + 'api/filter/agricultores/',
     );
 
     if (response.statusCode == 200) {
-      var list = <agricultores>[];
+      var list = <User>[];
       var json = jsonDecode(utf8.decode(response.bodyBytes));
       for (var element in json) {
-        var v = agricultores.fromJson(element);
+        var v = User.fromJson(element);
         list.add(v);
       }
       return list;
     } else {
       throw Exception('Error al recuperar la información de agricultores.');
+    }
+  }
+
+  static Future getCompradores() async {
+    final response = await HTTPClient.getClient(WithToken.yes).get(
+      MyHTTPConection.HTTP_URL + 'api/filter/compradores/',
+    );
+
+    if (response.statusCode == 200) {
+      var list = <User>[];
+      var json = jsonDecode(utf8.decode(response.bodyBytes));
+      for (var element in json) {
+        var v = User.fromJson(element);
+        list.add(v);
+      }
+      return list;
+    } else {
+      throw Exception('Error al recuperar la información de compradores.');
     }
   }
 

@@ -9,19 +9,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:shimmer/shimmer.dart';
 
-class buscadorAgricultoresScreen extends StatefulWidget {
-  buscadorAgricultoresScreen({Key key, this.title, this.role}) : super(key: key);
+class BuscadorCompradoresScreen extends StatefulWidget {
+  BuscadorCompradoresScreen({Key key, this.title, this.role}) : super(key: key);
 
   final String title;
   final String role;
 
   @override
-  _buscadorAgricultoresScreenState createState() => _buscadorAgricultoresScreenState(role: role);
+  _BuscadorCompradoresScreenState createState() => _BuscadorCompradoresScreenState(role: role);
 }
 
-class _buscadorAgricultoresScreenState extends State<buscadorAgricultoresScreen> {
+class _BuscadorCompradoresScreenState extends State<BuscadorCompradoresScreen> {
 
-  _buscadorAgricultoresScreenState({this.role});
+  _BuscadorCompradoresScreenState({this.role});
 
   final role;
   
@@ -76,7 +76,7 @@ class _buscadorAgricultoresScreenState extends State<buscadorAgricultoresScreen>
       snap: true,
       pinned: true,
       expandedHeight: 100.0,
-      backgroundColor: Color(0xff09B44D),
+      backgroundColor: Color(0xfffc6e08),
       shape: ContinuousRectangleBorder(
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(60),
@@ -95,7 +95,7 @@ class _buscadorAgricultoresScreenState extends State<buscadorAgricultoresScreen>
                 ),
               )
             : SABT(
-                child: Text("Resultados de agricultores",   style: TextStyle(fontSize: 12))
+                child: Text("Resultados de compradores",   style: TextStyle(fontSize: 12))
               ),
         collapseMode: CollapseMode.pin,
         centerTitle: true,
@@ -145,7 +145,7 @@ class _buscadorAgricultoresScreenState extends State<buscadorAgricultoresScreen>
   Widget _carruselUsuarios(bool isLoading) {
     if (!isLoading) {
       return FutureBuilder(
-        future: UserFilterService.getAgricultores(),
+        future: UserFilterService.getCompradores(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
             final listResponse = snapshot.data;
@@ -194,22 +194,22 @@ class _buscadorAgricultoresScreenState extends State<buscadorAgricultoresScreen>
                                         Column(
                                             children: <Widget>[
 
-                                        Row(
-                                          children: [
-                                            Text(
-                                              (listResponse[index].firstName == null ? "": (listResponse[index].firstName) )
-                                                  + " " +
-                                                  (listResponse[index].lastName== null? "": listResponse[index].lastName),
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ],
-                                        ),
-                                        Row(
-                                          children: [
-                                            Text(listResponse[index].ubigeo)
-                                          ],
-                                        )
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    (listResponse[index].firstName == null ? "": (listResponse[index].firstName) )
+                                                        + " " +
+                                                        (listResponse[index].lastName== null? "": listResponse[index].lastName),
+                                                    style: TextStyle(
+                                                        fontWeight: FontWeight.bold),
+                                                  ),
+                                                ],
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Text(listResponse[index].ubigeo)
+                                                ],
+                                              )
                                             ]
                                         )
                                       ]
@@ -219,7 +219,7 @@ class _buscadorAgricultoresScreenState extends State<buscadorAgricultoresScreen>
                             );
                           },
                           separatorBuilder: (BuildContext context, int index) =>
-                              const Divider(),
+                          const Divider(),
                           itemCount: listResponse.length,
                           padding: const EdgeInsets.all(8),
                           shrinkWrap: true,

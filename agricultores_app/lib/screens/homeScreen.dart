@@ -1,4 +1,5 @@
 //import 'package:agricultores_app/screens/filters/filterCropsAndOrdersScreen.dart';
+import 'package:agricultores_app/screens/buscadorCompradoresScreen.dart';
 import 'package:agricultores_app/screens/loginScreen.dart';
 import 'package:agricultores_app/screens/profileScreen.dart';
 import 'package:agricultores_app/services/token.dart';
@@ -70,17 +71,32 @@ class _HomeScreenState extends State<HomeScreen> {
                       CosechaGreenButton(
                         onPressed: () async {
                           final role = await this._getRole();
-                          final title = role == 'ag' ? 'Buscar órdenes' : 'Buscar cultivos';
+                          final title = role == 'Buscar agricultores';
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              //builder: (context) => FilterCropsAndOrdersScreen(title: title, role: role)
                                 builder: (context) => buscadorAgricultoresScreen(role: role)
 
                             ),
                           );
                         },
-                        text: 'Buscar',
+                        text: 'Buscar agricultores',
+                        isLoading: false,
+                      ),
+                      CosechaGreenButton(
+                        onPressed: () async {
+                          final role = await this._getRole();
+                          final title = 'Buscar compradores';
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              //builder: (context) => FilterCropsAndOrdersScreen(title: title, role: role)
+                                builder: (context) => BuscadorCompradoresScreen(role: role)
+
+                            ),
+                          );
+                        },
+                        text: 'Buscar compradores',
                         isLoading: false,
                       ),
                       CosechaGreenButton(

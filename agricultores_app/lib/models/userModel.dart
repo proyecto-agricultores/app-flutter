@@ -1,4 +1,4 @@
-class agricultores{
+class User{
   final int id;
   final String firstName;
   final String lastName;
@@ -7,7 +7,7 @@ class agricultores{
   final String ubigeo;
   final isVerified;
 
-  agricultores({
+  User({
     this.id,
     this.firstName,
     this.lastName,
@@ -17,8 +17,8 @@ class agricultores{
     this.isVerified,
   });
 
-  factory agricultores.fromJson(Map<String, dynamic> json) {
-    return agricultores(
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
       id: json['id'],
       firstName: json['first_name'],
       lastName: json['last_name'],
