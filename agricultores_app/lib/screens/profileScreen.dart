@@ -1,7 +1,9 @@
 import 'package:agricultores_app/screens/STAB.dart';
-import 'package:agricultores_app/screens/cultivos/crearCutivoScreen.dart';
-import 'package:agricultores_app/screens/cultivos/cultivoScreen.dart';
-import 'package:agricultores_app/screens/orders/createOrderScreen.dart';
+import 'package:agricultores_app/screens/cultivosAndOrders/cultivos/crearCutivoScreen.dart';
+import 'package:agricultores_app/screens/cultivosAndOrders/cultivoAndOrderScreen.dart';
+import 'package:agricultores_app/screens/cultivosAndOrders/orders/createOrderScreen.dart';
+import 'package:agricultores_app/screens/cultivosAndOrders/todosCultivosAndOrderScreen.dart';
+import 'package:agricultores_app/services/myOrderService.dart';
 import 'package:agricultores_app/services/myProfileService.dart';
 import 'package:agricultores_app/services/myPubService.dart';
 import 'package:flutter/material.dart';
@@ -19,11 +21,10 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-
   _ProfileScreenState({this.role});
 
   final role;
-  
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -46,6 +47,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       this._verMapa(),
                       this._contactar(),
                       this._agregarCultivoUOrden(),
+                      this._verTodosCultivos(),
                       this._carruselCultivos(false),
                     ],
                   ),
@@ -63,7 +65,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       this._ubicacion(snapshot, true),
                       this._verMapa(),
                       this._contactar(),
-                      this._carruselCultivos(true),
+                      //this._carruselCultivos(true),
                     ],
                   ),
                 ),
@@ -81,7 +83,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       snap: true,
       pinned: true,
       expandedHeight: 300.0,
-      backgroundColor: this.role == 'ag' ? Color(0xff09B44D) : Color(0xfffc6e08),
+      backgroundColor:
+          this.role == 'ag' ? Color(0xff09B44D) : Color(0xfffc6e08),
       title: Text("Título"),
       shape: ContinuousRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -92,12 +95,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       flexibleSpace: FlexibleSpaceBar(
         title: isLoading
             ? Shimmer.fromColors(
-                baseColor: Colors.black12,
-                highlightColor: Colors.black,
+                baseColor: Colors.white.withAlpha(5),
+                highlightColor: Colors.white.withAlpha(50),
                 child: Container(
                   width: 90.0,
                   height: 20.0,
-                  color: Colors.black,
+                  color: Colors.white,
                 ),
               )
             : SABT(
@@ -162,8 +165,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         width: 150,
         margin: EdgeInsets.only(bottom: 70),
         child: Shimmer.fromColors(
-          baseColor: Colors.black12,
-          highlightColor: Colors.black,
+          baseColor: Colors.white.withAlpha(5),
+          highlightColor: Colors.white.withAlpha(60),
           child: CircleAvatar(),
         ),
       );
@@ -212,8 +215,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         : Text('Sin Ubicación')),
               )
             : Shimmer.fromColors(
-                baseColor: Colors.black12,
-                highlightColor: Colors.black,
+                baseColor: Colors.grey.withAlpha(5),
+                highlightColor: Colors.grey.withAlpha(60),
                 child: Container(
                   width: 250,
                   height: 50,
@@ -261,6 +264,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  Widget _verTodosCultivos() {
+    return Container(
+      margin: EdgeInsets.only(bottom: 15),
+      child: RaisedButton(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(18.0),
+        ),
+        onPressed: () async {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                //builder: (context) => this.role == 'ag' ? CrearCultivoScreen() : CreateOrderScreen(),
+                builder: (context) {
+              if (this.role == 'ag') {
+                return TodosCultivosAndOrdersScreen(
+                  role: this.role,
+                );
+              } else {
+                return TodosCultivosAndOrdersScreen(
+                  role: this.role,
+                );
+              }
+            }),
+          );
+        },
+        color: Colors.green[900],
+        textColor: Colors.white,
+        child: this.role == 'ag'
+            ? Text("Ver todos los Cultivos")
+            : Text("Ver todas las Ordenes"),
+      ),
+    );
+  }
+
   Widget _agregarCultivoUOrden() {
     return Container(
       margin: EdgeInsets.only(bottom: 15),
@@ -272,20 +309,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              //builder: (context) => this.role == 'ag' ? CrearCultivoScreen() : CreateOrderScreen(),
-              builder: (context) {
-                if (this.role == 'ag') {
-                  return CrearCultivoScreen();
-                } else {
-                  return CreateOrderScreen();
-                }
+                //builder: (context) => this.role == 'ag' ? CrearCultivoScreen() : CreateOrderScreen(),
+                builder: (context) {
+              if (this.role == 'ag') {
+                return CrearCultivoScreen();
+              } else {
+                return CreateOrderScreen();
               }
-            ),
+            }),
           );
         },
         color: Colors.green[900],
         textColor: Colors.white,
-        child: this.role == 'ag' ? Text("Añadir Cultivo") : Text("Añadir Orden"),
+        child:
+            this.role == 'ag' ? Text("Añadir Cultivo") : Text("Añadir Orden"),
       ),
     );
   }
@@ -293,11 +330,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _carruselCultivos(bool isLoading) {
     if (!isLoading) {
       return FutureBuilder(
-        future: MyPubService.getPubinUser(),
+        future: this.role == 'ag'
+            ? MyPubService.getFeaturedPubFromUser()
+            : MyOrderService.getFeaturedOrdersFromUser(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
             final listResponse = snapshot.data;
-            if (snapshot.hasData) {
+            if (listResponse.length > 0) {
               return Column(
                 children: [
                   Icon(
@@ -306,82 +345,88 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     size: 50,
                   ),
                   Text(
-                    'Mis Cultivos',
+                    this.role == 'ag'
+                        ? 'Mis Cultivos Destacados'
+                        : 'Mis Ordenes Destacadas',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                   ),
                   SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        ListView.separated(
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemBuilder: (BuildContext context, int index) {
-                            return InkWell(
-                              onTap: () => {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => CultivoScreen(
-                                      cultivoId: listResponse[index].id,
-                                      titulo: listResponse[index].supplieName,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 16.0, vertical: 24.0),
+                      height: MediaQuery.of(context).size.height * 0.45,
+                      child: ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (BuildContext context, int index) {
+                          return InkWell(
+                            onTap: () => {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => CultivoAndOrderScreen(
+                                    cultivoId: listResponse[index].id,
+                                    titulo: listResponse[index].supplieName,
+                                    role: this.role,
+                                  ),
+                                ),
+                              )
+                            },
+                            child: Column(
+                              children: <Widget>[
+                                Container(
+                                  alignment: Alignment.center,
+                                  child: Image(
+                                    height: 150,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.75,
+                                    image: this.role == 'ag'
+                                        ? (listResponse[index].pictureURLs ==
+                                                null
+                                            ? AssetImage(
+                                                "assets/images/papas.jpg")
+                                            : NetworkImage(listResponse[index]
+                                                .pictureURLs[0]))
+                                        : AssetImage("assets/images/order.jpg"),
+                                  ),
+                                ),
+                                Row(
+                                  children: [
+                                    Text("Producto: "),
+                                    Text(
+                                      listResponse[index].supplieName,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
                                     ),
-                                  ),
-                                )
-                              },
-                              child: Column(
-                                children: <Widget>[
-                                  Container(
-                                    alignment: Alignment.center,
-                                    child: Image(
-                                      height: 150,
-                                      width: MediaQuery.of(context).size.width,
-                                      fit: BoxFit.cover,
-                                      image: listResponse[index].pictureURLs ==
-                                              null
-                                          ? AssetImage(
-                                              "assets/images/papas.jpg")
-                                          : NetworkImage(
-                                              listResponse[index].pictureURL),
-                                    ),
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text("Producto: "),
-                                      Text(
-                                        listResponse[index].supplieName,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text('Área: '),
-                                      Text(listResponse[index].area.toString()),
-                                      Text(' '),
-                                      Text(listResponse[index].areaUnit),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text('Costo: '),
-                                      Text(listResponse[index]
-                                          .unitPrice
-                                          .toString()),
-                                      Text(' x '),
-                                      Text(listResponse[index].weightUnit),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                          separatorBuilder: (BuildContext context, int index) =>
-                              const Divider(),
-                          itemCount: listResponse.length,
-                          padding: const EdgeInsets.all(8),
-                          shrinkWrap: true,
-                        ),
-                      ],
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Text('Área: '),
+                                    Text(listResponse[index].area.toString()),
+                                    Text(' '),
+                                    Text(listResponse[index].areaUnit),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Text('Costo: '),
+                                    Text(listResponse[index]
+                                        .unitPrice
+                                        .toString()),
+                                    Text(' x '),
+                                    Text(listResponse[index].weightUnit),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                        separatorBuilder: (BuildContext context, int index) =>
+                            const Divider(),
+                        itemCount: listResponse.length,
+                        padding: const EdgeInsets.all(8),
+                        shrinkWrap: true,
+                      ),
                     ),
                   ),
                 ],
@@ -401,14 +446,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget _shimerPub() {
     return Shimmer.fromColors(
-      baseColor: Colors.black12,
-      highlightColor: Colors.black,
+      baseColor: Colors.grey.withAlpha(5),
+      highlightColor: Colors.grey.withAlpha(60),
       child: Column(
         children: [
           Container(
             height: 150,
             width: MediaQuery.of(context).size.width,
-            color: Colors.white,
+            color: Colors.grey.withAlpha(60),
           ),
         ],
       ),
