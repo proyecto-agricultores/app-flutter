@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:agricultores_app/interceptor/httpInterceptor.dart';
-import 'package:agricultores_app/models/myOrderModel.dart';
+import 'package:agricultores_app/models/userModel.dart';
 import 'package:agricultores_app/models/myPubModel.dart';
 
 import 'package:agricultores_app/global/myHTTPConnection.dart';
@@ -11,76 +11,40 @@ import 'package:agricultores_app/services/token.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 
-class MyPubService {
-  static Future getPubinUser() async {
+class UserFilterService {
+  static Future getAgricultores() async {
     final response = await HTTPClient.getClient(WithToken.yes).get(
-      MyHTTPConection.HTTP_URL + 'myPub/',
+      MyHTTPConection.HTTP_URL + 'api/filter/agricultores/',
     );
 
     if (response.statusCode == 200) {
-      var list = <MyPub>[];
+      var list = <User>[];
       var json = jsonDecode(utf8.decode(response.bodyBytes));
       for (var element in json) {
-        var v = MyPub.fromJson(element);
+        var v = User.fromJson(element);
         list.add(v);
       }
       return list;
     } else {
-      throw Exception('Error al recuperar la información del usuario.');
+      throw Exception('Error al recuperar la información de agricultores.');
     }
   }
 
-  static Future getPubByUser(int pk) async {
+  static Future getCompradores() async {
     final response = await HTTPClient.getClient(WithToken.yes).get(
-      MyHTTPConection.HTTP_URL + 'Pubs/'+ pk.toString()+'/',
+      MyHTTPConection.HTTP_URL + 'api/filter/compradores/',
     );
 
     if (response.statusCode == 200) {
-      var list = <MyPub>[];
+      var list = <User>[];
       var json = jsonDecode(utf8.decode(response.bodyBytes));
       for (var element in json) {
-        var v = MyPub.fromJson(element);
+        var v = User.fromJson(element);
         list.add(v);
       }
       return list;
     } else {
-      throw Exception('Error al recuperar la información del usuario.');
-    }
-  }
-
-  static Future getFeaturedPubFromUser() async {
-    final response = await HTTPClient.getClient(WithToken.yes).get(
-      MyHTTPConection.HTTP_URL + 'myFeaturedPub/',
-    );
-
-    if (response.statusCode == 200) {
-      var list = <MyPub>[];
-      var json = jsonDecode(utf8.decode(response.bodyBytes));
-      for (var element in json) {
-        var v = MyPub.fromJson(element);
-        list.add(v);
-      }
-      return list;
-    } else {
-      throw Exception('Error al recuperar la información del usuario.');
-    }
-  }
-
-  static Future getOrdersByUser(int pk) async {
-    final response = await HTTPClient.getClient(WithToken.yes).get(
-      MyHTTPConection.HTTP_URL + 'OrdersUser/'+ pk.toString()+'/',
-    );
-
-    if (response.statusCode == 200) {
-      var list = <MyOrder>[];
-      var json = jsonDecode(utf8.decode(response.bodyBytes));
-      for (var element in json) {
-        var v = MyOrder.fromJson(element);
-        list.add(v);
-      }
-      return list;
-    } else {
-      throw Exception('Error al recuperar la información del usuario.');
+      throw Exception('Error al recuperar la información de compradores.');
     }
   }
 

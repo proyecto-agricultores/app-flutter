@@ -3,6 +3,7 @@ import 'package:agricultores_app/models/priceUnitModel.dart';
 import 'package:agricultores_app/widgets/cultivos_orders/supplyDropdown.dart';
 import 'package:agricultores_app/widgets/cultivos_orders/unitDropdown.dart';
 import 'package:agricultores_app/widgets/general/cancelButton.dart';
+import 'package:agricultores_app/widgets/general/cosechaGreenButton.dart';
 import 'package:agricultores_app/widgets/general/divider.dart';
 import 'package:agricultores_app/widgets/general/separator.dart';
 import 'package:flutter/material.dart';
@@ -111,28 +112,10 @@ class CosechaForm extends StatelessWidget {
             label: "Fecha de cosecha"
           ),
           SizedBox(height: 20),
-          FlatButton(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(18.0),
-            ),
-            onPressed: () async {
-              this.onPressed();
-            },
-            color: Colors.green[400],
-            child: this.isLoading
-            ? 
-            LinearProgressIndicator(
-              minHeight: 5,
-            )
-            :
-            Text(
-              this.buttonText,
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
-            ),
+          CosechaGreenButton(
+            onPressed: this.onPressed,
+            text: this.buttonText,
+            isLoading: this.isLoading,
           ),
           CancelButton(),
         ]

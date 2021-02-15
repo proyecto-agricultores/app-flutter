@@ -1,14 +1,16 @@
-import 'package:agricultores_app/models/departmentModel.dart';
 import 'package:agricultores_app/models/district.dart';
 import 'package:agricultores_app/models/regionModel.dart';
 import 'package:agricultores_app/screens/register/roleRegisterScreen.dart';
 import 'package:agricultores_app/services/locationService.dart';
 import 'package:agricultores_app/services/updateUbigeoService.dart';
 import 'package:agricultores_app/widgets/general/cosechaLogo.dart';
+import 'package:agricultores_app/widgets/general/separator.dart';
+import 'package:agricultores_app/widgets/general/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show DeviceOrientation, SystemChrome;
 import 'package:location/location.dart';
 import 'package:geocoder/geocoder.dart';
+import 'package:agricultores_app/widgets/location/departmentDropdown.dart';
 
 class LocationRegisterScreen extends StatefulWidget {
   LocationRegisterScreen({Key key}) : super(key: key);
@@ -18,14 +20,13 @@ class LocationRegisterScreen extends StatefulWidget {
 }
 
 class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
+  final _formKey = new GlobalKey<FormState>();
   String code;
-  List<Department> _departments;
   List<Region> _regions = [Region(id: 0, name: '')];
   List<District> _districts = [District(id: 0, name: '')];
   int _selectedDepartment;
   int _selectedRegion;
   int _selectedDistrict;
-  bool _fetchingDepartments = true;
   bool _fetchingRegions = false;
   bool _fetchingDistricts = false;
   bool _departmentIsSelected = false;
@@ -37,16 +38,22 @@ class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
   @override
   void initState() {
     super.initState();
-    this._getDepartments();
     this._getGPSLocation();
   }
 
-  void _getDepartments() async {
-    final response = await LocationService.getDepartments();
+  void _handleDepartmentChange(newValue) {
+    print('new value: ' + newValue.toString());
     setState(() {
-      this._departments = response;
-      this._fetchingDepartments = false;
+      _selectedDepartment = newValue;
+      _departmentIsSelected = true;
+      _fetchingRegions = true;
+      this._regions = [Region(id: 0, name: '')];
+      this._selectedRegion = null;
+      this._districts = [District(id: 0, name: '')];
+      this._selectedDistrict = null;
+      this._getRegions();
     });
+    print(this._selectedDepartment);
   }
 
   void _getRegions() async {
@@ -99,48 +106,11 @@ class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
       _locationData.latitude,
       _locationData.longitude,
     );
-    // var addresses =
-    //     await Geocoder.local.findAddressesFromCoordinates(coordinates);
-    // var first = addresses.first;
-    // print("${first.toMap()}");
 
     setState(() {
       this._lat = coordinates.latitude;
       this._lon = coordinates.longitude;
     });
-  }
-
-  Widget _departmentDropdown() {
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.07,
-      width: MediaQuery.of(context).size.width * 0.8,
-      child: DropdownButton(
-        isExpanded: true,
-        hint: Text('Seleccione su departamento'),
-        value: _selectedDepartment,
-        onChanged: (newValue) {
-          setState(() {
-            _selectedDepartment = newValue;
-            _departmentIsSelected = true;
-            _fetchingRegions = true;
-            this._regions = [Region(id: 0, name: '')];
-            this._selectedRegion = null;
-            this._districts = [District(id: 0, name: '')];
-            this._selectedDistrict = null;
-            this._getRegions();
-          });
-        },
-        items: this._departments.map((department) {
-          return DropdownMenuItem(
-            child: new Text(
-              department.name,
-              textAlign: TextAlign.center,
-            ),
-            value: department.id,
-          );
-        }).toList(),
-      ),
-    );
   }
 
   Widget _nextButton() {
@@ -149,21 +119,23 @@ class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
         borderRadius: BorderRadius.circular(18.0),
       ),
       onPressed: () async {
-        setState(() {
-          this.isLoading = true;
-        });
-        var response = await UpdateUbigeoService.updateUbigeo(
-            _selectedDistrict.toString(), _lat, _lon);
-        setState(() {
-          this.isLoading = false;
-        });
-        print(response);
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => RoleRegisterScreen(),
-          ),
-        );
+        if (this._formKey.currentState.validate()) {
+          setState(() {
+            this.isLoading = true;
+          });
+          var response = await UpdateUbigeoService.updateUbigeo(
+              _selectedDistrict.toString(), _lat, _lon);
+          setState(() {
+            this.isLoading = false;
+          });
+          print(response);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => RoleRegisterScreen(),
+            ),
+          );
+        }
       },
       color: Colors.green[400],
       child: this.isLoading
@@ -181,22 +153,17 @@ class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
     );
   }
 
-  Widget _loading() {
-    return Container(
-        height: MediaQuery.of(context).size.height * 0.04,
-        child: CircularProgressIndicator());
-  }
-
   Widget _regionsDropdown() {
     return IgnorePointer(
         ignoring: !_departmentIsSelected,
         child: Container(
-            height: MediaQuery.of(context).size.height * 0.07,
+            height: MediaQuery.of(context).size.height * 0.11,
             width: MediaQuery.of(context).size.height * .8,
-            child: DropdownButton(
+            child: DropdownButtonFormField(
               isExpanded: true,
               hint: Text('Seleccione su región'),
               value: _selectedRegion,
+              validator: (value) => value == null ? 'Campo requerido' : null,
               onChanged: (newValue) {
                 setState(() {
                   _selectedRegion = newValue;
@@ -223,9 +190,10 @@ class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
     return IgnorePointer(
         ignoring: !_departmentIsSelected || !_regionIsSelected,
         child: Container(
-            height: MediaQuery.of(context).size.height * 0.07,
+            height: MediaQuery.of(context).size.height * 0.11,
             width: MediaQuery.of(context).size.height * 0.8,
-            child: DropdownButton(
+            child: DropdownButtonFormField(
+              validator: (value) => value == null ? 'Campo requerido' : null,
               isExpanded: true,
               hint: Text('Seleccione su distrito'),
               value: _selectedDistrict,
@@ -273,19 +241,26 @@ class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
                   width: MediaQuery.of(context).size.width * 0.8,
                   child: Column(
                     children: [
-                      this._fetchingDepartments
-                          ? this._loading()
-                          : this._departmentDropdown(),
-                      SizedBox(height: 10),
-                      this._fetchingRegions
-                          ? this._loading()
-                          : this._regionsDropdown(),
-                      SizedBox(height: 10),
-                      this._fetchingDistricts
-                          ? this._loading()
-                          : this._districtDropdown(),
-                      SizedBox(height: 30),
-                      this._nextButton(),
+                      Form(
+                        key: this._formKey,
+                        child: Column(
+                          children: [
+                            DepartmentDropdown(
+                              onChanged: this._handleDepartmentChange,
+                            ),
+                            Separator(height: 0.02),
+                            this._fetchingRegions
+                                ? CosechaLoading()
+                                : this._regionsDropdown(),
+                            Separator(height: 0.02),
+                            this._fetchingDistricts
+                                ? CosechaLoading()
+                                : this._districtDropdown(),
+                            Separator(height: 0.05),
+                            this._nextButton(),
+                          ]
+                        )
+                      )
                     ],
                   ),
                 ),
