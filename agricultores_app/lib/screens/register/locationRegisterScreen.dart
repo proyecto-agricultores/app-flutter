@@ -5,6 +5,7 @@ import 'package:agricultores_app/services/locationService.dart';
 import 'package:agricultores_app/services/updateUbigeoService.dart';
 import 'package:agricultores_app/widgets/general/cosechaLogo.dart';
 import 'package:agricultores_app/widgets/general/separator.dart';
+import 'package:agricultores_app/widgets/general/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show DeviceOrientation, SystemChrome;
 import 'package:location/location.dart';
@@ -149,12 +150,6 @@ class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
     );
   }
 
-  Widget _loading() {
-    return Container(
-        height: MediaQuery.of(context).size.height * 0.04,
-        child: CircularProgressIndicator());
-  }
-
   Widget _regionsDropdown() {
     return IgnorePointer(
         ignoring: !_departmentIsSelected,
@@ -246,11 +241,11 @@ class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
                       ),
                       Separator(height: 0.02),
                       this._fetchingRegions
-                          ? this._loading()
+                          ? CosechaLoading()
                           : this._regionsDropdown(),
                       Separator(height: 0.02),
                       this._fetchingDistricts
-                          ? this._loading()
+                          ? CosechaLoading()
                           : this._districtDropdown(),
                       Separator(height: 0.05),
                       this._nextButton(),
