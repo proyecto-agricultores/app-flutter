@@ -331,8 +331,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     if (!isLoading) {
       return FutureBuilder(
         future: this.role == 'ag'
-            ? MyPubService.getPubinUser()
-            : MyOrderService.getOrdersFromUser(),
+            ? MyPubService.getFeaturedPubFromUser()
+            : MyOrderService.getFeaturedOrdersFromUser(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
             final listResponse = snapshot.data;
