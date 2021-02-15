@@ -1,6 +1,7 @@
 import 'package:agricultores_app/screens/filters/filterCropsAndOrdersScreen.dart';
 import 'package:agricultores_app/screens/loginScreen.dart';
 import 'package:agricultores_app/screens/profileScreen.dart';
+import 'package:agricultores_app/screens/register/locationRegisterScreen.dart';
 import 'package:agricultores_app/services/token.dart';
 import 'package:agricultores_app/widgets/general/cosechaGreenButton.dart';
 import 'package:agricultores_app/widgets/general/cosechaLogo.dart';
@@ -77,6 +78,18 @@ class _HomeScreenState extends State<HomeScreen> {
                           );
                         },
                         text: 'Buscar',
+                        isLoading: false,
+                      ),
+                      CosechaGreenButton(
+                        onPressed: () async {
+                          return Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => LocationRegisterScreen()
+                            ),
+                          );
+                        },
+                        text: 'Location',
                         isLoading: false,
                       ),
                       CosechaGreenButton(
