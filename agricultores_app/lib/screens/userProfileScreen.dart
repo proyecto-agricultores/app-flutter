@@ -316,6 +316,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                       titulo: listResponse[index].supplieName,
                                       role: this.role,
                                       isMyCultivoOrOrder: false,
+                                      invertRole: false,
                                     ),
                                   ),
                                 )

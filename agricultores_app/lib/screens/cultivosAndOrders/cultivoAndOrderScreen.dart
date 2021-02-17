@@ -13,6 +13,7 @@ class CultivoAndOrderScreen extends StatefulWidget {
   final String titulo;
   final String role;
   final bool isMyCultivoOrOrder;
+  final bool invertRole;
 
   const CultivoAndOrderScreen({
     Key key,
@@ -20,6 +21,7 @@ class CultivoAndOrderScreen extends StatefulWidget {
     @required this.titulo,
     @required this.role,
     @required this.isMyCultivoOrOrder,
+    @required this.invertRole,
   }) : super(key: key);
 
   @override
@@ -28,6 +30,7 @@ class CultivoAndOrderScreen extends StatefulWidget {
         titulo,
         role,
         isMyCultivoOrOrder,
+        invertRole,
       );
 }
 
@@ -36,12 +39,14 @@ class _CultivoAndOrderScreenState extends State<CultivoAndOrderScreen> {
   final String titulo;
   final role;
   final bool isMyCultivoOrOrder;
+  final bool invertRole;
 
   _CultivoAndOrderScreenState(
     this.pubOrOrderId,
     this.titulo,
     this.role,
     this.isMyCultivoOrOrder,
+    this.invertRole,
   );
 
   @override
@@ -53,6 +58,9 @@ class _CultivoAndOrderScreenState extends State<CultivoAndOrderScreen> {
         DeviceOrientation.portraitDown,
       ],
     );
+
+    bool roleActual = this.role == 'ag' && !invertRole;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(titulo),
@@ -65,7 +73,7 @@ class _CultivoAndOrderScreenState extends State<CultivoAndOrderScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               FutureBuilder(
-                future: this.role == 'ag'
+                future: roleActual
                     ? MyPubService.getPubById(pubOrOrderId)
                     : MyOrderService.getOrderById(pubOrOrderId),
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -79,7 +87,7 @@ class _CultivoAndOrderScreenState extends State<CultivoAndOrderScreen> {
                     return Container(
                       child: Column(
                         children: [
-                          this.role == 'ag'
+                          roleActual
                               ? Container(
                                   child: CarouselSlider(
                                     options: CarouselOptions(
@@ -137,7 +145,7 @@ class _CultivoAndOrderScreenState extends State<CultivoAndOrderScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                  this.role == 'ag'
+                                  roleActual
                                       ? "Siembra: "
                                       : "Deseada de Siembra: ",
                                   style:
@@ -151,7 +159,7 @@ class _CultivoAndOrderScreenState extends State<CultivoAndOrderScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                  this.role == 'ag'
+                                  roleActual
                                       ? "Cosecha: "
                                       : "Deseada de Cosecha: ",
                                   style:
@@ -223,7 +231,7 @@ class _CultivoAndOrderScreenState extends State<CultivoAndOrderScreen> {
                                                 TextButton(
                                                   child: Text('Eliminar'),
                                                   onPressed: () {
-                                                    this.role == 'ag'
+                                                    roleActual
                                                         ? MyPubService.delete(
                                                             this.pubOrOrderId)
                                                         : MyOrderService.delete(
