@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:shimmer/shimmer.dart';
 
+import 'cultivosAndOrders/matchesScreen.dart';
+
 class ProfileScreen extends StatefulWidget {
   ProfileScreen({Key key, this.title, this.role}) : super(key: key);
 
@@ -46,6 +48,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       this._ubicacion(snapshot, false),
                       this._verMapa(),
                       this._agregarCultivoUOrden(),
+                      this._verMatches(),
                       this._verTodosCultivos(),
                       this._carruselCultivos(false),
                     ],
@@ -63,7 +66,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       SizedBox(height: 30),
                       this._ubicacion(snapshot, true),
                       this._verMapa(),
-                      //this._carruselCultivos(true),
                     ],
                   ),
                 ),
@@ -287,6 +289,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  Widget _verMatches() {
+    return Container(
+      margin: EdgeInsets.only(bottom: 15),
+      child: RaisedButton(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(18.0),
+        ),
+        onPressed: () async {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) {
+              if (this.role == 'ag') {
+                return MatchesScreen(
+                  role: this.role,
+                );
+              } else {
+                return MatchesScreen(
+                  role: this.role,
+                );
+              }
+            }),
+          );
+        },
+        color: Colors.green[900],
+        textColor: Colors.white,
+        child: this.role == 'ag'
+            ? Text("Sugerirme ventas")
+            : Text("Sugerirme compras"),
+      ),
+    );
+  }
+
   Widget _agregarCultivoUOrden() {
     return Container(
       margin: EdgeInsets.only(bottom: 15),
@@ -357,6 +391,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     titulo: listResponse[index].supplieName,
                                     role: this.role,
                                     isMyCultivoOrOrder: true,
+                                    invertRole: false,
                                   ),
                                 ),
                               )
