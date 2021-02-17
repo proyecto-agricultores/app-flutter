@@ -87,7 +87,7 @@ class GridDashboard extends StatelessWidget {
                       return LoginScreen();
                     } else if (data.route == "farmers") {
                       return FilterCropsAndOrdersScreen(
-                        title: "Buscar pedidos",
+                        title: "Buscar órdenes",
                         role: "co",
                       );
                     } else if (data.route == "crops") {
