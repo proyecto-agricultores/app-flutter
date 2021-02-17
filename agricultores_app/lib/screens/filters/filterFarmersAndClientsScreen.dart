@@ -124,7 +124,8 @@ class _FilterFarmersAndClientsState extends State<FilterFarmersAndClientsScreen>
                   ),
                   CosechaDivider(),
                   DepartmentDropdown(
-                    onChanged: this._handleDepartmentChange
+                    onChanged: this._handleDepartmentChange,
+                    selectedDepartment: this._departmentID,
                   ),
                   this._fetchingRegions ? CosechaLoading() : this._regionsDropdown(),
                   Separator(height: 0.03),
