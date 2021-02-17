@@ -2,19 +2,20 @@ import 'package:agricultores_app/screens/STAB.dart';
 import 'package:agricultores_app/screens/userProfileScreen.dart';
 import 'package:agricultores_app/services/myProfileService.dart';
 import 'package:agricultores_app/services/filterService.dart';
+import 'package:agricultores_app/widgets/shimmer/ShimmerUser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:shimmer/shimmer.dart';
 
 class FilterFarmersAndClientsResultsScreenScreen extends StatefulWidget {
-  FilterFarmersAndClientsResultsScreenScreen({
-    Key key, 
-    @required this.title, 
-    @required this.supplyID, 
-    @required this.departmentID, 
-    @required this.regionID, 
-    @required this.role
-  }) : super(key: key);
+  FilterFarmersAndClientsResultsScreenScreen(
+      {Key key,
+      @required this.title,
+      @required this.supplyID,
+      @required this.departmentID,
+      @required this.regionID,
+      @required this.role})
+      : super(key: key);
 
   final String title;
   final String role;
@@ -23,15 +24,22 @@ class FilterFarmersAndClientsResultsScreenScreen extends StatefulWidget {
   final int regionID;
 
   @override
-  _FilterFarmersAndClientsResultsScreenScreenState createState() => _FilterFarmersAndClientsResultsScreenScreenState(title: this.title, supplyID: this.supplyID, departmentID: this.departmentID, regionID: this.regionID, role: role);
+  _FilterFarmersAndClientsResultsScreenScreenState createState() =>
+      _FilterFarmersAndClientsResultsScreenScreenState(
+          title: this.title,
+          supplyID: this.supplyID,
+          departmentID: this.departmentID,
+          regionID: this.regionID,
+          role: role);
 }
 
-class _FilterFarmersAndClientsResultsScreenScreenState extends State<FilterFarmersAndClientsResultsScreenScreen> {
+class _FilterFarmersAndClientsResultsScreenScreenState
+    extends State<FilterFarmersAndClientsResultsScreenScreen> {
   _FilterFarmersAndClientsResultsScreenScreenState({
     @required this.title,
     @required this.supplyID,
     @required this.departmentID,
-    @required this.regionID, 
+    @required this.regionID,
     @required this.role,
   });
 
@@ -102,17 +110,14 @@ class _FilterFarmersAndClientsResultsScreenScreenState extends State<FilterFarme
       flexibleSpace: FlexibleSpaceBar(
         title: isLoading
             ? Shimmer.fromColors(
-                baseColor: Colors.black12,
-                highlightColor: Colors.black,
-                child: Container(
-                  width: 90.0,
-                  height: 20.0,
-                  color: Colors.black,
+                baseColor: Colors.white.withAlpha(20),
+                highlightColor: Colors.white.withAlpha(60),
+                child: Text(
+                  this.title,
+                  style: TextStyle(fontSize: 12),
                 ),
               )
-            : SABT(
-                child: Text(this.title,
-                    style: TextStyle(fontSize: 12))),
+            : SABT(child: Text(this.title, style: TextStyle(fontSize: 12))),
         collapseMode: CollapseMode.pin,
         centerTitle: true,
       ),
@@ -160,7 +165,8 @@ class _FilterFarmersAndClientsResultsScreenScreenState extends State<FilterFarme
   Widget _carruselUsuarios(bool isLoading) {
     if (!isLoading) {
       return FutureBuilder(
-        future: FilterService.filterFarmersAndClients(this.supplyID, this.departmentID, this.regionID, this.role),
+        future: FilterService.filterFarmersAndClients(
+            this.supplyID, this.departmentID, this.regionID, this.role),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
             final listResponse = snapshot.data;
@@ -186,6 +192,8 @@ class _FilterFarmersAndClientsResultsScreenScreenState extends State<FilterFarme
                                       profilePicture:
                                           listResponse[index].profilePicture,
                                       ubigeo: listResponse[index].ubigeo,
+                                      latitude: listResponse[index].latitude,
+                                      longitude: listResponse[index].longitude,
                                     ),
                                   ),
                                 )
@@ -235,7 +243,12 @@ class _FilterFarmersAndClientsResultsScreenScreenState extends State<FilterFarme
                                           ),
                                           Row(
                                             children: [
-                                              Text(listResponse[index].ubigeo)
+                                              Container(
+                                                width: 200,
+                                                child: Text(
+                                                  listResponse[index].ubigeo,
+                                                ),
+                                              )
                                             ],
                                           )
                                         ])
@@ -259,12 +272,12 @@ class _FilterFarmersAndClientsResultsScreenScreenState extends State<FilterFarme
               return Container();
             }
           } else {
-            return this._shimerPub();
+            return ShimmerUser();
           }
         },
       );
     } else {
-      return this._shimerPub();
+      return ShimmerUser();
     }
   }
 
@@ -280,22 +293,6 @@ class _FilterFarmersAndClientsResultsScreenScreenState extends State<FilterFarme
         color: Colors.green,
         textColor: Colors.white,
         child: Text("Nueva búsqueda"),
-      ),
-    );
-  }
-
-  Widget _shimerPub() {
-    return Shimmer.fromColors(
-      baseColor: Colors.black12,
-      highlightColor: Colors.black,
-      child: Column(
-        children: [
-          Container(
-            height: 150,
-            width: MediaQuery.of(context).size.width,
-            color: Colors.white,
-          ),
-        ],
       ),
     );
   }
