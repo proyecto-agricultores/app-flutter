@@ -8,6 +8,7 @@ import 'package:agricultores_app/services/myProfileService.dart';
 import 'package:agricultores_app/services/myPubService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:maps_launcher/maps_launcher.dart';
 import 'package:shimmer/shimmer.dart';
 
 import 'cultivosAndOrders/matchesScreen.dart';
@@ -46,7 +47,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: <Widget>[
                       SizedBox(height: 30),
                       this._ubicacion(snapshot, false),
-                      this._verMapa(),
+                      this._verMapa(snapshot, false),
                       this._agregarCultivoUOrden(),
                       this._verMatches(),
                       this._verTodosCultivos(),
@@ -65,7 +66,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: <Widget>[
                       SizedBox(height: 30),
                       this._ubicacion(snapshot, true),
-                      this._verMapa(),
+                      this._verMapa(snapshot, true),
                     ],
                   ),
                 ),
@@ -239,20 +240,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _verMapa() {
-    return Container(
-      margin: EdgeInsets.only(bottom: 5),
-      child: RaisedButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18.0),
-          side: BorderSide(color: Colors.green),
-        ),
-        onPressed: () {},
-        color: Colors.green,
-        textColor: Colors.white,
-        child: Text("Ver en mapa"),
-      ),
-    );
+  Widget _verMapa(AsyncSnapshot snapshot, bool isLoading) {
+    return !isLoading && snapshot.data.latitude != 0
+        ? Container(
+            margin: EdgeInsets.only(bottom: 5),
+            child: RaisedButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18.0),
+                side: BorderSide(color: Colors.green),
+              ),
+              onPressed: () => MapsLauncher.launchCoordinates(
+                  snapshot.data.latitude,
+                  snapshot.data.longitude,
+                  snapshot.data.firstName + " " + snapshot.data.lastName),
+              color: Colors.green,
+              textColor: Colors.white,
+              child: Text("Ver en mapa"),
+            ),
+          )
+        : Container();
   }
 
   Widget _verTodosCultivos() {

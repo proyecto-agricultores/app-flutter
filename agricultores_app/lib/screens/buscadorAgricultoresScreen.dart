@@ -173,6 +173,8 @@ class _BuscadorAgricultoresScreenState
                                       profilePicture:
                                           listResponse[index].profilePicture,
                                       ubigeo: listResponse[index].ubigeo,
+                                      latitude: listResponse[index].latitude,
+                                      longitude: listResponse[index].longitude,
                                     ),
                                   ),
                                 )

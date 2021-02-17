@@ -1,10 +1,12 @@
-class User{
+class User {
   final int id;
   final String firstName;
   final String lastName;
   final String role;
   final String profilePicture;
   final String ubigeo;
+  final double latitude;
+  final double longitude;
   final isVerified;
 
   User({
@@ -15,6 +17,8 @@ class User{
     this.profilePicture,
     this.ubigeo,
     this.isVerified,
+    this.latitude,
+    this.longitude,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -26,6 +30,8 @@ class User{
       ubigeo: json['district'],
       profilePicture: json['profile_picture_URL'],
       isVerified: json['is_verified'],
+      latitude: json['latitude'],
+      longitude: json['longitude'],
     );
   }
 }
