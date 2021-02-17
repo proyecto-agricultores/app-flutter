@@ -1,4 +1,3 @@
-//import 'package:agricultores_app/screens/filters/filterCropsAndOrdersScreen.dart';
 import 'package:agricultores_app/models/menuItems.dart';
 import 'package:agricultores_app/screens/register/locationRegisterScreen.dart';
 import 'package:agricultores_app/widgets/general/cosechaGreenButton.dart';

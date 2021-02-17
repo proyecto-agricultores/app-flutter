@@ -2,19 +2,20 @@ import 'package:agricultores_app/global/myHTTPConnection.dart';
 import 'package:agricultores_app/interceptor/httpInterceptor.dart';
 import 'package:agricultores_app/models/myPubModel.dart';
 import 'package:agricultores_app/models/myOrderModel.dart';
+import 'package:agricultores_app/models/myUserModel.dart';
 import 'dart:convert';
 
 class FilterService {
 
-  static filter(int supplyID, int departmentID, int regionID, String minPrice, String maxPrice, String minHarvestDate, String maxHarvestDate, String role) async {
+  static filterPubsAndOrders(int supplyID, int departmentID, int regionID, String minPrice, String maxPrice, String minHarvestDate, String maxHarvestDate, String role) async {
     String suffix = 'api/filter/';
 
-    role == 'ag' ? suffix += 'orders/?' : suffix += 'pubs/?';
+    role == 'co' ? suffix += 'orders/?' : suffix += 'pubs/?';
 
     Map<String, String> queryParams = {};
 
     if (supplyID != null) queryParams['supply'] = supplyID.toString();
-    if (departmentID != null) queryParams['department'] = supplyID.toString();
+    if (departmentID != null) queryParams['department'] = departmentID.toString();
     if (regionID != 0 && regionID != null) queryParams['region'] = regionID.toString();
     if (minPrice != null && minPrice != "") queryParams['minPrice'] = minPrice;
     if (maxPrice != null && maxPrice != "") queryParams['maxPrice'] = maxPrice;
@@ -25,24 +26,55 @@ class FilterService {
 
     suffix += queryString;
 
-    print(suffix);
-
     final response = await HTTPClient.getClient(WithToken.yes).get(
       MyHTTPConection.HTTP_URL + suffix,
     );
 
     if (response.statusCode == 200) {
       var results;
-      role == 'ag' ? results = <MyOrder>[] : results = <MyPub>[];
+      role == 'co' ? results = <MyOrder>[] : results = <MyPub>[];
       var json = jsonDecode(utf8.decode(response.bodyBytes));
       for (var result in json) {
-        var v = role == 'ag' ? MyOrder.fromJson(result) : MyPub.fromJson(result);
+        var v = role == 'co' ? MyOrder.fromJson(result) : MyPub.fromJson(result);
         results.add(v);
       }
-      print('terminé');
       return results;
     } else {
-      throw Exception('Error al intentar aplicar el filtro');
+      throw Exception('Error al intentar aplicar el filtro de ' + role == 'co' ? 'órdenes' : 'publicaciones');
+    }
+  }
+
+  static filterFarmersAndClients(int supplyID, int departmentID, int regionID, String role) async {
+    String suffix = 'api/filter/';
+
+    role == 'co' ? suffix += 'compradores/?' : suffix += 'agricultores/?';
+
+    Map<String, String> queryParams = {};
+
+    print('supplyID: ' + supplyID.toString());
+
+    if (supplyID != null) queryParams['supply'] = supplyID.toString();
+    if (departmentID != null) queryParams['department'] = departmentID.toString();
+    if (regionID != 0 && regionID != null) queryParams['region'] = regionID.toString();
+
+    String queryString = Uri(queryParameters: queryParams).query;
+
+    suffix += queryString;
+
+    final response = await HTTPClient.getClient(WithToken.yes).get(
+      MyHTTPConection.HTTP_URL + suffix,
+    );
+
+    if (response.statusCode == 200) {
+      var results = <MyUser>[];
+      var json = jsonDecode(utf8.decode(response.bodyBytes));
+      for (var result in json) {
+        var v = MyUser.fromJson(result);
+        results.add(v);
+      }
+      return results;
+    } else {
+      throw Exception('Error al intentar aplicar el filtro de ' + role == 'co' ? 'compradores' : 'agricultores');
     }
   }
 

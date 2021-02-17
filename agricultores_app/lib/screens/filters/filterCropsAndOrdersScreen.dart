@@ -17,10 +17,10 @@ class FilterCropsAndOrdersScreen extends StatefulWidget {
   FilterCropsAndOrdersScreen({this.title, this.role});
 
   final title;
-  final role;
+  final String role;
 
   @override
-  _FilterCropsAndOrdersScreenState createState() => _FilterCropsAndOrdersScreenState(title: this.title);
+  _FilterCropsAndOrdersScreenState createState() => _FilterCropsAndOrdersScreenState(title: this.title, role: this.role);
 }
 
 class _FilterCropsAndOrdersScreenState extends State<FilterCropsAndOrdersScreen> {
@@ -28,12 +28,12 @@ class _FilterCropsAndOrdersScreenState extends State<FilterCropsAndOrdersScreen>
   _FilterCropsAndOrdersScreenState({this.title, this.role});
 
   final title;
-  final role;
+  final String role;
   final minPriceController = TextEditingController();
   final maxPriceController = TextEditingController();
   final minHarvestDateController = TextEditingController();
   final maxHarvestDateController = TextEditingController();
- 
+
   int _departmentID;
   int _regionID;
   int _supplyID;
@@ -90,7 +90,7 @@ class _FilterCropsAndOrdersScreenState extends State<FilterCropsAndOrdersScreen>
 
   void _handleDepartmentChange(newValue) {
     setState(() {
-      _departmentID = newValue;
+      this._departmentID = newValue;
       _departmentIsSelected = true;
       _fetchingRegions = true;
       this._regions = [Region(id: 0, name: '')];
@@ -173,8 +173,7 @@ class _FilterCropsAndOrdersScreenState extends State<FilterCropsAndOrdersScreen>
                         setState(() {
                           this._loadingRequest = true;
                         });
-                        print(this._departmentID);
-                        var response = await FilterService.filter(
+                        var response = await FilterService.filterPubsAndOrders(
                           this._supplyID,
                           this._departmentID,
                           this._regionID,
