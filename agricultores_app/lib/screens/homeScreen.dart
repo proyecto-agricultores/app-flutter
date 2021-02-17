@@ -1,4 +1,5 @@
 import 'package:agricultores_app/screens/filters/filterCropsAndOrdersScreen.dart';
+import 'package:agricultores_app/screens/filters/filterFarmersAndClientsScreen.dart';
 import 'package:agricultores_app/screens/buscadorCompradoresScreen.dart';
 import 'package:agricultores_app/screens/loginScreen.dart';
 import 'package:agricultores_app/screens/profileScreen.dart';
@@ -91,6 +92,30 @@ class _HomeScreenState extends State<HomeScreen> {
                           );
                         },
                         text: 'Buscar pedidos',
+                        isLoading: false,
+                      ),
+                      CosechaGreenButton(
+                        onPressed: () async {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => FilterFarmersAndClientsScreen(title: "Buscar agricultores", role: "ag")
+                            ),
+                          );
+                        },
+                        text: 'Buscar agricultores',
+                        isLoading: false,
+                      ),
+                      CosechaGreenButton(
+                        onPressed: () async {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => FilterFarmersAndClientsScreen(title: "Buscar compradores", role: "co")
+                            ),
+                          );
+                        },
+                        text: 'Buscar compradores',
                         isLoading: false,
                       ),
                       CosechaGreenButton(
