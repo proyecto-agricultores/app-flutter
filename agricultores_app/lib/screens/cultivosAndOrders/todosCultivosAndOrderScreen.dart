@@ -143,9 +143,7 @@ class _TodosCultivosAndOrdersScreenState
                                       width: MediaQuery.of(context).size.width,
                                       fit: BoxFit.cover,
                                       image: this.role == 'ag'
-                                          ? (listResponse[index].pictureURLs ==
-                                                  null
-                                              ? AssetImage(
+                                          ? (listResponse[index].pictureURLs.length == 0 ? AssetImage(
                                                   "assets/images/papas.jpg")
                                               : NetworkImage(listResponse[index]
                                                   .pictureURLs[0]))
