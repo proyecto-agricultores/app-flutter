@@ -9,7 +9,7 @@ class FilterService {
   static filter(int supplyID, int departmentID, int regionID, String minPrice, String maxPrice, String minHarvestDate, String maxHarvestDate, String role) async {
     String suffix = 'api/filter/';
 
-    role == 'ag' ? suffix += 'orders/?' : suffix += 'pubs/?';
+    role == 'co' ? suffix += 'orders/?' : suffix += 'pubs/?';
 
     Map<String, String> queryParams = {};
 
@@ -25,21 +25,18 @@ class FilterService {
 
     suffix += queryString;
 
-    print(suffix);
-
     final response = await HTTPClient.getClient(WithToken.yes).get(
       MyHTTPConection.HTTP_URL + suffix,
     );
 
     if (response.statusCode == 200) {
       var results;
-      role == 'ag' ? results = <MyOrder>[] : results = <MyPub>[];
+      role == 'co' ? results = <MyOrder>[] : results = <MyPub>[];
       var json = jsonDecode(utf8.decode(response.bodyBytes));
       for (var result in json) {
-        var v = role == 'ag' ? MyOrder.fromJson(result) : MyPub.fromJson(result);
+        var v = role == 'co' ? MyOrder.fromJson(result) : MyPub.fromJson(result);
         results.add(v);
       }
-      print('terminé');
       return results;
     } else {
       throw Exception('Error al intentar aplicar el filtro');
