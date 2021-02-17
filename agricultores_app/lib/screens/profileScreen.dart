@@ -45,7 +45,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       SizedBox(height: 30),
                       this._ubicacion(snapshot, false),
                       this._verMapa(),
-                      this._contactar(),
                       this._agregarCultivoUOrden(),
                       this._verTodosCultivos(),
                       this._carruselCultivos(false),
@@ -64,7 +63,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       SizedBox(height: 30),
                       this._ubicacion(snapshot, true),
                       this._verMapa(),
-                      this._contactar(),
                       //this._carruselCultivos(true),
                     ],
                   ),
@@ -249,21 +247,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _contactar() {
-    return Container(
-      margin: EdgeInsets.only(bottom: 15),
-      child: RaisedButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18.0),
-        ),
-        onPressed: () {},
-        color: Colors.blue[900],
-        textColor: Colors.white,
-        child: Text("Contactar"),
-      ),
-    );
-  }
-
   Widget _verTodosCultivos() {
     return Container(
       margin: EdgeInsets.only(bottom: 15),
@@ -381,8 +364,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     width: MediaQuery.of(context).size.width *
                                         0.75,
                                     image: this.role == 'ag'
-                                        ? (listResponse[index].pictureURLs ==
-                                                null
+                                        ? (listResponse[index]
+                                                .pictureURLs
+                                                .isEmpty
                                             ? AssetImage(
                                                 "assets/images/papas.jpg")
                                             : NetworkImage(listResponse[index]
