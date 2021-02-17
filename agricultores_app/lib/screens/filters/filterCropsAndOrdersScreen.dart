@@ -33,7 +33,7 @@ class _FilterCropsAndOrdersScreenState extends State<FilterCropsAndOrdersScreen>
   final maxPriceController = TextEditingController();
   final minHarvestDateController = TextEditingController();
   final maxHarvestDateController = TextEditingController();
- 
+
   int _departmentID;
   int _regionID;
   int _supplyID;
@@ -90,7 +90,7 @@ class _FilterCropsAndOrdersScreenState extends State<FilterCropsAndOrdersScreen>
 
   void _handleDepartmentChange(newValue) {
     setState(() {
-      _departmentID = newValue;
+      this._departmentID = newValue;
       _departmentIsSelected = true;
       _fetchingRegions = true;
       this._regions = [Region(id: 0, name: '')];
@@ -173,7 +173,6 @@ class _FilterCropsAndOrdersScreenState extends State<FilterCropsAndOrdersScreen>
                         setState(() {
                           this._loadingRequest = true;
                         });
-                        print(this._departmentID);
                         var response = await FilterService.filter(
                           this._supplyID,
                           this._departmentID,
