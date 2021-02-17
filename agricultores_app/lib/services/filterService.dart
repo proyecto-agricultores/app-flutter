@@ -14,7 +14,7 @@ class FilterService {
     Map<String, String> queryParams = {};
 
     if (supplyID != null) queryParams['supply'] = supplyID.toString();
-    if (departmentID != null) queryParams['department'] = supplyID.toString();
+    if (departmentID != null) queryParams['department'] = departmentID.toString();
     if (regionID != 0 && regionID != null) queryParams['region'] = regionID.toString();
     if (minPrice != null && minPrice != "") queryParams['minPrice'] = minPrice;
     if (maxPrice != null && maxPrice != "") queryParams['maxPrice'] = maxPrice;
