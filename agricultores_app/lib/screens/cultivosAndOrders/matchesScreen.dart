@@ -9,19 +9,16 @@ import 'package:flutter/rendering.dart';
 import 'package:shimmer/shimmer.dart';
 
 class MatchesScreen extends StatefulWidget {
-  MatchesScreen({Key key, this.title, this.role})
-      : super(key: key);
+  MatchesScreen({Key key, this.title, this.role}) : super(key: key);
 
   final String title;
   final String role;
 
   @override
-  _MatchesScreenState createState() =>
-      _MatchesScreenState(role: role);
+  _MatchesScreenState createState() => _MatchesScreenState(role: role);
 }
 
-class _MatchesScreenState
-    extends State<MatchesScreen> {
+class _MatchesScreenState extends State<MatchesScreen> {
   _MatchesScreenState({this.role});
 
   final role;
@@ -75,7 +72,9 @@ class _MatchesScreenState
                     size: 50,
                   ),
                   Text(
-                    this.role == 'ag' ? 'Órdenes que me interesan' : 'Cultivos que me interesan',
+                    this.role == 'ag'
+                        ? 'Órdenes que me interesan'
+                        : 'Cultivos que me interesan',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                   ),
                   SingleChildScrollView(
@@ -94,6 +93,7 @@ class _MatchesScreenState
                                       titulo: listResponse[index].supplieName,
                                       role: this.role,
                                       isMyCultivoOrOrder: false,
+                                      invertRole: this.role == "ag",
                                     ),
                                   ),
                                 )
@@ -107,7 +107,10 @@ class _MatchesScreenState
                                       width: MediaQuery.of(context).size.width,
                                       fit: BoxFit.cover,
                                       image: this.role == 'co'
-                                          ? (listResponse[index].pictureURLs.length == 0
+                                          ? (listResponse[index]
+                                                      .pictureURLs
+                                                      .length ==
+                                                  0
                                               ? AssetImage(
                                                   "assets/images/papas.jpg")
                                               : NetworkImage(listResponse[index]

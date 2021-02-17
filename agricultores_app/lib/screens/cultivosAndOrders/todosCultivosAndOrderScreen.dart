@@ -129,6 +129,7 @@ class _TodosCultivosAndOrdersScreenState
                                       titulo: listResponse[index].supplieName,
                                       role: this.role,
                                       isMyCultivoOrOrder: true,
+                                      invertRole: false,
                                     ),
                                   ),
                                 )

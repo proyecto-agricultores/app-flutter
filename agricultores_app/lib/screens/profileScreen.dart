@@ -299,6 +299,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
+
   Widget _verMatches() {
     return Container(
       margin: EdgeInsets.only(bottom: 15),
@@ -309,8 +310,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         onPressed: () async {
           Navigator.push(
             context,
-            MaterialPageRoute(
-                builder: (context) {
+            MaterialPageRoute(builder: (context) {
               if (this.role == 'ag') {
                 return MatchesScreen(
                   role: this.role,
@@ -402,6 +402,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     titulo: listResponse[index].supplieName,
                                     role: this.role,
                                     isMyCultivoOrOrder: true,
+                                    invertRole: false,
                                   ),
                                 ),
                               )
@@ -415,8 +416,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     width: MediaQuery.of(context).size.width *
                                         0.75,
                                     image: this.role == 'ag'
-                                        ? (listResponse[index].pictureURLs
-                                        .length == 0
+                                        ? (listResponse[index]
+                                                    .pictureURLs
+                                                    .length ==
+                                                0
                                             ? AssetImage(
                                                 "assets/images/papas.jpg")
                                             : NetworkImage(listResponse[index]
