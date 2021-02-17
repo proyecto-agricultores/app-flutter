@@ -1,4 +1,4 @@
-//import 'package:agricultores_app/screens/filters/filterCropsAndOrdersScreen.dart';
+import 'package:agricultores_app/screens/filters/filterCropsAndOrdersScreen.dart';
 import 'package:agricultores_app/screens/buscadorCompradoresScreen.dart';
 import 'package:agricultores_app/screens/loginScreen.dart';
 import 'package:agricultores_app/screens/profileScreen.dart';
@@ -71,33 +71,26 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       CosechaGreenButton(
                         onPressed: () async {
-                          final role = await this._getRole();
-                          final title = role == 'Buscar agricultores';
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => buscadorAgricultoresScreen(role: role)
-
+                              builder: (context) => FilterCropsAndOrdersScreen(title: "Buscar cultivos", role: "ag")
                             ),
                           );
                         },
-                        text: 'Buscar agricultores',
+                        text: 'Buscar cultivos',
                         isLoading: false,
                       ),
                       CosechaGreenButton(
                         onPressed: () async {
-                          final role = await this._getRole();
-                          final title = 'Buscar compradores';
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              //builder: (context) => FilterCropsAndOrdersScreen(title: title, role: role)
-                                builder: (context) => BuscadorCompradoresScreen(role: role)
-
+                              builder: (context) => FilterCropsAndOrdersScreen(title: "Buscar pedidos", role: "co")
                             ),
                           );
                         },
-                        text: 'Buscar compradores',
+                        text: 'Buscar pedidos',
                         isLoading: false,
                       ),
                       CosechaGreenButton(
