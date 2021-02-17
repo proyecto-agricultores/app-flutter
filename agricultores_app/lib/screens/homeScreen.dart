@@ -60,12 +60,12 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  CosechaLogo(scale: 5.0),
+                  CosechaLogo(scale: 4.5),
                 ],
               ),
             ),
             SizedBox(
-              height: 40,
+              height: 25,
             ),
             GridDashboard(),
             CosechaGreenButton(

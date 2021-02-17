@@ -13,30 +13,47 @@ class GridDashboard extends StatelessWidget {
     return role;
   }
 
-  MenuItems item1 = new MenuItems(
+  MenuItems perfil = new MenuItems(
     title: "Mi Perfil",
     img: "assets/images/menu/user.png",
     route: "profile",
   );
-  MenuItems item2 = new MenuItems(
+  MenuItems agricultor = new MenuItems(
     title: "Agricultores",
-    img: "assets/images/menu/user.png",
+    img: "assets/images/menu/farmer.png",
     route: "buscadorAgricultores",
   );
-  MenuItems item3 = new MenuItems(
+  MenuItems comprador = new MenuItems(
     title: "Compradores",
-    img: "assets/images/menu/user.png",
+    img: "assets/images/menu/clerk.png",
     route: "buscadorCompradores",
   );
-  MenuItems item4 = new MenuItems(
-    title: "Logout",
-    img: "assets/images/menu/user.png",
+  MenuItems logout = new MenuItems(
+    title: "Cerrar Sesión",
+    img: "assets/images/menu/logout.png",
     route: "loginScreen",
+  );
+  MenuItems orden = new MenuItems(
+    title: "Órdenes",
+    img: "assets/images/menu/shopping-cart.png",
+    route: "profile",
+  );
+  MenuItems cultivo = new MenuItems(
+    title: "Cultivos",
+    img: "assets/images/menu/harvest.png",
+    route: "profile",
   );
 
   @override
   Widget build(BuildContext context) {
-    List<MenuItems> myList = [item1, item2, item3, item4];
+    List<MenuItems> myList = [
+      cultivo,
+      orden,
+      agricultor,
+      comprador,
+      perfil,
+      logout,
+    ];
     var color = 0xff453658;
     return Flexible(
       child: GridView.count(
@@ -77,7 +94,7 @@ class GridDashboard extends StatelessWidget {
                       width: 42,
                     ),
                     SizedBox(
-                      height: 14,
+                      height: 20,
                     ),
                     Text(
                       data.title,

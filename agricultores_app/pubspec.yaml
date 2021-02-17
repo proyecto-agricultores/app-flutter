@@ -59,6 +59,11 @@ flutter:
     - assets/images/user-placeholder.png
     - assets/images/order.jpg
     - assets/images/menu/user.png
+    - assets/images/menu/farmer.png
+    - assets/images/menu/logout.png
+    - assets/images/menu/clerk.png
+    - assets/images/menu/harvest.png
+    - assets/images/menu/shopping-cart.png
     - assets/images/background.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
