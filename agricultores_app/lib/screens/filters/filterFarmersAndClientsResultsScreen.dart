@@ -100,7 +100,7 @@ class _FilterFarmersAndClientsResultsScreenScreenState
       snap: true,
       pinned: true,
       expandedHeight: 100.0,
-      backgroundColor: Color(0xfffc6e08),
+      backgroundColor: Color(this.role == 'co' ? 0xfffc6e08 : 0xff09B44D),
       shape: ContinuousRectangleBorder(
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(60),
