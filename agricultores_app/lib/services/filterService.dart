@@ -51,8 +51,6 @@ class FilterService {
 
     Map<String, String> queryParams = {};
 
-    print('supplyID: ' + supplyID.toString());
-
     if (supplyID != null) queryParams['supply'] = supplyID.toString();
     if (departmentID != null) queryParams['department'] = departmentID.toString();
     if (regionID != 0 && regionID != null) queryParams['region'] = regionID.toString();
