@@ -3,6 +3,7 @@ import 'package:agricultores_app/screens/userProfileScreen.dart';
 import 'package:agricultores_app/services/myProfileService.dart';
 import 'package:agricultores_app/services/filterService.dart';
 import 'package:agricultores_app/widgets/shimmer/ShimmerUser.dart';
+import 'package:agricultores_app/widgets/general/cosechaGreenButton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:shimmer/shimmer.dart';
@@ -67,7 +68,13 @@ class _FilterFarmersAndClientsResultsScreenScreenState
                   child: Column(
                     children: <Widget>[
                       SizedBox(height: 30),
-                      this._buscar(),
+                      CosechaGreenButton(
+                        text: 'Nueva búsqueda',
+                        isLoading: false,
+                        onPressed: () {
+                          Navigator.pop(context);
+                        }
+                      ),
                       this._carruselUsuarios(false),
                     ],
                   ),
@@ -100,7 +107,7 @@ class _FilterFarmersAndClientsResultsScreenScreenState
       snap: true,
       pinned: true,
       expandedHeight: 100.0,
-      backgroundColor: Color(0xfffc6e08),
+      backgroundColor: Color(this.role == 'co' ? 0xfffc6e08 : 0xff09B44D),
       shape: ContinuousRectangleBorder(
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(60),
@@ -279,21 +286,5 @@ class _FilterFarmersAndClientsResultsScreenScreenState
     } else {
       return ShimmerUser();
     }
-  }
-
-  Widget _buscar() {
-    return Container(
-      margin: EdgeInsets.only(bottom: 5),
-      child: RaisedButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18.0),
-          side: BorderSide(color: Colors.green),
-        ),
-        onPressed: () {},
-        color: Colors.green,
-        textColor: Colors.white,
-        child: Text("Nueva búsqueda"),
-      ),
-    );
   }
 }

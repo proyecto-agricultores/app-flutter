@@ -9,17 +9,13 @@ class DepartmentDropdown extends StatefulWidget {
   final onChanged;
   final selectedDepartment;
 
-  _DepartmentDropdownState createState() => _DepartmentDropdownState(onChanged: this.onChanged, selectedDepartment: this.selectedDepartment);
+  _DepartmentDropdownState createState() => _DepartmentDropdownState();
 }
 
 class _DepartmentDropdownState extends State<DepartmentDropdown> {
 
-  _DepartmentDropdownState({this.onChanged, this.selectedDepartment});
-
   List<Department> _departments;
   bool _fetchingDepartments = true;
-  int selectedDepartment;
-  final onChanged;
 
   @override
   initState() {
@@ -46,8 +42,8 @@ class _DepartmentDropdownState extends State<DepartmentDropdown> {
         validator: (value) => value == null ? 'Campo requerido' : null,
         isExpanded: true,
         hint: Text('Seleccione su departamento'),
-        value: this.selectedDepartment,
-        onChanged: this.onChanged,
+        value: this.widget.selectedDepartment,
+        onChanged: this.widget.onChanged,
         items: this._departments.map((department) {
           return DropdownMenuItem(
             child: new Text(

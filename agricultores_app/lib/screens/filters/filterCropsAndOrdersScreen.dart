@@ -11,6 +11,7 @@ import 'package:agricultores_app/widgets/location/departmentDropdown.dart';
 import 'package:agricultores_app/models/regionModel.dart';
 import 'package:agricultores_app/services/locationService.dart';
 import 'package:agricultores_app/services/filterService.dart';
+import 'package:agricultores_app/screens/filters/filterCropsAndOrdersResultsScreen.dart';
 
 class FilterCropsAndOrdersScreen extends StatefulWidget {
 
@@ -118,7 +119,10 @@ class _FilterCropsAndOrdersScreenState extends State<FilterCropsAndOrdersScreen>
       ],
     );
     return Scaffold(
-      appBar: AppBar(title: Text(this.title),),
+      appBar: AppBar(
+        title: Text(this.title),
+        backgroundColor: this.role == 'ag' ? Color(0xff09B44D) : Color(0xfffc6e08),
+      ),
       body: Column(
         children: [
           Expanded(
@@ -132,7 +136,8 @@ class _FilterCropsAndOrdersScreenState extends State<FilterCropsAndOrdersScreen>
                   ),
                   CosechaDivider(),
                   DepartmentDropdown(
-                    onChanged: this._handleDepartmentChange
+                    onChanged: this._handleDepartmentChange,
+                    selectedDepartment: this._departmentID,
                   ),
                   this._fetchingRegions ? CosechaLoading() : this._regionsDropdown(),
                   Separator(height: 0.03),
@@ -173,17 +178,22 @@ class _FilterCropsAndOrdersScreenState extends State<FilterCropsAndOrdersScreen>
                         setState(() {
                           this._loadingRequest = true;
                         });
-                        var response = await FilterService.filterPubsAndOrders(
-                          this._supplyID,
-                          this._departmentID,
-                          this._regionID,
-                          this.minPriceController.text,
-                          this.maxPriceController.text,
-                          this.minHarvestDateController.text,
-                          this.maxHarvestDateController.text,
-                          this.role,
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => FilterCropsAndOrdersResultsScreen(
+                              title: this.widget.role == 'ag' ? 'Cultivos encontrados' : 'Órdenes encontradas',
+                              supplyID: this._supplyID,
+                              departmentID: this._departmentID,
+                              regionID: this._regionID,
+                              minPrice: this.minPriceController.text,
+                              maxPrice: this.maxPriceController.text,
+                              minDate: this.minHarvestDateController.text,
+                              maxDate: this.maxHarvestDateController.text,
+                              role: this.widget.role,
+                            )
+                          )
                         );
-                        print(response);
                         setState(() {
                           this._loadingRequest = false;
                         });
@@ -191,6 +201,24 @@ class _FilterCropsAndOrdersScreenState extends State<FilterCropsAndOrdersScreen>
                         print(e.toString());
                       }
                     },
+                  ),
+                  CosechaGreenButton(
+                    isLoading: false,
+                    text: 'Limpiar filtros',
+                    onPressed: () {
+                      setState(() {
+                        this._supplyID = null;
+                        this._departmentID = null;
+                        this._regionID = null;
+                        this._departmentIsSelected = false;
+                        this._regions = [Region(id: 0, name: '')];
+                        this.minPriceController.clear();
+                        this.maxPriceController.clear();
+                        this.minHarvestDateController.clear();
+                        this.maxHarvestDateController.clear();
+                        this._selectedMinHarvestDate = this._selectedMaxHarvestDate = DateTime.now();
+                      });
+                    }
                   )
                 ],
               )
