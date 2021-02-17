@@ -226,8 +226,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   color: Colors.blue[50],
                 ),
                 child: Center(
-                    child:
-                        ubigeo != null ? Text(ubigeo) : Text('Sin Ubicación')),
+                    child: ubigeo != null
+                        ? Text(
+                            ubigeo,
+                            textAlign: TextAlign.center,
+                          )
+                        : Text(
+                            'Sin Ubicación',
+                            textAlign: TextAlign.center,
+                          )),
               )
             : Shimmer.fromColors(
                 baseColor: Colors.black12,

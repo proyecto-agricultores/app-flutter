@@ -47,7 +47,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       SizedBox(height: 30),
                       this._ubicacion(snapshot, false),
                       this._verMapa(),
-                      this._contactar(),
                       this._agregarCultivoUOrden(),
                       this._verMatches(),
                       this._verTodosCultivos(),
@@ -67,7 +66,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       SizedBox(height: 30),
                       this._ubicacion(snapshot, true),
                       this._verMapa(),
-                      this._contactar(),
                     ],
                   ),
                 ),
@@ -213,8 +211,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 child: Center(
                     child: snapshot.data.ubigeo != null
-                        ? Text(snapshot.data.ubigeo)
-                        : Text('Sin Ubicación')),
+                        ? Text(
+                            snapshot.data.ubigeo,
+                            textAlign: TextAlign.center,
+                          )
+                        : Text(
+                            'Sin Ubicación',
+                            textAlign: TextAlign.center,
+                          )),
               )
             : Shimmer.fromColors(
                 baseColor: Colors.grey.withAlpha(5),
@@ -247,21 +251,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         color: Colors.green,
         textColor: Colors.white,
         child: Text("Ver en mapa"),
-      ),
-    );
-  }
-
-  Widget _contactar() {
-    return Container(
-      margin: EdgeInsets.only(bottom: 15),
-      child: RaisedButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18.0),
-        ),
-        onPressed: () {},
-        color: Colors.blue[900],
-        textColor: Colors.white,
-        child: Text("Contactar"),
       ),
     );
   }
@@ -417,9 +406,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         0.75,
                                     image: this.role == 'ag'
                                         ? (listResponse[index]
-                                                    .pictureURLs
-                                                    .length ==
-                                                0
+                                                .pictureURLs
+                                                .isEmpty
                                             ? AssetImage(
                                                 "assets/images/papas.jpg")
                                             : NetworkImage(listResponse[index]
