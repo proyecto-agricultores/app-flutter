@@ -72,7 +72,7 @@ class GridDashboard extends StatelessWidget {
                     if (data.route == "profile") {
                       return ProfileScreen(role: role);
                     } else if (data.route == "buscadorAgricultores") {
-                      return buscadorAgricultoresScreen(role: role);
+                      return BuscadorAgricultoresScreen(role: role);
                     } else if (data.route == "buscadorCompradores") {
                       return BuscadorCompradoresScreen(role: role);
                     } else if (data.route == "loginScreen") {

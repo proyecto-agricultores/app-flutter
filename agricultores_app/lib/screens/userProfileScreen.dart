@@ -113,8 +113,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       flexibleSpace: FlexibleSpaceBar(
         title: isLoading
             ? Shimmer.fromColors(
-                baseColor: Colors.black12,
-                highlightColor: Colors.black,
+                baseColor: Colors.white.withAlpha(5),
+                highlightColor: Colors.white.withAlpha(50),
                 child: Container(
                   width: 90.0,
                   height: 20.0,
@@ -181,8 +181,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         width: 150,
         margin: EdgeInsets.only(bottom: 70),
         child: Shimmer.fromColors(
-          baseColor: Colors.black12,
-          highlightColor: Colors.black,
+          baseColor: Colors.white.withAlpha(5),
+          highlightColor: Colors.white.withAlpha(60),
           child: CircleAvatar(),
         ),
       );
@@ -237,8 +237,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           )),
               )
             : Shimmer.fromColors(
-                baseColor: Colors.black12,
-                highlightColor: Colors.black,
+                baseColor: Colors.grey.withAlpha(5),
+                highlightColor: Colors.grey.withAlpha(60),
                 child: Container(
                   width: 250,
                   height: 50,
@@ -407,8 +407,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   Widget _shimerPub() {
     return Shimmer.fromColors(
-      baseColor: Colors.black12,
-      highlightColor: Colors.black,
+      baseColor: Colors.grey.withAlpha(5),
+      highlightColor: Colors.grey.withAlpha(60),
       child: Column(
         children: [
           Container(
