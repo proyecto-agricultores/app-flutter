@@ -110,7 +110,10 @@ class _FilterFarmersAndClientsState extends State<FilterFarmersAndClientsScreen>
       ],
     );
     return Scaffold(
-      appBar: AppBar(title: Text(this.title),),
+      appBar: AppBar(
+        title: Text(this.title),
+        backgroundColor: this.role == 'ag' ? Color(0xff09B44D) : Color(0xfffc6e08),
+      ),
       body: Column(
         children: [
           Expanded(
