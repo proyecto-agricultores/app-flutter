@@ -8,32 +8,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:shimmer/shimmer.dart';
 
-class TodosCultivosAndOrdersScreen extends StatefulWidget {
-  TodosCultivosAndOrdersScreen({Key key, this.title, this.role})
-      : super(key: key);
+class MatchesScreen extends StatefulWidget {
+  MatchesScreen({Key key, this.title, this.role}) : super(key: key);
 
   final String title;
   final String role;
 
   @override
-  _TodosCultivosAndOrdersScreenState createState() =>
-      _TodosCultivosAndOrdersScreenState(role: role);
+  _MatchesScreenState createState() => _MatchesScreenState(role: role);
 }
 
-class _TodosCultivosAndOrdersScreenState
-    extends State<TodosCultivosAndOrdersScreen> {
-  _TodosCultivosAndOrdersScreenState({this.role});
+class _MatchesScreenState extends State<MatchesScreen> {
+  _MatchesScreenState({this.role});
 
   final role;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: this.role == 'ag'
-            ? Text("Todos mis Cultivos")
-            : Text("Todas mis Ordenes"),
-      ),
+      appBar: AppBar(),
       body: FutureBuilder(
         future: MyProfileService.getLoggedinUser(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -43,7 +36,6 @@ class _TodosCultivosAndOrdersScreenState
                 children: <Widget>[
                   SizedBox(height: 30),
                   this._carruselCultivos(false),
-                  this._agregarCultivoUOrden()
                 ],
               ),
             );
@@ -53,7 +45,6 @@ class _TodosCultivosAndOrdersScreenState
                 children: <Widget>[
                   SizedBox(height: 30),
                   this._carruselCultivos(true),
-                  this._agregarCultivoUOrden()
                 ],
               ),
             );
@@ -63,41 +54,12 @@ class _TodosCultivosAndOrdersScreenState
     );
   }
 
-  Widget _agregarCultivoUOrden() {
-    return Container(
-      margin: EdgeInsets.only(bottom: 15),
-      child: RaisedButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18.0),
-        ),
-        onPressed: () async {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                //builder: (context) => this.role == 'ag' ? CrearCultivoScreen() : CreateOrderScreen(),
-                builder: (context) {
-              if (this.role == 'ag') {
-                return CrearCultivoScreen();
-              } else {
-                return CreateOrderScreen();
-              }
-            }),
-          );
-        },
-        color: Colors.green[900],
-        textColor: Colors.white,
-        child:
-            this.role == 'ag' ? Text("Añadir Cultivo") : Text("Añadir Orden"),
-      ),
-    );
-  }
-
   Widget _carruselCultivos(bool isLoading) {
     if (!isLoading) {
       return FutureBuilder(
         future: this.role == 'ag'
-            ? MyPubService.getPubinUser()
-            : MyOrderService.getOrdersFromUser(),
+            ? MyPubService.getProspects()
+            : MyPubService.getSuggestions(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
             final listResponse = snapshot.data;
@@ -110,7 +72,9 @@ class _TodosCultivosAndOrdersScreenState
                     size: 50,
                   ),
                   Text(
-                    this.role == 'ag' ? 'Mis Cultivos' : 'Mis Ordenes',
+                    this.role == 'ag'
+                        ? 'Órdenes que me interesan'
+                        : 'Cultivos que me interesan',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                   ),
                   SingleChildScrollView(
@@ -128,8 +92,8 @@ class _TodosCultivosAndOrdersScreenState
                                       cultivoId: listResponse[index].id,
                                       titulo: listResponse[index].supplieName,
                                       role: this.role,
-                                      isMyCultivoOrOrder: true,
-                                      invertRole: false,
+                                      isMyCultivoOrOrder: false,
+                                      invertRole: this.role == "ag",
                                     ),
                                   ),
                                 )
@@ -142,10 +106,11 @@ class _TodosCultivosAndOrdersScreenState
                                       height: 150,
                                       width: MediaQuery.of(context).size.width,
                                       fit: BoxFit.cover,
-                                      image: this.role == 'ag'
+                                      image: this.role == 'co'
                                           ? (listResponse[index]
-                                                  .pictureURLs
-                                                  .isEmpty
+                                                      .pictureURLs
+                                                      .length ==
+                                                  0
                                               ? AssetImage(
                                                   "assets/images/papas.jpg")
                                               : NetworkImage(listResponse[index]

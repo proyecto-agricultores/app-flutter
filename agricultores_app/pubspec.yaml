@@ -33,6 +33,7 @@ dependencies:
   http_interceptor: ^0.3.3
   shimmer: ^1.1.2
   carousel_slider: ^3.0.0
+  maps_launcher: ^1.2.2+2
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -58,6 +59,13 @@ flutter:
     - assets/images/logo.png
     - assets/images/user-placeholder.png
     - assets/images/order.jpg
+    - assets/images/menu/user.png
+    - assets/images/menu/farmer.png
+    - assets/images/menu/logout.png
+    - assets/images/menu/clerk.png
+    - assets/images/menu/harvest.png
+    - assets/images/menu/shopping-cart.png
+    - assets/images/background.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

@@ -14,7 +14,6 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-
   _setRole(role) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('role', role);

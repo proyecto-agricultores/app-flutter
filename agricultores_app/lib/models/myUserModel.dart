@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 class MyUser {
   final int id;
   final String firstName;
@@ -5,6 +7,8 @@ class MyUser {
   final String role;
   final String profilePicture;
   final String ubigeo;
+  final double latitude;
+  final double longitude;
   final isVerified;
 
   MyUser({
@@ -15,6 +19,8 @@ class MyUser {
     this.profilePicture,
     this.ubigeo,
     this.isVerified,
+    this.latitude,
+    this.longitude,
   });
 
   factory MyUser.fromJson(Map<String, dynamic> json) {
@@ -26,6 +32,8 @@ class MyUser {
       ubigeo: json['district'],
       profilePicture: json['profile_picture_URL'],
       isVerified: json['is_verified'],
+      latitude: json['latitude'],
+      longitude: json['longitude'],
     );
   }
 }

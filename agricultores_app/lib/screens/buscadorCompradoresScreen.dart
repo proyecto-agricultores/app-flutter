@@ -4,6 +4,7 @@ import 'package:agricultores_app/screens/cultivosAndOrders/orders/createOrderScr
 import 'package:agricultores_app/screens/userProfileScreen.dart';
 import 'package:agricultores_app/services/myProfileService.dart';
 import 'package:agricultores_app/services/userFilterService.dart';
+import 'package:agricultores_app/widgets/shimmer/ShimmerUser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:shimmer/shimmer.dart';
@@ -57,6 +58,7 @@ class _BuscadorCompradoresScreenState extends State<BuscadorCompradoresScreen> {
                   child: Column(
                     children: <Widget>[
                       SizedBox(height: 30),
+                      this._buscar(),
                       this._carruselUsuarios(true),
                     ],
                   ),
@@ -85,17 +87,19 @@ class _BuscadorCompradoresScreenState extends State<BuscadorCompradoresScreen> {
       flexibleSpace: FlexibleSpaceBar(
         title: isLoading
             ? Shimmer.fromColors(
-                baseColor: Colors.black12,
-                highlightColor: Colors.black,
-                child: Container(
-                  width: 90.0,
-                  height: 20.0,
-                  color: Colors.black,
+                baseColor: Colors.white.withAlpha(20),
+                highlightColor: Colors.white.withAlpha(60),
+                child: Text(
+                  "Resultados de compradores",
+                  style: TextStyle(fontSize: 12),
                 ),
               )
             : SABT(
-                child: Text("Resultados de compradores",
-                    style: TextStyle(fontSize: 12))),
+                child: Text(
+                  "Resultados de compradores",
+                  style: TextStyle(fontSize: 12),
+                ),
+              ),
         collapseMode: CollapseMode.pin,
         centerTitle: true,
       ),
@@ -169,6 +173,8 @@ class _BuscadorCompradoresScreenState extends State<BuscadorCompradoresScreen> {
                                       profilePicture:
                                           listResponse[index].profilePicture,
                                       ubigeo: listResponse[index].ubigeo,
+                                      latitude: listResponse[index].latitude,
+                                      longitude: listResponse[index].longitude,
                                     ),
                                   ),
                                 )
@@ -242,12 +248,12 @@ class _BuscadorCompradoresScreenState extends State<BuscadorCompradoresScreen> {
               return Container();
             }
           } else {
-            return this._shimerPub();
+            return ShimmerUser();
           }
         },
       );
     } else {
-      return this._shimerPub();
+      return ShimmerUser();
     }
   }
 
@@ -263,22 +269,6 @@ class _BuscadorCompradoresScreenState extends State<BuscadorCompradoresScreen> {
         color: Colors.green,
         textColor: Colors.white,
         child: Text("Nueva búsqueda"),
-      ),
-    );
-  }
-
-  Widget _shimerPub() {
-    return Shimmer.fromColors(
-      baseColor: Colors.black12,
-      highlightColor: Colors.black,
-      child: Column(
-        children: [
-          Container(
-            height: 150,
-            width: MediaQuery.of(context).size.width,
-            color: Colors.white,
-          ),
-        ],
       ),
     );
   }

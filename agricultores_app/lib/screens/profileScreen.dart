@@ -8,7 +8,10 @@ import 'package:agricultores_app/services/myProfileService.dart';
 import 'package:agricultores_app/services/myPubService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:maps_launcher/maps_launcher.dart';
 import 'package:shimmer/shimmer.dart';
+
+import 'cultivosAndOrders/matchesScreen.dart';
 
 class ProfileScreen extends StatefulWidget {
   ProfileScreen({Key key, this.title, this.role}) : super(key: key);
@@ -44,9 +47,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: <Widget>[
                       SizedBox(height: 30),
                       this._ubicacion(snapshot, false),
-                      this._verMapa(),
-                      this._contactar(),
+                      this._verMapa(snapshot, false),
                       this._agregarCultivoUOrden(),
+                      this._verMatches(),
                       this._verTodosCultivos(),
                       this._carruselCultivos(false),
                     ],
@@ -63,9 +66,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: <Widget>[
                       SizedBox(height: 30),
                       this._ubicacion(snapshot, true),
-                      this._verMapa(),
-                      this._contactar(),
-                      //this._carruselCultivos(true),
+                      this._verMapa(snapshot, true),
                     ],
                   ),
                 ),
@@ -211,8 +212,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 child: Center(
                     child: snapshot.data.ubigeo != null
-                        ? Text(snapshot.data.ubigeo)
-                        : Text('Sin Ubicación')),
+                        ? Text(
+                            snapshot.data.ubigeo,
+                            textAlign: TextAlign.center,
+                          )
+                        : Text(
+                            'Sin Ubicación',
+                            textAlign: TextAlign.center,
+                          )),
               )
             : Shimmer.fromColors(
                 baseColor: Colors.grey.withAlpha(5),
@@ -233,35 +240,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _verMapa() {
-    return Container(
-      margin: EdgeInsets.only(bottom: 5),
-      child: RaisedButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18.0),
-          side: BorderSide(color: Colors.green),
-        ),
-        onPressed: () {},
-        color: Colors.green,
-        textColor: Colors.white,
-        child: Text("Ver en mapa"),
-      ),
-    );
-  }
-
-  Widget _contactar() {
-    return Container(
-      margin: EdgeInsets.only(bottom: 15),
-      child: RaisedButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18.0),
-        ),
-        onPressed: () {},
-        color: Colors.blue[900],
-        textColor: Colors.white,
-        child: Text("Contactar"),
-      ),
-    );
+  Widget _verMapa(AsyncSnapshot snapshot, bool isLoading) {
+    return !isLoading && snapshot.data.latitude != 0
+        ? Container(
+            margin: EdgeInsets.only(bottom: 5),
+            child: RaisedButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18.0),
+                side: BorderSide(color: Colors.green),
+              ),
+              onPressed: () => MapsLauncher.launchCoordinates(
+                  snapshot.data.latitude,
+                  snapshot.data.longitude,
+                  snapshot.data.firstName + " " + snapshot.data.lastName),
+              color: Colors.green,
+              textColor: Colors.white,
+              child: Text("Ver en mapa"),
+            ),
+          )
+        : Container();
   }
 
   Widget _verTodosCultivos() {
@@ -294,6 +291,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: this.role == 'ag'
             ? Text("Ver todos los Cultivos")
             : Text("Ver todas las Ordenes"),
+      ),
+    );
+  }
+
+  Widget _verMatches() {
+    return Container(
+      margin: EdgeInsets.only(bottom: 15),
+      child: RaisedButton(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(18.0),
+        ),
+        onPressed: () async {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) {
+              if (this.role == 'ag') {
+                return MatchesScreen(
+                  role: this.role,
+                );
+              } else {
+                return MatchesScreen(
+                  role: this.role,
+                );
+              }
+            }),
+          );
+        },
+        color: Colors.green[900],
+        textColor: Colors.white,
+        child: this.role == 'ag'
+            ? Text("Sugerirme ventas")
+            : Text("Sugerirme compras"),
       ),
     );
   }
@@ -368,6 +397,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     titulo: listResponse[index].supplieName,
                                     role: this.role,
                                     isMyCultivoOrOrder: true,
+                                    invertRole: false,
                                   ),
                                 ),
                               )
@@ -381,8 +411,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     width: MediaQuery.of(context).size.width *
                                         0.75,
                                     image: this.role == 'ag'
-                                        ? (listResponse[index].pictureURLs ==
-                                                null
+                                        ? (listResponse[index]
+                                                .pictureURLs
+                                                .isEmpty
                                             ? AssetImage(
                                                 "assets/images/papas.jpg")
                                             : NetworkImage(listResponse[index]

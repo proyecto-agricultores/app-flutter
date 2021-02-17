@@ -70,8 +70,10 @@ class _EditarCultivoScreenState extends State<EditarCultivoScreen> {
   }
 
   updateDate(DateTime picked, TextEditingController dateController) {
-    setState(() {
-        var date = "${picked.toLocal().day}-${picked.toLocal().month}-${picked.toLocal().year}";
+    setState(
+      () {
+        var date =
+            "${picked.toLocal().day}-${picked.toLocal().month}-${picked.toLocal().year}";
         dateController.text = date;
       },
     );
@@ -83,8 +85,7 @@ class _EditarCultivoScreenState extends State<EditarCultivoScreen> {
         this.isLoading = true;
       });
       try {
-        final update =
-            await MyPubService.update(
+        final update = await MyPubService.update(
           MyPub(
             id: this.cultivoId,
             supplieName: null,
@@ -113,17 +114,14 @@ class _EditarCultivoScreenState extends State<EditarCultivoScreen> {
           barrierDismissible: true,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text(
-                  'Cambios realizados correctamente.'),
-              content: Text(
-                  'Se acaba de actualizar el cultivo con nuevos datos.'),
+              title: Text('Cambios realizados correctamente.'),
+              content:
+                  Text('Se acaba de actualizar el cultivo con nuevos datos.'),
               actions: <Widget>[
                 TextButton(
                   child: Text('OK!'),
                   onPressed: () {
-                    Navigator.of(context)
-                        .popUntil((route) =>
-                            route.isFirst);
+                    Navigator.of(context).popUntil((route) => route.isFirst);
                   },
                 ),
               ],
@@ -157,45 +155,39 @@ class _EditarCultivoScreenState extends State<EditarCultivoScreen> {
       ],
     );
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Editar: ' + titulo),
-      ),
-      body: Column(
-        children: [
+        appBar: AppBar(
+          title: Text('Editar: ' + titulo),
+        ),
+        body: Column(children: [
           Expanded(
-            child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(
-                horizontal: 40.0,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  CosechaForm(
-                    unitPriceController: this.unitPriceController,
-                    weightUnit: this.weightUnit,
-                    updateWeightUnit: this.updateWeightUnit,
-                    areaController: this.areaController,
-                    areaUnit: this.areaUnit,
-                    updateAreaUnit: this.updateAreaUnit,
-                    updateDate: this.updateDate,
-                    sowingDateController: this.sowingDateController,
-                    selectedSowingDate: this.selectedSowingDate,
-                    harvestDateController: this.harvestDateController,
-                    selectedHarvestDate: this.selectedHarvestDate,
-                    onPressed: this._onPressed,
-                    isLoading: this.isLoading,
-                    formKey: this._formKey,
-                    buttonText: 'Guardar Cambios',
-                    hasSupply: false,
-                  )
-                ]
-              )
-            )
-          )
-        ]
-      )
-    );
+              child: SingleChildScrollView(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 40.0,
+                  ),
+                  child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        CosechaForm(
+                          unitPriceController: this.unitPriceController,
+                          weightUnit: this.weightUnit,
+                          updateWeightUnit: this.updateWeightUnit,
+                          areaController: this.areaController,
+                          areaUnit: this.areaUnit,
+                          updateAreaUnit: this.updateAreaUnit,
+                          updateDate: this.updateDate,
+                          sowingDateController: this.sowingDateController,
+                          selectedSowingDate: this.selectedSowingDate,
+                          harvestDateController: this.harvestDateController,
+                          selectedHarvestDate: this.selectedHarvestDate,
+                          onPressed: this._onPressed,
+                          isLoading: this.isLoading,
+                          formKey: this._formKey,
+                          buttonText: 'Guardar Cambios',
+                          hasSupply: false,
+                        )
+                      ])))
+        ]));
   }
 }

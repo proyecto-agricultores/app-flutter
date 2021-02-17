@@ -4,18 +4,21 @@ import 'package:agricultores_app/services/myProfileService.dart';
 import 'package:agricultores_app/services/myPubService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:maps_launcher/maps_launcher.dart';
 import 'package:shimmer/shimmer.dart';
 
 class UserProfileScreen extends StatefulWidget {
-  UserProfileScreen(
-      {Key key,
-      this.id,
-      this.firstName,
-      this.lastName,
-      this.profilePicture,
-      this.ubigeo,
-      this.role})
-      : super(key: key);
+  UserProfileScreen({
+    Key key,
+    this.id,
+    this.firstName,
+    this.lastName,
+    this.profilePicture,
+    this.ubigeo,
+    this.role,
+    this.latitude,
+    this.longitude,
+  }) : super(key: key);
 
   final String role;
   final int id;
@@ -23,10 +26,12 @@ class UserProfileScreen extends StatefulWidget {
   final String lastName;
   final String profilePicture;
   final String ubigeo;
+  final double latitude;
+  final double longitude;
 
   @override
-  _UserProfileScreenState createState() => _UserProfileScreenState(
-      role, id, firstName, lastName, profilePicture, ubigeo);
+  _UserProfileScreenState createState() => _UserProfileScreenState(role, id,
+      firstName, lastName, profilePicture, ubigeo, latitude, longitude);
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
@@ -36,6 +41,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   final String lastName;
   final String profilePicture;
   final String ubigeo;
+  final double latitude;
+  final double longitude;
 
   _UserProfileScreenState(
     this.role,
@@ -44,6 +51,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     this.lastName,
     this.profilePicture,
     this.ubigeo,
+    this.latitude,
+    this.longitude,
   );
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -65,7 +74,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     children: <Widget>[
                       SizedBox(height: 30),
                       this._ubicacion(snapshot, false),
-                      this._verMapa(),
+                      this._verMapa(false),
                       this._contactar(),
                       this._carruselCultivos(false),
                     ],
@@ -82,7 +91,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     children: <Widget>[
                       SizedBox(height: 30),
                       this._ubicacion(snapshot, true),
-                      this._verMapa(),
+                      this._verMapa(true),
                       this._contactar(),
                       this._carruselCultivos(true),
                     ],
@@ -113,8 +122,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       flexibleSpace: FlexibleSpaceBar(
         title: isLoading
             ? Shimmer.fromColors(
-                baseColor: Colors.black12,
-                highlightColor: Colors.black,
+                baseColor: Colors.white.withAlpha(5),
+                highlightColor: Colors.white.withAlpha(50),
                 child: Container(
                   width: 90.0,
                   height: 20.0,
@@ -181,8 +190,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         width: 150,
         margin: EdgeInsets.only(bottom: 70),
         child: Shimmer.fromColors(
-          baseColor: Colors.black12,
-          highlightColor: Colors.black,
+          baseColor: Colors.white.withAlpha(5),
+          highlightColor: Colors.white.withAlpha(60),
           child: CircleAvatar(),
         ),
       );
@@ -226,12 +235,19 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   color: Colors.blue[50],
                 ),
                 child: Center(
-                    child:
-                        ubigeo != null ? Text(ubigeo) : Text('Sin Ubicación')),
+                    child: ubigeo != null
+                        ? Text(
+                            ubigeo,
+                            textAlign: TextAlign.center,
+                          )
+                        : Text(
+                            'Sin Ubicación',
+                            textAlign: TextAlign.center,
+                          )),
               )
             : Shimmer.fromColors(
-                baseColor: Colors.black12,
-                highlightColor: Colors.black,
+                baseColor: Colors.grey.withAlpha(5),
+                highlightColor: Colors.grey.withAlpha(60),
                 child: Container(
                   width: 250,
                   height: 50,
@@ -248,20 +264,23 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     );
   }
 
-  Widget _verMapa() {
-    return Container(
-      margin: EdgeInsets.only(bottom: 5),
-      child: RaisedButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18.0),
-          side: BorderSide(color: Colors.green),
-        ),
-        onPressed: () {},
-        color: Colors.green,
-        textColor: Colors.white,
-        child: Text("Ver en mapa"),
-      ),
-    );
+  Widget _verMapa(bool isLoading) {
+    return !isLoading && latitude != 0
+        ? Container(
+            margin: EdgeInsets.only(bottom: 5),
+            child: RaisedButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18.0),
+                side: BorderSide(color: Colors.green),
+              ),
+              onPressed: () => MapsLauncher.launchCoordinates(
+                  latitude, longitude, firstName + " " + lastName),
+              color: Colors.green,
+              textColor: Colors.white,
+              child: Text("Ver en mapa"),
+            ),
+          )
+        : Container();
   }
 
   Widget _contactar() {
@@ -316,6 +335,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                       titulo: listResponse[index].supplieName,
                                       role: this.role,
                                       isMyCultivoOrOrder: false,
+                                      invertRole: false,
                                     ),
                                   ),
                                 )
@@ -399,8 +419,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   Widget _shimerPub() {
     return Shimmer.fromColors(
-      baseColor: Colors.black12,
-      highlightColor: Colors.black,
+      baseColor: Colors.grey.withAlpha(5),
+      highlightColor: Colors.grey.withAlpha(60),
       child: Column(
         children: [
           Container(
