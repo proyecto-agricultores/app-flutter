@@ -3,6 +3,7 @@ import 'package:agricultores_app/widgets/location/departmentDropdown.dart';
 import 'package:agricultores_app/widgets/general/divider.dart';
 import 'package:agricultores_app/widgets/general/cosechaGreenButton.dart';
 import 'package:agricultores_app/widgets/general/loading.dart';
+import 'package:agricultores_app/widgets/general/separator.dart';
 import 'package:agricultores_app/models/regionModel.dart';
 import 'package:flutter/services.dart';
 import 'package:agricultores_app/widgets/cultivos_orders/supplyDropdown.dart';
@@ -126,6 +127,9 @@ class _FilterFarmersAndClientsState extends State<FilterFarmersAndClientsScreen>
                     onChanged: this._handleDepartmentChange
                   ),
                   this._fetchingRegions ? CosechaLoading() : this._regionsDropdown(),
+                  Separator(height: 0.03),
+                  Text('Nota: Todos los filtros son opcionales'),
+                  Separator(height: 0.03),
                   CosechaGreenButton(
                     isLoading: this._loadingRequest,
                     text: 'Buscar',
@@ -153,6 +157,19 @@ class _FilterFarmersAndClientsState extends State<FilterFarmersAndClientsScreen>
                         print(e.toString());
                       }
                     },
+                  ),
+                  CosechaGreenButton(
+                    isLoading: false,
+                    text: 'Limpiar filtros',
+                    onPressed: () {
+                      setState(() {
+                        this._supplyID = null;
+                        this._departmentID = null;
+                        this._regionID = null;
+                        this._departmentIsSelected = false;
+                        this._regions = [Region(id: 0, name: '')];
+                      });
+                    }
                   )
                 ]
               )
