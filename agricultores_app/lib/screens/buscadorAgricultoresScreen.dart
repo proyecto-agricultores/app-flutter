@@ -1,6 +1,4 @@
 import 'package:agricultores_app/screens/STAB.dart';
-import 'package:agricultores_app/screens/cultivosAndOrders/cultivos/crearCutivoScreen.dart';
-import 'package:agricultores_app/screens/cultivosAndOrders/orders/createOrderScreen.dart';
 import 'package:agricultores_app/screens/userProfileScreen.dart';
 import 'package:agricultores_app/services/myProfileService.dart';
 import 'package:agricultores_app/services/userFilterService.dart';
@@ -8,21 +6,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:shimmer/shimmer.dart';
 
-class buscadorAgricultoresScreen extends StatefulWidget {
-  buscadorAgricultoresScreen({Key key, this.title, this.role})
+class BuscadorAgricultoresScreen extends StatefulWidget {
+  BuscadorAgricultoresScreen({Key key, this.title, this.role})
       : super(key: key);
 
   final String title;
   final String role;
 
   @override
-  _buscadorAgricultoresScreenState createState() =>
-      _buscadorAgricultoresScreenState(role: role);
+  _BuscadorAgricultoresScreenState createState() =>
+      _BuscadorAgricultoresScreenState(role: role);
 }
 
-class _buscadorAgricultoresScreenState
-    extends State<buscadorAgricultoresScreen> {
-  _buscadorAgricultoresScreenState({this.role});
+class _BuscadorAgricultoresScreenState
+    extends State<BuscadorAgricultoresScreen> {
+  _BuscadorAgricultoresScreenState({this.role});
 
   final role;
 
