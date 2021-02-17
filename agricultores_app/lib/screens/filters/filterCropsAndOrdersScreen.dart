@@ -173,7 +173,7 @@ class _FilterCropsAndOrdersScreenState extends State<FilterCropsAndOrdersScreen>
                         setState(() {
                           this._loadingRequest = true;
                         });
-                        var response = await FilterService.filter(
+                        var response = await FilterService.filterPubsAndOrders(
                           this._supplyID,
                           this._departmentID,
                           this._regionID,
