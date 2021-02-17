@@ -6,8 +6,8 @@ import 'package:agricultores_app/widgets/general/loading.dart';
 import 'package:agricultores_app/models/regionModel.dart';
 import 'package:flutter/services.dart';
 import 'package:agricultores_app/widgets/cultivos_orders/supplyDropdown.dart';
+import 'package:agricultores_app/screens/filters/filterFarmersAndClientsResultsScreen.dart';
 import 'package:agricultores_app/services/locationService.dart';
-import 'package:agricultores_app/services/filterService.dart';
 
 class FilterFarmersAndClientsScreen extends StatefulWidget {
 
@@ -134,16 +134,21 @@ class _FilterFarmersAndClientsState extends State<FilterFarmersAndClientsScreen>
                         setState(() {
                           this._loadingRequest = true;
                         });
-                        var response = await FilterService.filterFarmersAndClients(
-                          this._supplyID,
-                          this._departmentID,
-                          this._regionID,
-                          this.role,
-                        );
-                        print(response);
                         setState(() {
                           this._loadingRequest = false;
                         });
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => FilterFarmersAndClientsResultsScreenScreen(
+                                title: role == 'ag' ? "Agricultores encontrados" : "Compradores encontrados",
+                                supplyID: this._supplyID,
+                                departmentID: this._departmentID,
+                                regionID: this._regionID,
+                                role: this.role,
+                              )
+                          )
+                        );
                       } catch (e) {
                         print(e.toString());
                       }
