@@ -17,10 +17,10 @@ class FilterCropsAndOrdersScreen extends StatefulWidget {
   FilterCropsAndOrdersScreen({this.title, this.role});
 
   final title;
-  final role;
+  final String role;
 
   @override
-  _FilterCropsAndOrdersScreenState createState() => _FilterCropsAndOrdersScreenState(title: this.title);
+  _FilterCropsAndOrdersScreenState createState() => _FilterCropsAndOrdersScreenState(title: this.title, role: this.role);
 }
 
 class _FilterCropsAndOrdersScreenState extends State<FilterCropsAndOrdersScreen> {
@@ -28,7 +28,7 @@ class _FilterCropsAndOrdersScreenState extends State<FilterCropsAndOrdersScreen>
   _FilterCropsAndOrdersScreenState({this.title, this.role});
 
   final title;
-  final role;
+  final String role;
   final minPriceController = TextEditingController();
   final maxPriceController = TextEditingController();
   final minHarvestDateController = TextEditingController();
