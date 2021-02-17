@@ -11,8 +11,8 @@ import 'package:shimmer/shimmer.dart';
 
 class FilterCropsAndOrdersResultsScreen extends StatefulWidget {
   FilterCropsAndOrdersResultsScreen({
-    Key key, 
-    @required this.title, 
+    Key key,
+    @required this.title,
     @required this.role,
     @required this.supplyID,
     @required this.departmentID,
@@ -34,18 +34,20 @@ class FilterCropsAndOrdersResultsScreen extends StatefulWidget {
   final String maxDate;
 
   @override
-  _FilterCropsAndOrdersResultsScreenState createState() => _FilterCropsAndOrdersResultsScreenState();
+  _FilterCropsAndOrdersResultsScreenState createState() =>
+      _FilterCropsAndOrdersResultsScreenState();
 }
 
-class _FilterCropsAndOrdersResultsScreenState extends State<FilterCropsAndOrdersResultsScreen> {
-
+class _FilterCropsAndOrdersResultsScreenState
+    extends State<FilterCropsAndOrdersResultsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(this.widget.title),
-          backgroundColor: this.widget.role == 'ag' ? Color(0xff09B44D) : Color(0xfffc6e08),
-        ),
+      appBar: AppBar(
+        title: Text(this.widget.title),
+        backgroundColor:
+            this.widget.role == 'ag' ? Color(0xff09B44D) : Color(0xfffc6e08),
+      ),
       body: FutureBuilder(
         future: MyProfileService.getLoggedinUser(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -108,7 +110,7 @@ class _FilterCropsAndOrdersResultsScreenState extends State<FilterCropsAndOrders
                                       titulo: listResponse[index].supplieName,
                                       role: this.widget.role,
                                       isMyCultivoOrOrder: false,
-                                      invertRole: this.widget.role == "ag",
+                                      invertRole: false,
                                     ),
                                   ),
                                 )
@@ -121,7 +123,7 @@ class _FilterCropsAndOrdersResultsScreenState extends State<FilterCropsAndOrders
                                       height: 150,
                                       width: MediaQuery.of(context).size.width,
                                       fit: BoxFit.cover,
-                                      image: this.widget.role == 'co'
+                                      image: this.widget.role != 'co'
                                           ? (listResponse[index]
                                                       .pictureURLs
                                                       .length ==
