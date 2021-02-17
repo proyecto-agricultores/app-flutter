@@ -42,7 +42,10 @@ class _FilterCropsAndOrdersResultsScreenState extends State<FilterCropsAndOrders
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+        appBar: AppBar(
+          title: Text(this.widget.title),
+          backgroundColor: this.widget.role == 'ag' ? Color(0xff09B44D) : Color(0xfffc6e08),
+        ),
       body: FutureBuilder(
         future: MyProfileService.getLoggedinUser(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -89,17 +92,6 @@ class _FilterCropsAndOrdersResultsScreenState extends State<FilterCropsAndOrders
             if (snapshot.hasData) {
               return Column(
                 children: [
-                  Icon(
-                    Icons.agriculture_outlined,
-                    color: Colors.indigo[900],
-                    size: 50,
-                  ),
-                  Text(
-                    this.widget.role == 'ag'
-                        ? 'Cultivos encontrados'
-                        : 'Órdenes encontradas',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-                  ),
                   SingleChildScrollView(
                     child: Column(
                       children: [
