@@ -209,8 +209,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 child: Center(
                     child: snapshot.data.ubigeo != null
-                        ? Text(snapshot.data.ubigeo)
-                        : Text('Sin Ubicación')),
+                        ? Text(
+                            snapshot.data.ubigeo,
+                            textAlign: TextAlign.center,
+                          )
+                        : Text(
+                            'Sin Ubicación',
+                            textAlign: TextAlign.center,
+                          )),
               )
             : Shimmer.fromColors(
                 baseColor: Colors.grey.withAlpha(5),

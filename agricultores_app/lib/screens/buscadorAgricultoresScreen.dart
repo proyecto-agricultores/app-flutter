@@ -220,7 +220,13 @@ class _buscadorAgricultoresScreenState
                                           ),
                                           Row(
                                             children: [
-                                              Text(listResponse[index].ubigeo)
+                                              Container(
+                                                width: 200,
+                                                child: Text(
+                                                  listResponse[index].ubigeo,
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              )
                                             ],
                                           )
                                         ])
