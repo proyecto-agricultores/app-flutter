@@ -11,7 +11,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>agricultores_app</string>
+	<string>Cosecha</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -22,6 +22,12 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Cosecha utiliza la camara.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Cosecha necesita tu ubicación</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Cosecha utiliza fotos.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
