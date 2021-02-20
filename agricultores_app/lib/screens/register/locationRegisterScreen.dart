@@ -11,6 +11,7 @@ import 'package:flutter/services.dart' show DeviceOrientation, SystemChrome;
 import 'package:location/location.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:agricultores_app/widgets/location/departmentDropdown.dart';
+import 'package:agricultores_app/widgets/location/regionDropdown.dart';
 
 class LocationRegisterScreen extends StatefulWidget {
   LocationRegisterScreen({Key key}) : super(key: key);
@@ -34,6 +35,7 @@ class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
   double _lat = 0.0;
   double _lon = 0.0;
   bool isLoading = false;
+  bool _regionsFetched = false;
 
   @override
   void initState() {
@@ -41,19 +43,25 @@ class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
     this._getGPSLocation();
   }
 
+  void setRegions(List<Region> newRegions) {
+    setState(() {
+      this._regions = newRegions;
+      this._regionsFetched = true;
+    });
+  }
+
   void _handleDepartmentChange(newValue) {
-    print('new value: ' + newValue.toString());
     setState(() {
       _selectedDepartment = newValue;
       _departmentIsSelected = true;
       _fetchingRegions = true;
       this._regions = [Region(id: 0, name: '')];
       this._selectedRegion = null;
+      this._regionsFetched = false;
       this._districts = [District(id: 0, name: '')];
       this._selectedDistrict = null;
       this._getRegions();
     });
-    print(this._selectedDepartment);
   }
 
   void _getRegions() async {
@@ -214,6 +222,17 @@ class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
             )));
   }
 
+  void _handleRegionChange(newRegion) {
+    setState(() {
+      this._selectedRegion = newRegion;
+      this._regionIsSelected = true;
+      this._fetchingDistricts = true;
+      this._districts = [District(id: 0, name: '')];
+      this._selectedDistrict = null;
+      this._getDistricts();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     WidgetsFlutterBinding.ensureInitialized();
@@ -249,9 +268,18 @@ class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
                               onChanged: this._handleDepartmentChange,
                             ),
                             Separator(height: 0.02),
-                            this._fetchingRegions
-                                ? CosechaLoading()
-                                : this._regionsDropdown(),
+                            // this._fetchingRegions
+                            //     ? CosechaLoading()
+                            //     : this._regionsDropdown(),
+                            RegionDropdown(
+                              onChanged: this._handleRegionChange,
+                              selectedDepartment: this._selectedDepartment,
+                              selectedRegion: this._selectedRegion,
+                              ignoreCondition: !this._departmentIsSelected,
+                              regions: this._regions,
+                              setRegions: this.setRegions,
+                              regionsFetched: this._regionsFetched,
+                            ),
                             Separator(height: 0.02),
                             this._fetchingDistricts
                                 ? CosechaLoading()
