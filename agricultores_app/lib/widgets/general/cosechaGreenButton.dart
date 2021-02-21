@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 
 class CosechaGreenButton extends StatelessWidget {
 
-  CosechaGreenButton({this.onPressed, this.text, this.isLoading});
+  CosechaGreenButton({
+    @required this.onPressed, 
+    @required this.text, 
+    @required this.isLoading,
+  });
 
   final onPressed;
-  final text;
-  final isLoading;
+  final String text;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
