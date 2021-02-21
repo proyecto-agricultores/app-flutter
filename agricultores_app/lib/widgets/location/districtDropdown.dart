@@ -1,6 +1,6 @@
 import 'package:agricultores_app/models/district.dart';
 import 'package:agricultores_app/services/locationService.dart';
-import 'package:agricultores_app/widgets/general/loading.dart';
+import 'package:agricultores_app/widgets/location/locationDropdown.dart';
 import 'package:flutter/material.dart';
 
 class DistrictDropdown extends StatefulWidget {
@@ -14,7 +14,7 @@ class DistrictDropdown extends StatefulWidget {
     @required this.districts, 
     @required this.setDistricts, 
     @required this.districtsAreFetched
-    }) : super(key: key);
+  }) : super(key: key);
   
   final onChanged;
   final selectedRegion;
@@ -49,30 +49,12 @@ class _DistrictDropdownState extends State<DistrictDropdown> {
     if (this.widget.selectedRegion != null && this.widget.districtsAreFetched == false) {
       this._getDistricts();
     }
-    return IgnorePointer(
-      ignoring: this.widget.ignoreCondition,
-      child: Container(
-        height: MediaQuery.of(context).size.height * 0.11,
-        width: MediaQuery.of(context).size.height * 0.8,
-        child: this._fetchingDistricts
-        ? CosechaLoading()
-        : DropdownButtonFormField(
-          validator: (value) => value == null ? 'Campo requerido' : null,
-          isExpanded: true,
-          hint: Text('Seleccione su departamento'),
-          value: this.widget.selectedDistrict,
-          onChanged: this.widget.onChanged,
-          items: this.widget.districts.map((district) {
-            return DropdownMenuItem(
-              child: new Text(
-                district.name,
-                textAlign: TextAlign.center,
-              ),
-              value: district.id,
-            );
-          }).toList(),
-        )
-      )
+    return LocationDropdown(
+      ignoreCondition: this.widget.ignoreCondition,
+      isLoading: this._fetchingDistricts,
+      selectedLocation: this.widget.selectedDistrict,
+      onChanged: this.widget.onChanged,
+      listItems: this.widget.districts,
     );
   }
 
