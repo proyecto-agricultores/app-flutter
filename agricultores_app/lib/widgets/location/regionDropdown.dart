@@ -11,7 +11,7 @@ class RegionDropdown extends StatefulWidget {
     @required this.ignoreCondition, 
     @required this.regions, 
     @required this.setRegions,
-    @required this.regionsFetched,
+    @required this.regionsAreFetched,
   });
 
   final onChanged;
@@ -20,7 +20,7 @@ class RegionDropdown extends StatefulWidget {
   final ignoreCondition;
   final List<Region> regions;
   final setRegions;
-  final regionsFetched;
+  final regionsAreFetched;
 
   _RegionDropdownState createState() => _RegionDropdownState();
 }
@@ -29,13 +29,7 @@ class _RegionDropdownState extends State<RegionDropdown> {
 
   bool _fetchingRegions = false;
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
   _getRegions() async {
-    print('');
     setState(() {
       this._fetchingRegions = true;
     });
@@ -48,17 +42,17 @@ class _RegionDropdownState extends State<RegionDropdown> {
 
   @override
   Widget build(BuildContext context) {
-    if (this.widget.selectedDepartment != null && this.widget.regionsFetched == false) {
+    if (this.widget.selectedDepartment != null && this.widget.regionsAreFetched == false) {
       this._getRegions();
     }
-    return this._fetchingRegions
-    ? CosechaLoading()
-    : IgnorePointer(
+    return IgnorePointer(
       ignoring: this.widget.ignoreCondition,
       child: Container(
         height: MediaQuery.of(context).size.height * 0.11,
         width: MediaQuery.of(context).size.width * 0.8,
-        child: DropdownButtonFormField(
+        child: this._fetchingRegions 
+        ? CosechaLoading()
+        : DropdownButtonFormField(
           validator: (value) => value == null ? 'Campo requerido' : null,
           isExpanded: true,
           hint: Text('Seleccione su región'),
