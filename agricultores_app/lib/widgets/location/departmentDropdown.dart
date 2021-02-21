@@ -33,12 +33,12 @@ class _DepartmentDropdownState extends State<DepartmentDropdown> {
 
   @override
   Widget build(BuildContext context) {
-    return this._fetchingDepartments
-      ? CosechaLoading()
-      : Container(
+    return Container(
       height: MediaQuery.of(context).size.height * 0.11,
       width: MediaQuery.of(context).size.width * 0.8,
-      child: DropdownButtonFormField(
+      child: this._fetchingDepartments 
+      ? CosechaLoading()
+      : DropdownButtonFormField(
         validator: (value) => value == null ? 'Campo requerido' : null,
         isExpanded: true,
         hint: Text('Seleccione su departamento'),
