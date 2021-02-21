@@ -51,6 +51,7 @@ class _RegionDropdownState extends State<RegionDropdown> {
       selectedLocation: this.widget.selectedRegion,
       onChanged: this.widget.onChanged,
       listItems: this.widget.regions,
+      text: 'Seleccione su región',
     );
   }
   

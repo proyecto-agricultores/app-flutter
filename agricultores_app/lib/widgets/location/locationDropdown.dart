@@ -9,6 +9,7 @@ class LocationDropdown extends StatelessWidget {
     @required this.selectedLocation,
     @required this.onChanged,
     @required this.listItems,
+    @required this.text,
   });
 
   final bool ignoreCondition;
@@ -16,6 +17,7 @@ class LocationDropdown extends StatelessWidget {
   final int selectedLocation;
   final onChanged;
   final List<dynamic> listItems;
+  final String text;
 
   @override
   Widget build(BuildContext context) {
@@ -24,12 +26,10 @@ class LocationDropdown extends StatelessWidget {
       child: Container(
         height: MediaQuery.of(context).size.height * 0.11,
         width: MediaQuery.of(context).size.width * 0.8,
-        child: this.isLoading 
-        ? CosechaLoading()
-        : DropdownButtonFormField(
+        child: DropdownButtonFormField(
           validator: (value) => value == null ? 'Campo requerido' : null,
           isExpanded: true,
-          hint: Text('Seleccione su región'),
+          hint: Text(this.isLoading ? 'Cargando...' : this.text),
           value: this.selectedLocation,
           onChanged: this.onChanged,
           items: this.listItems.map<DropdownMenuItem<int>>((item) {

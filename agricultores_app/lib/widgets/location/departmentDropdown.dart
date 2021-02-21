@@ -14,7 +14,7 @@ class DepartmentDropdown extends StatefulWidget {
 
 class _DepartmentDropdownState extends State<DepartmentDropdown> {
 
-  List<Department> _departments;
+  List<Department> _departments = [Department(id: 0, name: '')];
   bool _fetchingDepartments = true;
 
   @override
@@ -39,6 +39,7 @@ class _DepartmentDropdownState extends State<DepartmentDropdown> {
       selectedLocation: this.widget.selectedDepartment,
       onChanged: this.widget.onChanged,
       listItems: this._departments,
+      text: 'Seleccione su departamento',
     );
   }
   

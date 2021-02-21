@@ -55,6 +55,7 @@ class _DistrictDropdownState extends State<DistrictDropdown> {
       selectedLocation: this.widget.selectedDistrict,
       onChanged: this.widget.onChanged,
       listItems: this.widget.districts,
+      text: 'Seleccione su distrito',
     );
   }
 
