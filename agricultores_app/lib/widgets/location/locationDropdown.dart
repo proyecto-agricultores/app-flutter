@@ -1,4 +1,3 @@
-import 'package:agricultores_app/widgets/general/loading.dart';
 import 'package:flutter/material.dart';
 
 class LocationDropdown extends StatelessWidget {
