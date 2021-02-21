@@ -1,9 +1,10 @@
 import 'package:agricultores_app/models/regionModel.dart';
 import 'package:agricultores_app/services/locationService.dart';
 import 'package:agricultores_app/widgets/location/locationDropdown.dart';
+import 'package:agricultores_app/widgets/location/regionAndDistrictTemplateDropdown.dart';
 import 'package:flutter/material.dart';
 
-class RegionDropdown extends StatefulWidget {
+class RegionDropdown extends StatelessWidget {
   RegionDropdown({
     @required this.onChanged,
     @required this.selectedDepartment,
@@ -21,38 +22,18 @@ class RegionDropdown extends StatefulWidget {
   final List<Region> regions;
   final setRegions;
   final regionsAreFetched;
-
-  _RegionDropdownState createState() => _RegionDropdownState();
-}
-
-class _RegionDropdownState extends State<RegionDropdown> {
-
-  bool _fetchingRegions = false;
-
-  _getRegions() async {
-    setState(() {
-      this._fetchingRegions = true;
-    });
-    final response = await LocationService.getRegionsByDepartment(this.widget.selectedDepartment);
-    this.widget.setRegions(response);
-    setState(() {
-      this._fetchingRegions = false;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (this.widget.selectedDepartment != null && this.widget.regionsAreFetched == false) {
-      this._getRegions();
-    }
-    return LocationDropdown(
-      ignoreCondition: this.widget.ignoreCondition,
-      isLoading: this._fetchingRegions,
-      selectedLocation: this.widget.selectedRegion,
-      onChanged: this.widget.onChanged,
-      listItems: this.widget.regions,
+    
+  Widget build(BuildContext build) {
+    return RegionAndDistrictTemplateDropdown(
+      onChanged: this.onChanged,
+      selectedParentLocation: this.selectedDepartment,
+      selectedLocation: this.selectedRegion,
+      ignoreCondition: this.ignoreCondition,
+      listItems: this.regions,
+      setData: this.setRegions,
+      listItemsAreFetched: this.regionsAreFetched,
+      dataGetter: LocationService.getRegionsByDepartment,
       text: 'Seleccione su región',
     );
   }
-  
 }
