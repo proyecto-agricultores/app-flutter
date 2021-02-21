@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:agricultores_app/services/uploadProfilePictureService.dart';
+import 'package:agricultores_app/widgets/general/cosechaGreenButton.dart';
 import 'package:agricultores_app/widgets/general/cosechaLogo.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -122,10 +123,7 @@ class _PhotoRegisterScreenState extends State<PhotoRegisterScreen> {
                         ],
                       ),
                       SizedBox(height: 40),
-                      FlatButton(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                        ),
+                      CosechaGreenButton(
                         onPressed: () async {
                           setState(() {
                             this.isLoading = true;
@@ -147,33 +145,10 @@ class _PhotoRegisterScreenState extends State<PhotoRegisterScreen> {
                             this.isLoading = false;
                           });
                         },
-                        color: Colors.green[400],
-                        child: this.isLoading
-                            ? LinearProgressIndicator(
-                                minHeight: 5,
-                              )
-                            : Text(
-                                'Siguiente',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
-                              ),
+                        text: 'Siguiente',
+                        isLoading: false,
                       ),
-                      FlatButton(
-                        child: Text(
-                          "Continuar sin foto",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          )
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                        ),
-                        color: Colors.green[400],
+                      CosechaGreenButton(
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -181,8 +156,10 @@ class _PhotoRegisterScreenState extends State<PhotoRegisterScreen> {
                               builder: (context) => LocationRegisterScreen(),
                              )
                           );
-                        }
-                      )
+                        },
+                        text: 'Continuar sin foto',
+                        isLoading: false,
+                      ),
                     ],
                   ),
                 ),

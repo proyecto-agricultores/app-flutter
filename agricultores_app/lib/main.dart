@@ -1,3 +1,4 @@
+import 'package:agricultores_app/models/colorsModel.dart';
 import 'package:agricultores_app/screens/loadingScreen.dart';
 import 'package:agricultores_app/screens/homeScreen.dart';
 import 'package:agricultores_app/screens/register/codeRegisterScreen.dart';
@@ -25,8 +26,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Cosecha',
       theme: ThemeData(
-        primaryColor: MyColors.getColorsFromHex(0xFF09B44D),
-        accentColor: MyColors.getColorsFromHex(0xFF093AC3),
+        primaryColor: CosechaColors.verdeFuerte,
+        accentColor: CosechaColors.verdeSuave,
         primarySwatch: Colors.blue,
         fontFamily: 'Poppins',
       ),
