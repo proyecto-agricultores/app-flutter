@@ -1,3 +1,4 @@
+import 'package:agricultores_app/models/colorsModel.dart';
 import 'package:flutter/material.dart';
 
 class CosechaGreenButton extends StatelessWidget {
@@ -19,7 +20,7 @@ class CosechaGreenButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(18.0),
       ),
       onPressed: this.onPressed,
-      color: Colors.green[400],
+      color: CosechaColors.verdeFuerte,
       child: this.isLoading
       ? LinearProgressIndicator(minHeight: 5,)
       : Text(
