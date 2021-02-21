@@ -1,7 +1,7 @@
 import 'package:agricultores_app/models/regionModel.dart';
 import 'package:agricultores_app/services/locationService.dart';
+import 'package:agricultores_app/widgets/location/locationDropdown.dart';
 import 'package:flutter/material.dart';
-import 'package:agricultores_app/widgets/general/loading.dart';
 
 class RegionDropdown extends StatefulWidget {
   RegionDropdown({
@@ -45,30 +45,12 @@ class _RegionDropdownState extends State<RegionDropdown> {
     if (this.widget.selectedDepartment != null && this.widget.regionsAreFetched == false) {
       this._getRegions();
     }
-    return IgnorePointer(
-      ignoring: this.widget.ignoreCondition,
-      child: Container(
-        height: MediaQuery.of(context).size.height * 0.11,
-        width: MediaQuery.of(context).size.width * 0.8,
-        child: this._fetchingRegions 
-        ? CosechaLoading()
-        : DropdownButtonFormField(
-          validator: (value) => value == null ? 'Campo requerido' : null,
-          isExpanded: true,
-          hint: Text('Seleccione su región'),
-          value: this.widget.selectedRegion,
-          onChanged: this.widget.onChanged,
-          items: this.widget.regions.map((region) {
-            return DropdownMenuItem(
-              child: new Text(
-                region.name,
-                textAlign: TextAlign.center,
-              ),
-              value: region.id,
-            );
-          }).toList(),
-        ),
-      )
+    return LocationDropdown(
+      ignoreCondition: this.widget.ignoreCondition,
+      isLoading: this._fetchingRegions,
+      selectedLocation: this.widget.selectedRegion,
+      onChanged: this.widget.onChanged,
+      listItems: this.widget.regions,
     );
   }
   
