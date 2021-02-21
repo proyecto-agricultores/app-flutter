@@ -1,7 +1,9 @@
+import 'package:agricultores_app/models/colorsModel.dart';
 import 'package:agricultores_app/screens/homeScreen.dart';
 import 'package:agricultores_app/screens/register/registerScreen.dart';
 import 'package:agricultores_app/services/myProfileService.dart';
 import 'package:agricultores_app/services/token.dart';
+import 'package:agricultores_app/widgets/general/cosechaGreenButton.dart';
 import 'package:agricultores_app/widgets/general/cosechaLogo.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
@@ -72,7 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       labelText: 'Contraseña',
                       prefixIcon: Icon(
                         Icons.lock,
-                        color: Colors.green,
+                        color: CosechaColors.verdeFuerte,
                       ),
                       border: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.green),
@@ -100,11 +102,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               SizedBox(height: 30),
-              FlatButton(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
-                ),
-                // onPressed: Token.generateOrRefreshToken(telephone, passwordController.text),
+              CosechaGreenButton(
+                text: 'Ingresar',
+                isLoading: this.isLoading,
                 onPressed: () async {
                   setState(() {
                     this.isLoading = true;
@@ -146,21 +146,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       },
                     );
                   }
-                },
-                color: Colors.green[400],
-                child: this.isLoading
-                    ? LinearProgressIndicator(
-                        minHeight: 5,
-                      )
-                    : Text(
-                        'Ingresar',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
-              )
+                } 
+              ),
             ],
           ),
         ),
