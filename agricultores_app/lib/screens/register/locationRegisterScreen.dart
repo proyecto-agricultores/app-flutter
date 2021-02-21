@@ -2,6 +2,7 @@ import 'package:agricultores_app/models/district.dart';
 import 'package:agricultores_app/models/regionModel.dart';
 import 'package:agricultores_app/screens/register/roleRegisterScreen.dart';
 import 'package:agricultores_app/services/updateUbigeoService.dart';
+import 'package:agricultores_app/widgets/general/cosechaGreenButton.dart';
 import 'package:agricultores_app/widgets/general/cosechaLogo.dart';
 import 'package:agricultores_app/widgets/general/separator.dart';
 import 'package:agricultores_app/widgets/location/districtDropdown.dart';
@@ -105,46 +106,6 @@ class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
     });
   }
 
-  Widget _nextButton() {
-    return FlatButton(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(18.0),
-      ),
-      onPressed: () async {
-        if (this._formKey.currentState.validate()) {
-          setState(() {
-            this.isLoading = true;
-          });
-          var response = await UpdateUbigeoService.updateUbigeo(
-              _selectedDistrict.toString(), _lat, _lon);
-          setState(() {
-            this.isLoading = false;
-          });
-          print(response);
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => RoleRegisterScreen(),
-            ),
-          );
-        }
-      },
-      color: Colors.green[400],
-      child: this.isLoading
-          ? LinearProgressIndicator(
-              minHeight: 5,
-            )
-          : Text(
-              'Siguiente',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
-            ),
-    );
-  }
-
   void _handleRegionChange(newRegion) {
     setState(() {
       this._selectedRegion = newRegion;
@@ -224,7 +185,29 @@ class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
                               districtsAreFetched: this._districtsAreFetched
                             ),
                             Separator(height: 0.05),
-                            this._nextButton(),
+                            CosechaGreenButton(
+                              text: 'Siguiente',
+                              isLoading: this.isLoading,
+                              onPressed: () async {
+                                if (this._formKey.currentState.validate()) {
+                                  setState(() {
+                                    this.isLoading = true;
+                                  });
+                                  var response = await UpdateUbigeoService.updateUbigeo(
+                                      _selectedDistrict.toString(), _lat, _lon);
+                                  setState(() {
+                                    this.isLoading = false;
+                                  });
+                                  print(response);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => RoleRegisterScreen(),
+                                    ),
+                                  );
+                                } 
+                              },
+                            )
                           ]
                         )
                       )
