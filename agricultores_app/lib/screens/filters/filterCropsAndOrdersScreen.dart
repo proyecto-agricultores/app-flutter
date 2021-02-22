@@ -144,7 +144,9 @@ class _FilterCropsAndOrdersScreenState extends State<FilterCropsAndOrdersScreen>
                     selectedDate: this._selectedMaxHarvestDate,
                     label: "Fecha máxima de cosecha"
                   ),
+                  Separator(height: 0.03),
                   Text('Nota: Todos los campos son opcionales'),
+                  Separator(height: 0.03),
                   CosechaGreenButton(
                     isLoading: this._loadingRequest,
                     text: 'Buscar',
