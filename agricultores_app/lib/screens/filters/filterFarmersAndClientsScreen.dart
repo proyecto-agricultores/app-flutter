@@ -1,14 +1,13 @@
+import 'package:agricultores_app/widgets/location/regionDropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:agricultores_app/widgets/location/departmentDropdown.dart';
 import 'package:agricultores_app/widgets/general/divider.dart';
 import 'package:agricultores_app/widgets/general/cosechaGreenButton.dart';
-import 'package:agricultores_app/widgets/general/loading.dart';
 import 'package:agricultores_app/widgets/general/separator.dart';
 import 'package:agricultores_app/models/regionModel.dart';
 import 'package:flutter/services.dart';
 import 'package:agricultores_app/widgets/cultivos_orders/supplyDropdown.dart';
 import 'package:agricultores_app/screens/filters/filterFarmersAndClientsResultsScreen.dart';
-import 'package:agricultores_app/services/locationService.dart';
 
 class FilterFarmersAndClientsScreen extends StatefulWidget {
 
@@ -38,7 +37,7 @@ class _FilterFarmersAndClientsState extends State<FilterFarmersAndClientsScreen>
   int _departmentID;
   int _regionID;
   bool _departmentIsSelected = false;
-  bool _fetchingRegions = false;
+  bool _regionsAreFetched = false;
   bool _loadingRequest = false;
   List<Region> _regions = [Region(id: 0, name: '')];
 
@@ -52,52 +51,17 @@ class _FilterFarmersAndClientsState extends State<FilterFarmersAndClientsScreen>
     setState(() {
       this._departmentID = newValue;
       _departmentIsSelected = true;
-      _fetchingRegions = true;
       this._regions = [Region(id: 0, name: '')];
       this._regionID = null;
-      this._getRegions();
     });
     this._departmentIsSelected = true;
   }
 
-  Widget _regionsDropdown() {
-    return IgnorePointer(
-        ignoring: !_departmentIsSelected,
-        child: Container(
-            height: MediaQuery.of(context).size.height * 0.07,
-            width: MediaQuery.of(context).size.height * .8,
-            child: DropdownButtonFormField(
-              isExpanded: true,
-              hint: Text('Seleccione su región'),
-              value: _regionID,
-              validator: (value) => value == null ? 'Campo requerido' : null,
-              onChanged: (newValue) {
-                setState(() {
-                  _regionID = newValue;
-                });
-              },
-              items: this._regions.map((region) {
-                return DropdownMenuItem(
-                  child: new Text(
-                    region.name,
-                    textAlign: TextAlign.center,
-                  ),
-                  value: region.id,
-                );
-              }).toList(),
-            )
-          )
-        );
-  }
 
-  void _getRegions() async {
-    final response =
-        await LocationService.getRegionsByDepartment(this._departmentID);
-    response.insert(0, Region(id: 0, name: 'Todas las regiones'));
+  void _handleRegionChange(newValue) {
     setState(() {
-      this._regions = response;
-      this._fetchingRegions = false;
-    });
+      _regionID = newValue;
+    }); 
   }
 
   @override
@@ -130,7 +94,21 @@ class _FilterFarmersAndClientsState extends State<FilterFarmersAndClientsScreen>
                     onChanged: this._handleDepartmentChange,
                     selectedDepartment: this._departmentID,
                   ),
-                  this._fetchingRegions ? CosechaLoading() : this._regionsDropdown(),
+                  //this._fetchingRegions ? CosechaLoading() : this._regionsDropdown(),
+                  RegionDropdown(
+                    onChanged: this._handleRegionChange,
+                    selectedDepartment: this._departmentID,
+                    selectedRegion: this._regionID,
+                    ignoreCondition: !this._departmentIsSelected,
+                    regions: this._regions,
+                    setRegions: (List<Region> newRegions) {
+                      setState(() {
+                        this._regions = newRegions;
+                        this._regionsAreFetched = true;
+                      });
+                    },
+                    regionsAreFetched: this._regionsAreFetched,
+                  ),
                   Separator(height: 0.03),
                   Text('Nota: Todos los filtros son opcionales'),
                   Separator(height: 0.03),
