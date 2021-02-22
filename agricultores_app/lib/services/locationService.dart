@@ -59,7 +59,7 @@ class LocationService {
       return districts;
     } else {
       throw Exception(
-          'Error al intentar obtener los distritios filtrados por el id de región $regionId');
+          'Error al intentar obtener los distritos filtrados por el id de región $regionId');
     }
   }
 }
