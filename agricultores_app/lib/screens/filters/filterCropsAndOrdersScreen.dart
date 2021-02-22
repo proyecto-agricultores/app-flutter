@@ -1,16 +1,14 @@
 import 'package:agricultores_app/widgets/cultivos_orders/supplyDropdown.dart';
 import 'package:agricultores_app/widgets/general/divider.dart';
 import 'package:agricultores_app/widgets/general/cosechaGreenButton.dart';
-import 'package:agricultores_app/widgets/general/loading.dart';
 import 'package:agricultores_app/widgets/general/separator.dart';
 import 'package:agricultores_app/widgets/cultivos_orders/cosechaTextFormField.dart';
 import 'package:agricultores_app/widgets/cultivos_orders/cosechaCalendar.dart';
+import 'package:agricultores_app/widgets/location/regionDropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:agricultores_app/widgets/location/departmentDropdown.dart';
 import 'package:agricultores_app/models/regionModel.dart';
-import 'package:agricultores_app/services/locationService.dart';
-import 'package:agricultores_app/services/filterService.dart';
 import 'package:agricultores_app/screens/filters/filterCropsAndOrdersResultsScreen.dart';
 
 class FilterCropsAndOrdersScreen extends StatefulWidget {
@@ -38,11 +36,11 @@ class _FilterCropsAndOrdersScreenState extends State<FilterCropsAndOrdersScreen>
   int _departmentID;
   int _regionID;
   int _supplyID;
-  bool _fetchingRegions = false;
   bool _departmentIsSelected = false;
   List<Region> _regions = [Region(id: 0, name: '')];
   DateTime _selectedMinHarvestDate = DateTime.now();
   DateTime _selectedMaxHarvestDate = DateTime.now();
+  bool _regionsAreFetched = false;
   bool _loadingRequest = false;
 
   updateSupplyID(newValue) {
@@ -51,54 +49,20 @@ class _FilterCropsAndOrdersScreenState extends State<FilterCropsAndOrdersScreen>
     });
   }
 
-  Widget _regionsDropdown() {
-    return IgnorePointer(
-        ignoring: !_departmentIsSelected,
-        child: Container(
-            height: MediaQuery.of(context).size.height * 0.07,
-            width: MediaQuery.of(context).size.height * .8,
-            child: DropdownButtonFormField(
-              isExpanded: true,
-              hint: Text('Seleccione su región'),
-              value: _regionID,
-              validator: (value) => value == null ? 'Campo requerido' : null,
-              onChanged: (newValue) {
-                setState(() {
-                  _regionID = newValue;
-                });
-              },
-              items: this._regions.map((region) {
-                return DropdownMenuItem(
-                  child: new Text(
-                    region.name,
-                    textAlign: TextAlign.center,
-                  ),
-                  value: region.id,
-                );
-              }).toList(),
-            )));
-  }
-
-  void _getRegions() async {
-    final response =
-        await LocationService.getRegionsByDepartment(this._departmentID);
-    response.insert(0, Region(id: 0, name: 'Todas las regiones'));
-    setState(() {
-      this._regions = response;
-      this._fetchingRegions = false;
-    });
-  }
-
   void _handleDepartmentChange(newValue) {
     setState(() {
       this._departmentID = newValue;
       _departmentIsSelected = true;
-      _fetchingRegions = true;
       this._regions = [Region(id: 0, name: '')];
       this._regionID = null;
-      this._getRegions();
     });
     this._departmentIsSelected = true;
+  }
+
+  void _handleRegionChange(newValue) {
+    setState(() {
+      _regionID = newValue;
+    }); 
   }
 
   updateDate(DateTime picked, TextEditingController dateController) {
@@ -139,7 +103,20 @@ class _FilterCropsAndOrdersScreenState extends State<FilterCropsAndOrdersScreen>
                     onChanged: this._handleDepartmentChange,
                     selectedDepartment: this._departmentID,
                   ),
-                  this._fetchingRegions ? CosechaLoading() : this._regionsDropdown(),
+                  RegionDropdown(
+                    onChanged: this._handleRegionChange,
+                    selectedDepartment: this._departmentID,
+                    selectedRegion: this._regionID,
+                    ignoreCondition: !this._departmentIsSelected,
+                    regions: this._regions,
+                    setRegions: (List<Region> newRegions) {
+                      setState(() {
+                        this._regions = newRegions;
+                        this._regionsAreFetched = true;
+                      });
+                    },
+                    regionsAreFetched: this._regionsAreFetched,
+                  ),
                   Separator(height: 0.03),
                   CosechaTextFormField(
                     validator: "",
@@ -155,7 +132,6 @@ class _FilterCropsAndOrdersScreenState extends State<FilterCropsAndOrdersScreen>
                     unit: 'kg'
                   ),
                   Separator(height: 0.03),
-                  CosechaDivider(),
                   CosechaCalendar(
                     updateDate: this.updateDate,
                     controller: this.minHarvestDateController,
@@ -168,7 +144,6 @@ class _FilterCropsAndOrdersScreenState extends State<FilterCropsAndOrdersScreen>
                     selectedDate: this._selectedMaxHarvestDate,
                     label: "Fecha máxima de cosecha"
                   ),
-                  CosechaDivider(),
                   Text('Nota: Todos los campos son opcionales'),
                   CosechaGreenButton(
                     isLoading: this._loadingRequest,
