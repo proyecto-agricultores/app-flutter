@@ -1,7 +1,6 @@
 import 'package:agricultores_app/widgets/location/regionDropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:agricultores_app/widgets/location/departmentDropdown.dart';
-import 'package:agricultores_app/widgets/general/divider.dart';
 import 'package:agricultores_app/widgets/general/cosechaGreenButton.dart';
 import 'package:agricultores_app/widgets/general/separator.dart';
 import 'package:agricultores_app/models/regionModel.dart';
@@ -53,8 +52,8 @@ class _FilterFarmersAndClientsState extends State<FilterFarmersAndClientsScreen>
       _departmentIsSelected = true;
       this._regions = [Region(id: 0, name: '')];
       this._regionID = null;
+      this._regionsAreFetched = false;
     });
-    this._departmentIsSelected = true;
   }
 
 
@@ -85,16 +84,15 @@ class _FilterFarmersAndClientsState extends State<FilterFarmersAndClientsScreen>
               padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.1),
               child: Column(
                 children: [
+                  Separator(height: 0.03),
                   SupplyDropdown(
                     supplyID: this._supplyID,
                     updateSupply: this.updateSupplyID,
                   ),
-                  CosechaDivider(),
                   DepartmentDropdown(
                     onChanged: this._handleDepartmentChange,
                     selectedDepartment: this._departmentID,
                   ),
-                  //this._fetchingRegions ? CosechaLoading() : this._regionsDropdown(),
                   RegionDropdown(
                     onChanged: this._handleRegionChange,
                     selectedDepartment: this._departmentID,

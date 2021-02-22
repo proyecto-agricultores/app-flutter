@@ -1,6 +1,5 @@
 import 'package:agricultores_app/models/regionModel.dart';
 import 'package:agricultores_app/services/locationService.dart';
-import 'package:agricultores_app/widgets/location/locationDropdown.dart';
 import 'package:agricultores_app/widgets/location/regionAndDistrictTemplateDropdown.dart';
 import 'package:flutter/material.dart';
 

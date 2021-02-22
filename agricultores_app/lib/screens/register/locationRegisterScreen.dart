@@ -153,6 +153,7 @@ class _LocationRegisterScreenState extends State<LocationRegisterScreen> {
                           children: [
                             DepartmentDropdown(
                               onChanged: this._handleDepartmentChange,
+                              selectedDepartment: this._selectedDepartment,
                             ),
                             Separator(height: 0.02),
                             RegionDropdown(

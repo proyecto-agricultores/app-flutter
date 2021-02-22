@@ -55,8 +55,8 @@ class _FilterCropsAndOrdersScreenState extends State<FilterCropsAndOrdersScreen>
       _departmentIsSelected = true;
       this._regions = [Region(id: 0, name: '')];
       this._regionID = null;
+      this._regionsAreFetched = false;
     });
-    this._departmentIsSelected = true;
   }
 
   void _handleRegionChange(newValue) {
@@ -94,11 +94,11 @@ class _FilterCropsAndOrdersScreenState extends State<FilterCropsAndOrdersScreen>
               padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.1),
               child: Column(
                 children: [
+                  Separator(height: 0.03,),
                   SupplyDropdown(
                     supplyID: this._supplyID,
                     updateSupply: this.updateSupplyID,
                   ),
-                  CosechaDivider(),
                   DepartmentDropdown(
                     onChanged: this._handleDepartmentChange,
                     selectedDepartment: this._departmentID,

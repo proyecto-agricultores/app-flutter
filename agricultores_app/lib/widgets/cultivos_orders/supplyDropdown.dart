@@ -20,23 +20,23 @@ class SupplyDropdown extends StatelessWidget {
         } 
         return IgnorePointer(
           ignoring: !snapshot.hasData,
-          child: DropdownButtonFormField(
-            validator: (value) => value == null ? 'Campo requerido' : null,
-            hint: Text(snapshot.hasData ? 'Seleccione un insumo' : 'Cargando...'),
-            value: supplyID,
-            isExpanded: true,
-            onChanged: (newValue) {
-              updateSupply(newValue);
-            },
-            items: listItems.map((item) {
-              return DropdownMenuItem(
-                child: Text(item.name),
-                value: item.id,
-              );
-            }).toList(),
-            decoration: new InputDecoration(
-              //labelText: "Insumo",
-              enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+          child: Container(
+            height: MediaQuery.of(context).size.height * 0.11,
+            width: MediaQuery.of(context).size.width * 0.8,
+            child: DropdownButtonFormField(
+              validator: (value) => value == null ? 'Campo requerido' : null,
+              hint: Text(snapshot.hasData ? 'Seleccione un insumo' : 'Cargando...'),
+              value: supplyID,
+              isExpanded: true,
+              onChanged: (newValue) {
+                updateSupply(newValue);
+              },
+              items: listItems.map((item) {
+                return DropdownMenuItem(
+                  child: Text(item.name),
+                  value: item.id,
+                );
+              }).toList(),
             ),
           )
         );

@@ -4,7 +4,7 @@ import 'package:agricultores_app/widgets/location/locationDropdown.dart';
 import 'package:flutter/material.dart';
 
 class DepartmentDropdown extends StatefulWidget {
-  DepartmentDropdown({this.onChanged, this.selectedDepartment});
+  DepartmentDropdown({@required this.onChanged, @required this.selectedDepartment});
 
   final onChanged;
   final selectedDepartment;
