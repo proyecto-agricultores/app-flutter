@@ -24,7 +24,6 @@ class SupplyDropdown extends StatelessWidget {
             validator: (value) => value == null ? 'Campo requerido' : null,
             hint: Text(snapshot.hasData ? 'Seleccione un insumo' : 'Cargando...'),
             value: supplyID,
-            icon: Icon(Icons.arrow_downward),
             isExpanded: true,
             onChanged: (newValue) {
               updateSupply(newValue);
