@@ -21,7 +21,7 @@ class LocationDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IgnorePointer(
-      ignoring: this.ignoreCondition,
+      ignoring: this.ignoreCondition || this.isLoading,
       child: Container(
         height: MediaQuery.of(context).size.height * 0.11,
         width: MediaQuery.of(context).size.width * 0.8,
