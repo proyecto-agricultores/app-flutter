@@ -11,13 +11,22 @@ import 'package:flutter/services.dart' show DeviceOrientation, SystemChrome;
 import 'locationRegisterScreen.dart';
 
 class PhotoRegisterScreen extends StatefulWidget {
-  PhotoRegisterScreen({Key key}) : super(key: key);
+  PhotoRegisterScreen({
+    Key key,
+    this.returnToProfile = false,
+  }) : super(key: key);
+
+  final bool returnToProfile;
 
   @override
-  _PhotoRegisterScreenState createState() => _PhotoRegisterScreenState();
+  _PhotoRegisterScreenState createState() =>
+      _PhotoRegisterScreenState(returnToProfile: returnToProfile);
 }
 
 class _PhotoRegisterScreenState extends State<PhotoRegisterScreen> {
+  _PhotoRegisterScreenState({this.returnToProfile = false});
+  var returnToProfile;
+
   File _image;
   final picker = ImagePicker();
   bool isLoading = false;
@@ -45,8 +54,10 @@ class _PhotoRegisterScreenState extends State<PhotoRegisterScreen> {
     );
     return Scaffold(
       appBar: AppBar(
-        title: Text('Registro'),
-        automaticallyImplyLeading: false,
+        title: Text(
+          this.returnToProfile ? 'Cambiar foto de perfil' : 'Registro',
+        ),
+        automaticallyImplyLeading: this.returnToProfile,
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -132,12 +143,16 @@ class _PhotoRegisterScreenState extends State<PhotoRegisterScreen> {
                             var response = await UploadProfilePictureService
                                 .uploadProfilePicture(_image.path);
                             print(response);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => LocationRegisterScreen(),
-                              ),
-                            );
+                            !this.returnToProfile
+                                ? Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          LocationRegisterScreen(),
+                                    ),
+                                  )
+                                : Navigator.of(context)
+                                    .popUntil((route) => route.isFirst);
                           } catch (e) {
                             print(e);
                           }
@@ -145,21 +160,23 @@ class _PhotoRegisterScreenState extends State<PhotoRegisterScreen> {
                             this.isLoading = false;
                           });
                         },
-                        text: 'Siguiente',
-                        isLoading: false,
+                        text: this.returnToProfile ? 'Guardar' : 'Siguiente',
+                        isLoading: this.isLoading,
                       ),
-                      CosechaGreenButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => LocationRegisterScreen(),
-                             )
-                          );
-                        },
-                        text: 'Continuar sin foto',
-                        isLoading: false,
-                      ),
+                      !this.returnToProfile
+                          ? CosechaGreenButton(
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          LocationRegisterScreen(),
+                                    ));
+                              },
+                              text: 'Continuar sin foto',
+                              isLoading: false,
+                            )
+                          : Container(),
                     ],
                   ),
                 ),

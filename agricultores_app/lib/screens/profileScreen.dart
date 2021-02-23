@@ -3,6 +3,7 @@ import 'package:agricultores_app/screens/cultivosAndOrders/cultivos/crearCutivoS
 import 'package:agricultores_app/screens/cultivosAndOrders/cultivoAndOrderScreen.dart';
 import 'package:agricultores_app/screens/cultivosAndOrders/orders/createOrderScreen.dart';
 import 'package:agricultores_app/screens/cultivosAndOrders/todosCultivosAndOrderScreen.dart';
+import 'package:agricultores_app/screens/register/photoRegisterScreen.dart';
 import 'package:agricultores_app/services/myOrderService.dart';
 import 'package:agricultores_app/services/myProfileService.dart';
 import 'package:agricultores_app/services/myPubService.dart';
@@ -181,13 +182,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       );
     } else {
-      return Container(
-        height: 150,
-        width: 150,
-        margin: EdgeInsets.only(bottom: 70),
-        child: CircleAvatar(
-          backgroundImage: NetworkImage(snapshot.data.profilePicture),
-        ),
+      return Stack(
+        children: [
+          GestureDetector(
+            onTap: () => {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return PhotoRegisterScreen(returnToProfile: true);
+                  },
+                ),
+              ),
+            },
+            child: Icon(
+              Icons.edit,
+              color: Colors.white,
+            ),
+          ),
+          Container(
+            height: 150,
+            width: 150,
+            margin: EdgeInsets.only(bottom: 70),
+            child: CircleAvatar(
+              backgroundImage: NetworkImage(snapshot.data.profilePicture),
+            ),
+          ),
+        ],
       );
     }
   }
