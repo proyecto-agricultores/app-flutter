@@ -3,8 +3,6 @@ import 'dart:io';
 import 'package:agricultores_app/models/myPubModel.dart';
 import 'package:agricultores_app/services/myPubService.dart';
 import 'package:agricultores_app/widgets/cultivos_orders/cosechaForm.dart';
-import 'package:agricultores_app/widgets/cultivos_orders/imageCarouselWidget.dart';
-import 'package:agricultores_app/widgets/general/divider.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'
@@ -43,6 +41,8 @@ class _EditarCultivoScreenState extends State<EditarCultivoScreen> {
 
   List<String> pictureURLsToDelete = List<String>();
   List<String> pictureURLs = List<String>();
+  List<File> newPicturesToUpload = List<File>();
+
   final picker = ImagePicker();
 
   _EditarCultivoScreenState(
@@ -89,19 +89,19 @@ class _EditarCultivoScreenState extends State<EditarCultivoScreen> {
     );
   }
 
-  // Future getImage(ImageSource src) async {
-  //   final pickedFile = await picker.getImage(source: src);
+  Future getImage(ImageSource src) async {
+    final pickedFile = await picker.getImage(source: src);
 
-  //   setState(
-  //     () {
-  //       if (pickedFile != null) {
-  //         _images.add(File(pickedFile.path));
-  //       } else {
-  //         print('No image selected.');
-  //       }
-  //     },
-  //   );
-  // }
+    setState(
+      () {
+        if (pickedFile != null) {
+          newPicturesToUpload.add(File(pickedFile.path));
+        } else {
+          print('No image selected.');
+        }
+      },
+    );
+  }
 
   _onPressed() async {
     if (_formKey.currentState.validate()) {
@@ -135,6 +135,14 @@ class _EditarCultivoScreenState extends State<EditarCultivoScreen> {
             this.cultivoId,
             this.pictureURLsToDelete,
           );
+        }
+        if (newPicturesToUpload.isNotEmpty) {
+          for (var image in newPicturesToUpload) {
+            await MyPubService.appendPubPicture(
+              this.cultivoId,
+              image.path,
+            );
+          }
         }
         setState(() {
           this.isLoading = false;
@@ -213,43 +221,78 @@ class _EditarCultivoScreenState extends State<EditarCultivoScreen> {
                         enlargeCenterPage: true,
                       ),
                       items: this.pictureURLs.map<Widget>(
-                        (item) {
-                          return Container(
-                            child: Center(
-                              child: Stack(
-                                children: [
-                                  Image.network(
-                                    item,
-                                    fit: BoxFit.cover,
-                                    height: 200,
-                                  ),
-                                  Positioned(
-                                    top: 0,
-                                    right: -20,
-                                    child: RawMaterialButton(
-                                      elevation: 2.0,
-                                      fillColor: Colors.red,
-                                      child: Icon(
-                                        Icons.close,
-                                        size: 25.0,
-                                        color: Colors.white,
+                            (item) {
+                              return Container(
+                                child: Center(
+                                  child: Stack(
+                                    children: [
+                                      Image.network(
+                                        item,
+                                        fit: BoxFit.cover,
+                                        height: 200,
                                       ),
-                                      shape: CircleBorder(),
-                                      onPressed: () {
-                                        pictureURLs.remove(item);
-                                        print(item);
-                                        pictureURLsToDelete.add(item);
-                                        setState(() {});
-                                      },
+                                      Positioned(
+                                        top: 0,
+                                        right: -20,
+                                        child: RawMaterialButton(
+                                          elevation: 2.0,
+                                          fillColor: Colors.red,
+                                          child: Icon(
+                                            Icons.close,
+                                            size: 25.0,
+                                            color: Colors.white,
+                                          ),
+                                          shape: CircleBorder(),
+                                          onPressed: () {
+                                            pictureURLs.remove(item);
+                                            print(item);
+                                            pictureURLsToDelete.add(item);
+                                            setState(() {});
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ).toList() +
+                          newPicturesToUpload
+                              .map(
+                                (item) => Container(
+                                  height: 500.0,
+                                  decoration: new BoxDecoration(
+                                    color: const Color(0xff7c94b6),
+                                    image: DecorationImage(
+                                      image: new FileImage(item),
+                                      fit: BoxFit.cover,
                                     ),
                                   ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      ).toList(),
+                                ),
+                              )
+                              .toList(),
                     ),
+                  ),
+                  SizedBox(height: 30),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("Agregar Imágenes: "),
+                      SizedBox(width: 10),
+                      FloatingActionButton(
+                        onPressed: () => this.getImage(ImageSource.camera),
+                        tooltip: 'Pick Image',
+                        child: Icon(Icons.add_a_photo),
+                        heroTag: 'camera',
+                      ),
+                      SizedBox(width: 10),
+                      FloatingActionButton(
+                        onPressed: () => this.getImage(ImageSource.gallery),
+                        tooltip: 'Pick Image From Library',
+                        child: Icon(Icons.photo_library),
+                        heroTag: 'library',
+                      )
+                    ],
                   ),
                   CosechaForm(
                     unitPriceController: this.unitPriceController,
