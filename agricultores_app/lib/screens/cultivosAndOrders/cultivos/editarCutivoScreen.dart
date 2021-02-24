@@ -222,44 +222,40 @@ class _EditarCultivoScreenState extends State<EditarCultivoScreen> {
                       ),
                       items: this.pictureURLs.map<Widget>(
                             (item) {
-                              return Container(
-                                child: Center(
-                                  child: Stack(
-                                    children: [
-                                      Image.network(
-                                        item,
-                                        fit: BoxFit.cover,
-                                        height: 200,
-                                      ),
-                                      Positioned(
-                                        top: 0,
-                                        right: -20,
-                                        child: RawMaterialButton(
-                                          elevation: 2.0,
-                                          fillColor: Colors.red,
-                                          child: Icon(
-                                            Icons.close,
-                                            size: 25.0,
-                                            color: Colors.white,
-                                          ),
-                                          shape: CircleBorder(),
-                                          onPressed: () {
-                                            pictureURLs.remove(item);
-                                            print(item);
-                                            pictureURLsToDelete.add(item);
-                                            setState(() {});
-                                          },
-                                        ),
-                                      ),
-                                    ],
+                              return Stack(
+                                children: [
+                                  Image.network(
+                                    item,
+                                    fit: BoxFit.cover,
+                                    height: 200,
                                   ),
-                                ),
+                                  Positioned(
+                                    top: 0,
+                                    right: -20,
+                                    child: RawMaterialButton(
+                                      elevation: 2.0,
+                                      fillColor: Colors.red,
+                                      child: Icon(
+                                        Icons.close,
+                                        size: 25.0,
+                                        color: Colors.white,
+                                      ),
+                                      shape: CircleBorder(),
+                                      onPressed: () {
+                                        pictureURLs.remove(item);
+                                        pictureURLsToDelete.add(item);
+                                        setState(() {});
+                                      },
+                                    ),
+                                  ),
+                                ],
                               );
                             },
                           ).toList() +
-                          newPicturesToUpload
-                              .map(
-                                (item) => Container(
+                          newPicturesToUpload.map((item) {
+                            return Stack(
+                              children: [
+                                Container(
                                   height: 500.0,
                                   decoration: new BoxDecoration(
                                     color: const Color(0xff7c94b6),
@@ -269,8 +265,27 @@ class _EditarCultivoScreenState extends State<EditarCultivoScreen> {
                                     ),
                                   ),
                                 ),
-                              )
-                              .toList(),
+                                Positioned(
+                                  top: 0,
+                                  right: -20,
+                                  child: RawMaterialButton(
+                                    elevation: 2.0,
+                                    fillColor: Colors.red,
+                                    child: Icon(
+                                      Icons.close,
+                                      size: 25.0,
+                                      color: Colors.white,
+                                    ),
+                                    shape: CircleBorder(),
+                                    onPressed: () {
+                                      newPicturesToUpload.remove(item);
+                                      setState(() {});
+                                    },
+                                  ),
+                                ),
+                              ],
+                            );
+                          }).toList(),
                     ),
                   ),
                   SizedBox(height: 30),
