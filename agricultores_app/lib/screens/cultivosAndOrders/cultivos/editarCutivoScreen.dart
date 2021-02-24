@@ -1,6 +1,11 @@
+import 'dart:io';
+
 import 'package:agricultores_app/models/myPubModel.dart';
 import 'package:agricultores_app/services/myPubService.dart';
 import 'package:agricultores_app/widgets/cultivos_orders/cosechaForm.dart';
+import 'package:agricultores_app/widgets/cultivos_orders/imageCarouselWidget.dart';
+import 'package:agricultores_app/widgets/general/divider.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'
     show
@@ -8,6 +13,7 @@ import 'package:flutter/services.dart'
         FilteringTextInputFormatter,
         SystemChrome,
         TextInputFormatter;
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 class EditarCultivoScreen extends StatefulWidget {
@@ -34,6 +40,10 @@ class _EditarCultivoScreenState extends State<EditarCultivoScreen> {
   final int cultivoId;
   final String titulo;
   final dataCultivo;
+
+  List<String> pictureURLsToDelete = List<String>();
+  List<String> pictureURLs = List<String>();
+  final picker = ImagePicker();
 
   _EditarCultivoScreenState(
     this.cultivoId,
@@ -79,6 +89,20 @@ class _EditarCultivoScreenState extends State<EditarCultivoScreen> {
     );
   }
 
+  // Future getImage(ImageSource src) async {
+  //   final pickedFile = await picker.getImage(source: src);
+
+  //   setState(
+  //     () {
+  //       if (pickedFile != null) {
+  //         _images.add(File(pickedFile.path));
+  //       } else {
+  //         print('No image selected.');
+  //       }
+  //     },
+  //   );
+  // }
+
   _onPressed() async {
     if (_formKey.currentState.validate()) {
       setState(() {
@@ -106,6 +130,12 @@ class _EditarCultivoScreenState extends State<EditarCultivoScreen> {
             ),
           ),
         );
+        if (pictureURLsToDelete.isNotEmpty) {
+          await MyPubService.deletePubPicture(
+            this.cultivoId,
+            this.pictureURLsToDelete,
+          );
+        }
         setState(() {
           this.isLoading = false;
         });
@@ -143,6 +173,7 @@ class _EditarCultivoScreenState extends State<EditarCultivoScreen> {
     areaController.text = dataCultivo.area.toString();
     harvestDateController.text = formatter.format(dataCultivo.harvestDate);
     sowingDateController.text = formatter.format(dataCultivo.sowingDate);
+    pictureURLs = dataCultivo.pictureURLs;
   }
 
   @override
@@ -155,39 +186,95 @@ class _EditarCultivoScreenState extends State<EditarCultivoScreen> {
       ],
     );
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Editar: ' + titulo),
-        ),
-        body: Column(children: [
+      appBar: AppBar(
+        title: Text('Editar: ' + titulo),
+      ),
+      body: Column(
+        children: [
           Expanded(
-              child: SingleChildScrollView(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 40.0,
+            child: SingleChildScrollView(
+              padding: EdgeInsets.symmetric(
+                horizontal: 40.0,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(
+                    height: 15,
                   ),
-                  child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        CosechaForm(
-                          unitPriceController: this.unitPriceController,
-                          weightUnit: this.weightUnit,
-                          updateWeightUnit: this.updateWeightUnit,
-                          areaController: this.areaController,
-                          areaUnit: this.areaUnit,
-                          updateAreaUnit: this.updateAreaUnit,
-                          updateDate: this.updateDate,
-                          sowingDateController: this.sowingDateController,
-                          selectedSowingDate: this.selectedSowingDate,
-                          harvestDateController: this.harvestDateController,
-                          selectedHarvestDate: this.selectedHarvestDate,
-                          onPressed: this._onPressed,
-                          isLoading: this.isLoading,
-                          formKey: this._formKey,
-                          buttonText: 'Guardar Cambios',
-                          hasSupply: false,
-                        )
-                      ])))
-        ]));
+                  Container(
+                    child: CarouselSlider(
+                      options: CarouselOptions(
+                        height: 200.0,
+                        viewportFraction: 0.6,
+                        enableInfiniteScroll: false,
+                        enlargeCenterPage: true,
+                      ),
+                      items: this.pictureURLs.map<Widget>(
+                        (item) {
+                          return Container(
+                            child: Center(
+                              child: Stack(
+                                children: [
+                                  Image.network(
+                                    item,
+                                    fit: BoxFit.cover,
+                                    height: 200,
+                                  ),
+                                  Positioned(
+                                    top: 0,
+                                    right: -20,
+                                    child: RawMaterialButton(
+                                      elevation: 2.0,
+                                      fillColor: Colors.red,
+                                      child: Icon(
+                                        Icons.close,
+                                        size: 25.0,
+                                        color: Colors.white,
+                                      ),
+                                      shape: CircleBorder(),
+                                      onPressed: () {
+                                        pictureURLs.remove(item);
+                                        print(item);
+                                        pictureURLsToDelete.add(item);
+                                        setState(() {});
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ).toList(),
+                    ),
+                  ),
+                  CosechaForm(
+                    unitPriceController: this.unitPriceController,
+                    weightUnit: this.weightUnit,
+                    updateWeightUnit: this.updateWeightUnit,
+                    areaController: this.areaController,
+                    areaUnit: this.areaUnit,
+                    updateAreaUnit: this.updateAreaUnit,
+                    updateDate: this.updateDate,
+                    sowingDateController: this.sowingDateController,
+                    selectedSowingDate: this.selectedSowingDate,
+                    harvestDateController: this.harvestDateController,
+                    selectedHarvestDate: this.selectedHarvestDate,
+                    onPressed: this._onPressed,
+                    isLoading: this.isLoading,
+                    formKey: this._formKey,
+                    buttonText: 'Guardar Cambios',
+                    hasSupply: false,
+                  )
+                ],
+              ),
+            ),
+          )
+        ],
+      ),
+    );
   }
 }

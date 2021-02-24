@@ -12,28 +12,26 @@ import 'cosechaCalendar.dart';
 import 'cosechaTextFormField.dart';
 
 class CosechaForm extends StatelessWidget {
-  CosechaForm(
-    {
-      this.supplyID,
-      this.updateSupply,
-      this.unitPriceController,
-      this.weightUnit,
-      this.updateWeightUnit,
-      this.areaController,
-      this.areaUnit,
-      this.updateAreaUnit,
-      this.updateDate,
-      this.sowingDateController,
-      this.selectedSowingDate,
-      this.harvestDateController,
-      this.selectedHarvestDate,
-      this.onPressed,
-      this.isLoading,
-      this.formKey,
-      this.buttonText,
-      this.hasSupply,
-    }
-  );
+  CosechaForm({
+    this.supplyID,
+    this.updateSupply,
+    this.unitPriceController,
+    this.weightUnit,
+    this.updateWeightUnit,
+    this.areaController,
+    this.areaUnit,
+    this.updateAreaUnit,
+    this.updateDate,
+    this.sowingDateController,
+    this.selectedSowingDate,
+    this.harvestDateController,
+    this.selectedHarvestDate,
+    this.onPressed,
+    this.isLoading,
+    this.formKey,
+    this.buttonText,
+    this.hasSupply,
+  });
 
   final supplyID;
   final updateSupply;
@@ -53,21 +51,16 @@ class CosechaForm extends StatelessWidget {
   final formKey;
   final buttonText;
   final hasSupply;
-  
+
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: formKey,
-      child: Column(
-        children: [
+        key: formKey,
+        child: Column(children: [
           this.hasSupply
-          ?
-          SupplyDropdown(
-            supplyID: this.supplyID,
-            updateSupply: updateSupply
-          )
-          :
-          Container(),
+              ? SupplyDropdown(
+                  supplyID: this.supplyID, updateSupply: updateSupply)
+              : Container(),
           Separator(height: 0.01),
           CosechaDivider(),
           Separator(height: 0.01),
@@ -79,10 +72,9 @@ class CosechaForm extends StatelessWidget {
           ),
           Separator(height: 0.01),
           UnitDropdown(
-            initialUnit: this.weightUnit,
-            updateUnit: updateWeightUnit,
-            items: PriceUnit.getPriceUnits()
-          ),
+              initialUnit: this.weightUnit,
+              updateUnit: updateWeightUnit,
+              items: PriceUnit.getPriceUnits()),
           CosechaDivider(),
           Separator(height: 0.01),
           CosechaTextFormField(
@@ -92,25 +84,22 @@ class CosechaForm extends StatelessWidget {
             unit: this.areaUnit,
           ),
           UnitDropdown(
-            initialUnit: this.areaUnit,
-            updateUnit: updateAreaUnit,
-            items: AreaUnit.getAreaUnits()
-          ), 
+              initialUnit: this.areaUnit,
+              updateUnit: updateAreaUnit,
+              items: AreaUnit.getAreaUnits()),
           Separator(height: 0.01),
           CosechaDivider(),
           CosechaCalendar(
-            updateDate: this.updateDate,
-            controller: this.sowingDateController,
-            selectedDate: this.selectedSowingDate,
-            label: "Fecha de siembra"
-          ),
+              updateDate: this.updateDate,
+              controller: this.sowingDateController,
+              selectedDate: this.selectedSowingDate,
+              label: "Fecha de siembra"),
           Separator(height: 0.01),
           CosechaCalendar(
-            updateDate: this.updateDate,
-            controller: this.harvestDateController,
-            selectedDate: this.selectedHarvestDate,
-            label: "Fecha de cosecha"
-          ),
+              updateDate: this.updateDate,
+              controller: this.harvestDateController,
+              selectedDate: this.selectedHarvestDate,
+              label: "Fecha de cosecha"),
           SizedBox(height: 20),
           CosechaGreenButton(
             onPressed: this.onPressed,
@@ -118,8 +107,6 @@ class CosechaForm extends StatelessWidget {
             isLoading: this.isLoading,
           ),
           CancelButton(),
-        ]
-      )
-    );
+        ]));
   }
 }

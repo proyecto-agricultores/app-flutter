@@ -100,8 +100,6 @@ class _CultivoAndOrderScreenState extends State<CultivoAndOrderScreen> {
                                         .map<Widget>((item) => Container(
                                               child: Center(
                                                 child: Image.network(
-                                                  // item.replaceAll(
-                                                  //     'https', 'http'),
                                                   item,
                                                   fit: BoxFit.cover,
                                                   height: 200,

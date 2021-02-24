@@ -84,7 +84,6 @@ class MyPubService {
     }
   }
 
-
   static Future getFeaturedPubFromUser() async {
     final response = await HTTPClient.getClient(WithToken.yes).get(
       MyHTTPConection.HTTP_URL + 'myFeaturedPub/',
@@ -239,6 +238,23 @@ class MyPubService {
       return Exception('El archivo es muy grande');
     } else {
       throw Exception('Error.');
+    }
+  }
+
+  static Future deletePubPicture(
+      int id, List<String> pictureURLsToDelete) async {
+    final response = await HTTPClient.getClient(WithToken.yes).post(
+      MyHTTPConection.HTTP_URL + 'detetePubPicture/' + id.toString() + '/',
+      body: jsonEncode(
+        {
+          "picture_URLs": pictureURLsToDelete,
+        },
+      ),
+    );
+    if (response.statusCode == 204) {
+      return 'OK';
+    } else {
+      throw Exception('Error al eliminar.');
     }
   }
 }
