@@ -178,8 +178,8 @@ class MyPubService {
       body: jsonEncode(
         {
           "supplies": supplyId,
-          "weight_unit": myPub.weightUnit,
-          "unit_price": myPub.unitPrice,
+          "weight_unit": 'kg',
+          // "unit_price": myPub.unitPrice,
           "area_unit": myPub.areaUnit,
           "area": myPub.area,
           "harvest_date": myPub.harvestDate.toUtc().toString(),
@@ -191,7 +191,7 @@ class MyPubService {
 
     if (response.statusCode == 201) {
       var json = jsonDecode(utf8.decode(response.bodyBytes));
-      return MyPub.fromJson(json);
+      return MyPub.fromJsonWithoutPrice(json);
     } else {
       throw Exception('Error al crear.');
     }

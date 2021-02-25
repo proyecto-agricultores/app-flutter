@@ -165,6 +165,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                     formKey: this._formKey,
                     buttonText: 'Crear Orden',
                     hasSupply: true,
+                    hasPrice: true,
                   )
                 ]
               )

@@ -23,23 +23,10 @@ class EditarCultivoScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _EditarCultivoScreenState createState() => _EditarCultivoScreenState(
-        cultivoId,
-        titulo,
-        dataCultivo,
-      );
+  _EditarCultivoScreenState createState() => _EditarCultivoScreenState();
 }
 
 class _EditarCultivoScreenState extends State<EditarCultivoScreen> {
-  final int cultivoId;
-  final String titulo;
-  final dataCultivo;
-
-  _EditarCultivoScreenState(
-    this.cultivoId,
-    this.titulo,
-    this.dataCultivo,
-  );
   bool isLoading = false;
 
   DateTime selectedHarvestDate = DateTime.now();
@@ -87,7 +74,7 @@ class _EditarCultivoScreenState extends State<EditarCultivoScreen> {
       try {
         final update = await MyPubService.update(
           MyPub(
-            id: this.cultivoId,
+            id: this.widget.cultivoId,
             supplieName: null,
             pictureURLs: null,
             weightUnit: this.weightUnit,
@@ -137,12 +124,12 @@ class _EditarCultivoScreenState extends State<EditarCultivoScreen> {
   @override
   void initState() {
     super.initState();
-    weightUnit = dataCultivo.weightUnit;
-    unitPriceController.text = dataCultivo.unitPrice.toString();
-    areaUnit = dataCultivo.areaUnit;
-    areaController.text = dataCultivo.area.toString();
-    harvestDateController.text = formatter.format(dataCultivo.harvestDate);
-    sowingDateController.text = formatter.format(dataCultivo.sowingDate);
+    weightUnit = this.widget.dataCultivo.weightUnit;
+    unitPriceController.text = this.widget.dataCultivo.unitPrice != null ? this.widget.dataCultivo.unitPrice.toString() : '';
+    areaUnit = this.widget.dataCultivo.areaUnit;
+    areaController.text = this.widget.dataCultivo.area.toString();
+    harvestDateController.text = formatter.format(this.widget.dataCultivo.harvestDate);
+    sowingDateController.text = formatter.format(this.widget.dataCultivo.sowingDate);
   }
 
   @override
@@ -156,7 +143,7 @@ class _EditarCultivoScreenState extends State<EditarCultivoScreen> {
     );
     return Scaffold(
         appBar: AppBar(
-          title: Text('Editar: ' + titulo),
+          title: Text('Editar: ' + this.widget.titulo),
         ),
         body: Column(children: [
           Expanded(
@@ -186,6 +173,7 @@ class _EditarCultivoScreenState extends State<EditarCultivoScreen> {
                           formKey: this._formKey,
                           buttonText: 'Guardar Cambios',
                           hasSupply: false,
+                          hasPrice: true,
                         )
                       ])))
         ]));
