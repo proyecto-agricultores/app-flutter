@@ -173,33 +173,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       );
     } else if (snapshot.data.profilePicture == null) {
-      return Container(
-        height: 150,
-        width: 150,
-        margin: EdgeInsets.only(bottom: 70),
-        child: CircleAvatar(
-          backgroundImage: AssetImage("assets/images/user-placeholder.png"),
-        ),
+      return Stack(
+        children: [
+          this._imageIcon(Icons.add),
+          Container(
+            height: 150,
+            width: 150,
+            margin: EdgeInsets.only(bottom: 70),
+            child: CircleAvatar(
+              backgroundImage: AssetImage("assets/images/user-placeholder.png"),
+            ),
+          ),
+        ],
       );
     } else {
       return Stack(
         children: [
-          GestureDetector(
-            onTap: () => {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return PhotoRegisterScreen(returnToProfile: true);
-                  },
-                ),
-              ),
-            },
-            child: Icon(
-              Icons.edit,
-              color: Colors.white,
-            ),
-          ),
+          this._imageIcon(Icons.edit),
           Container(
             height: 150,
             width: 150,
@@ -258,6 +248,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
       ],
+    );
+  }
+
+  Widget _imageIcon(IconData type) {
+    return GestureDetector(
+      onTap: () => {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return PhotoRegisterScreen(returnToProfile: true);
+            },
+          ),
+        ),
+      },
+      child: Icon(
+        type,
+        color: Colors.white,
+      ),
     );
   }
 
