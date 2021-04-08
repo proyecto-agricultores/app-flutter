@@ -27,7 +27,11 @@ class EditarCultivoScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _EditarCultivoScreenState createState() => _EditarCultivoScreenState();
+  _EditarCultivoScreenState createState() => _EditarCultivoScreenState(
+        cultivoId,
+        titulo,
+        dataCultivo,
+      );
 }
 
 class _EditarCultivoScreenState extends State<EditarCultivoScreen> {
@@ -322,7 +326,8 @@ class _EditarCultivoScreenState extends State<EditarCultivoScreen> {
                     isLoading: this.isLoading,
                     formKey: this._formKey,
                     buttonText: 'Guardar Cambios',
-                    hasSupply: false,
+                    hasSupply: false, 
+                    hasPrice: true,
                   )
                 ],
               ),
