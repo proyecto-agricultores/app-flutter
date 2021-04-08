@@ -27,11 +27,7 @@ class EditarCultivoScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _EditarCultivoScreenState createState() => _EditarCultivoScreenState(
-        cultivoId,
-        titulo,
-        dataCultivo,
-      );
+  _EditarCultivoScreenState createState() => _EditarCultivoScreenState();
 }
 
 class _EditarCultivoScreenState extends State<EditarCultivoScreen> {
@@ -50,6 +46,7 @@ class _EditarCultivoScreenState extends State<EditarCultivoScreen> {
     this.titulo,
     this.dataCultivo,
   );
+
   bool isLoading = false;
 
   DateTime selectedHarvestDate = DateTime.now();
@@ -111,7 +108,7 @@ class _EditarCultivoScreenState extends State<EditarCultivoScreen> {
       try {
         final update = await MyPubService.update(
           MyPub(
-            id: this.cultivoId,
+            id: this.widget.cultivoId,
             supplieName: null,
             pictureURLs: null,
             weightUnit: this.weightUnit,

@@ -470,13 +470,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ],
                                 ),
                                 Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text('Costo: '),
-                                    Text(listResponse[index]
-                                        .unitPrice
-                                        .toString()),
-                                    Text(' x '),
-                                    Text(listResponse[index].weightUnit),
+                                    listResponse[index].unitPrice.toString() != 'null'
+                                    ? 
+                                    Row(
+                                      children: [
+                                        Text(listResponse[index].unitPrice.toString()),
+                                        Text(' x '),
+                                        Text(listResponse[index].weightUnit),
+                                      ],
+                                    )
+                                    : Text('Por asignar')
                                   ],
                                 ),
                               ],

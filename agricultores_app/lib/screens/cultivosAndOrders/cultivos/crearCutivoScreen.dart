@@ -78,10 +78,8 @@ class _CrearCultivoScreenState extends State<CrearCultivoScreen> {
             await MyPubService.create(
           supplyID,
           MyPub(
-            weightUnit: this.weightUnit,
-            unitPrice: double.parse(
-              unitPriceController.text,
-            ),
+            // weightUnit: null,
+            // unitPrice: null,
             areaUnit: this.areaUnit,
             area: double.parse(
               areaController.text,
@@ -130,6 +128,7 @@ class _CrearCultivoScreenState extends State<CrearCultivoScreen> {
           },
         );
       } catch (e) {
+        print(e.toString());
         throw e;
       }
     }
@@ -199,6 +198,7 @@ class _CrearCultivoScreenState extends State<CrearCultivoScreen> {
                     formKey: this._formKey,
                     buttonText: 'Crear Cultivo',
                     hasSupply: true,
+                    hasPrice: false,
                   )
                 ]
               )

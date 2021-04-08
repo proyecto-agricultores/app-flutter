@@ -134,9 +134,16 @@ class _CultivoAndOrderScreenState extends State<CultivoAndOrderScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text('Costo: '),
-                              Text(snapshot.data.unitPrice.toString()),
-                              Text(' x '),
-                              Text(snapshot.data.weightUnit),
+                              snapshot.data.unitPrice.toString() != 'null'
+                              ? 
+                              Row(
+                                children: [
+                                  Text(snapshot.data.unitPrice.toString()),
+                                  Text(' x '),
+                                  Text(snapshot.data.weightUnit),
+                                ],
+                              )
+                              : Text('Por asignar')
                             ],
                           ),
                           Row(

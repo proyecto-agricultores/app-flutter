@@ -36,4 +36,19 @@ class MyPub {
       sowingDate: DateTime.parse(json['sowing_date']),
     );
   }
+
+  factory MyPub.fromJsonWithoutPrice(Map<String, dynamic> json) {
+    var genreIdsFromJson = json['picture_URLs'];
+    List<String> pictureURLsTemp = new List<String>.from(genreIdsFromJson);
+    return MyPub(
+      id: json['id'],
+      supplieName: json['supplies']['name'],
+      pictureURLs: pictureURLsTemp,
+      weightUnit: 'kg',
+      areaUnit: json['area_unit'],
+      area: json['area'],
+      harvestDate: DateTime.parse(json['harvest_date']),
+      sowingDate: DateTime.parse(json['sowing_date']),
+    );
+  }
 }
