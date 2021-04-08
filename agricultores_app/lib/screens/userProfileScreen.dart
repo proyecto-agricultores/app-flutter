@@ -61,7 +61,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      endDrawer: Drawer(),
       body: FutureBuilder(
         future: MyProfileService.getLoggedinUser(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -110,7 +109,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       floating: true,
       snap: true,
       pinned: true,
-      expandedHeight: 300.0,
+      expandedHeight: 260.0,
       backgroundColor:
           this.role == 'ag' ? Color(0xff09B44D) : Color(0xfffc6e08),
       shape: ContinuousRectangleBorder(
@@ -142,44 +141,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           ],
         ),
       ),
-      actions: <Widget>[
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              child: Column(
-                children: [
-                  Icon(Icons.person_outlined),
-                  Text("Perfil"),
-                ],
-              ),
-            ),
-            Container(
-              child: Column(
-                children: [
-                  Icon(Icons.coronavirus_outlined),
-                  Text("Cultivos"),
-                ],
-              ),
-            ),
-            Container(
-              child: Column(
-                children: [
-                  Icon(Icons.person_outlined),
-                  Text("Pedidos"),
-                ],
-              ),
-            ),
-          ],
-        ),
-        IconButton(
-          icon: Icon(Icons.menu, color: Colors.white),
-          onPressed: () {
-            _scaffoldKey.currentState.openEndDrawer();
-          },
-        ),
-      ],
     );
   }
 

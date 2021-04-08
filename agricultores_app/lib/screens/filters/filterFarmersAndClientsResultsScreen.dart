@@ -70,12 +70,6 @@ class _FilterFarmersAndClientsResultsScreenScreenState
                   child: Column(
                     children: <Widget>[
                       SizedBox(height: 30),
-                      CosechaGreenButton(
-                          text: 'Nueva búsqueda',
-                          isLoading: false,
-                          onPressed: () {
-                            Navigator.pop(context);
-                          }),
                       this._carruselUsuarios(false),
                     ],
                   ),
