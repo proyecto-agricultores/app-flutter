@@ -53,21 +53,15 @@ class CosechaForm extends StatelessWidget {
   final buttonText;
   final hasSupply;
   final hasPrice;
-  
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: formKey,
-      child: Column(
-        children: [
+        key: formKey,
+        child: Column(children: [
           this.hasSupply
-          ?
-          SupplyDropdown(
-            supplyID: this.supplyID,
-            updateSupply: updateSupply
-          )
-          :
-          Container(),
+              ? SupplyDropdown(
+                  supplyID: this.supplyID, updateSupply: updateSupply)
+              : Container(),
           Separator(height: 0.01),
           this.hasPrice 
           ? Column(
@@ -104,18 +98,16 @@ class CosechaForm extends StatelessWidget {
           CosechaDivider(),
           Separator(height: 0.01),
           CosechaCalendar(
-            updateDate: this.updateDate,
-            controller: this.sowingDateController,
-            selectedDate: this.selectedSowingDate,
-            label: "Fecha de siembra"
-          ),
+              updateDate: this.updateDate,
+              controller: this.sowingDateController,
+              selectedDate: this.selectedSowingDate,
+              label: "Fecha de siembra"),
           Separator(height: 0.01),
           CosechaCalendar(
-            updateDate: this.updateDate,
-            controller: this.harvestDateController,
-            selectedDate: this.selectedHarvestDate,
-            label: "Fecha de cosecha"
-          ),
+              updateDate: this.updateDate,
+              controller: this.harvestDateController,
+              selectedDate: this.selectedHarvestDate,
+              label: "Fecha de cosecha"),
           SizedBox(height: 20),
           CosechaGreenButton(
             onPressed: this.onPressed,
@@ -123,8 +115,6 @@ class CosechaForm extends StatelessWidget {
             isLoading: this.isLoading,
           ),
           CancelButton(),
-        ]
-      )
-    );
+        ]));
   }
 }

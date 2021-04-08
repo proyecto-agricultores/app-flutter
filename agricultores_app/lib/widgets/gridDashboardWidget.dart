@@ -1,6 +1,4 @@
 import 'package:agricultores_app/models/menuItems.dart';
-import 'package:agricultores_app/screens/buscadorAgricultoresScreen.dart';
-import 'package:agricultores_app/screens/buscadorCompradoresScreen.dart';
 import 'package:agricultores_app/screens/filters/filterCropsAndOrdersScreen.dart';
 import 'package:agricultores_app/screens/filters/filterFarmersAndClientsScreen.dart';
 import 'package:agricultores_app/screens/loginScreen.dart';
