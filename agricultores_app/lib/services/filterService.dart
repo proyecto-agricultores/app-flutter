@@ -17,14 +17,16 @@ class FilterService {
     if (supplyID != null) queryParams['supply'] = supplyID.toString();
     if (departmentID != null) queryParams['department'] = departmentID.toString();
     if (regionID != 0 && regionID != null) queryParams['region'] = regionID.toString();
-    if (minPrice != null && minPrice != "") queryParams['minPrice'] = minPrice;
-    if (maxPrice != null && maxPrice != "") queryParams['maxPrice'] = maxPrice;
-    if (minHarvestDate != null && minHarvestDate != "") queryParams['minHarvestDate'] = minHarvestDate;
-    if (maxHarvestDate != null && maxHarvestDate != "") queryParams['maxHarvestDate'] = maxHarvestDate;
+    if (minPrice != null && minPrice != "") queryParams['min_price'] = minPrice;
+    if (maxPrice != null && maxPrice != "") queryParams['max_price'] = maxPrice;
+    if (minHarvestDate != null && minHarvestDate != "") queryParams['min_date'] = minHarvestDate;
+    if (maxHarvestDate != null && maxHarvestDate != "") queryParams['max_date'] = maxHarvestDate;
 
     String queryString = Uri(queryParameters: queryParams).query;
 
     suffix += queryString;
+
+    print(suffix);
 
     final response = await HTTPClient.getClient(WithToken.yes).get(
       MyHTTPConection.HTTP_URL + suffix,
