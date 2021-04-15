@@ -7,6 +7,7 @@ class MyOrder {
   final double area;
   final DateTime harvestDate;
   final DateTime sowingDate;
+  final bool isSolved;
 
   MyOrder({
     this.id,
@@ -17,6 +18,7 @@ class MyOrder {
     this.area,
     this.harvestDate,
     this.sowingDate,
+    this.isSolved,
   });
 
   factory MyOrder.fromJson(Map<String, dynamic> json) {
@@ -27,6 +29,7 @@ class MyOrder {
       unitPrice: json['unit_price'],
       areaUnit: json['area_unit'],
       area: json['area'],
+      isSolved: json['is_solved'],
       harvestDate: DateTime.parse(json['desired_harvest_date']),
       sowingDate: DateTime.parse(json['desired_sowing_date']),
     );

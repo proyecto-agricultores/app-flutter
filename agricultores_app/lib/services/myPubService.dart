@@ -171,6 +171,21 @@ class MyPubService {
     }
   }
 
+  static Future changeStatus(int id, bool status) async {
+    final response = await HTTPClient.getClient(WithToken.yes).put(
+      MyHTTPConection.HTTP_URL + 'myPub/$id/',
+      body: jsonEncode(
+        {"is_sold": status},
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      return "Ok";
+    } else {
+      throw Exception('Error.');
+    }
+  }
+
   static Future create(int supplyId, MyPub myPub) async {
     final response = await HTTPClient.getClient(WithToken.yes).post(
       MyHTTPConection.HTTP_URL + 'myPub/',
