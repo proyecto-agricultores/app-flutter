@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class UserProfileScreen extends StatefulWidget {
   UserProfileScreen({
@@ -16,6 +17,7 @@ class UserProfileScreen extends StatefulWidget {
     this.profilePicture,
     this.ubigeo,
     this.role,
+    this.phoneNumber,
     this.latitude,
     this.longitude,
   }) : super(key: key);
@@ -26,12 +28,21 @@ class UserProfileScreen extends StatefulWidget {
   final String lastName;
   final String profilePicture;
   final String ubigeo;
+  final String phoneNumber;
   final double latitude;
   final double longitude;
 
   @override
-  _UserProfileScreenState createState() => _UserProfileScreenState(role, id,
-      firstName, lastName, profilePicture, ubigeo, latitude, longitude);
+  _UserProfileScreenState createState() => _UserProfileScreenState(
+      role,
+      id,
+      firstName,
+      lastName,
+      profilePicture,
+      ubigeo,
+      phoneNumber,
+      latitude,
+      longitude);
 }
 
 class _UserProfileScreenState extends State<UserProfileScreen> {
@@ -41,6 +52,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   final String lastName;
   final String profilePicture;
   final String ubigeo;
+  final String phoneNumber;
   final double latitude;
   final double longitude;
 
@@ -51,6 +63,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     this.lastName,
     this.profilePicture,
     this.ubigeo,
+    this.phoneNumber,
     this.latitude,
     this.longitude,
   );
@@ -74,7 +87,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       SizedBox(height: 30),
                       this._ubicacion(snapshot, false),
                       this._verMapa(false),
-                      this._contactar(),
+                      this._contactar(snapshot, false),
                       this._carruselCultivos(false),
                     ],
                   ),
@@ -91,7 +104,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       SizedBox(height: 30),
                       this._ubicacion(snapshot, true),
                       this._verMapa(true),
-                      this._contactar(),
+                      this._contactar(snapshot, false),
                       this._carruselCultivos(true),
                     ],
                   ),
@@ -244,14 +257,22 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         : Container();
   }
 
-  Widget _contactar() {
+  Widget _contactar(AsyncSnapshot snapshot, bool isLoading) {
     return Container(
       margin: EdgeInsets.only(bottom: 15),
       child: RaisedButton(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(18.0),
         ),
-        onPressed: () {},
+        onPressed: () async {
+          String url = 'tel:' + phoneNumber;
+          if (await canLaunch(url)) {
+            await launch(url);
+          } else {
+            throw 'Could not launch $url';
+          }
+          print(phoneNumber);
+        },
         color: Colors.blue[900],
         textColor: Colors.white,
         child: Text("Contactar"),

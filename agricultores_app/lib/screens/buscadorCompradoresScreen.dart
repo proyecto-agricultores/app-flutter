@@ -173,6 +173,8 @@ class _BuscadorCompradoresScreenState extends State<BuscadorCompradoresScreen> {
                                       profilePicture:
                                           listResponse[index].profilePicture,
                                       ubigeo: listResponse[index].ubigeo,
+                                      phoneNumber:
+                                          listResponse[index].phoneNumber,
                                       latitude: listResponse[index].latitude,
                                       longitude: listResponse[index].longitude,
                                     ),
