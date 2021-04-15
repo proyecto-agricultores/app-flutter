@@ -20,10 +20,10 @@ class RegisterService {
     );
 
     if (response.body ==
-        "{\"phone_number\":[\"user with this phone number already exists.\"]}") {
+        "{\"phone_number\":[\"Usuario with this phone number already exists.\"]}") {
       return 'phone already in use';
     } else if (response.statusCode != 201) {
-      throw Exception('Error al momento de realizar el registro');
+      return ['error', response.body];
     } else if (response.statusCode == 201) {
       return 'ok';
     }

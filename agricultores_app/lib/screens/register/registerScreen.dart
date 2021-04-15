@@ -185,7 +185,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
         child: Column(
           children: [
-            CosechaLogo(scale: 5.0,),
+            CosechaLogo(
+              scale: 5.0,
+            ),
             this._buildTelephoneNumber(),
             Form(
               key: _formKey,
@@ -213,24 +215,44 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 dniOrRucController.text,
                                 passwordController.text,
                                 dniOrRuc);
-                            print(register);
-                            print(telephone);
-                            print(passwordController.text);
                             if (register == 'phone already in use') {
                               return showDialog<void>(
                                 context: context,
                                 barrierDismissible: true,
                                 builder: (BuildContext context) {
                                   return AlertDialog(
-                                    title: Text('Número de teléfono ya registrado'),
+                                    title: Text(
+                                        'Número de teléfono ya registrado'),
                                     content: Text(
                                         'Ya existe una cuenta registrada con el número de teléfono ingresado. Intente hacer log-in'),
                                     actions: <Widget>[
                                       TextButton(
                                         child: Text('Aceptar'),
                                         onPressed: () {
-                                          Navigator.of(context)
-                                              .popUntil((route) => route.isFirst);
+                                          Navigator.of(context).popUntil(
+                                              (route) => route.isFirst);
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            } else if (register[0] == 'error') {
+                              return showDialog<void>(
+                                context: context,
+                                barrierDismissible: true,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text('Error del servidor'),
+                                    content: Text(
+                                        'Se ha producido un error inesperado en el servidor.' +
+                                            register[1]),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        child: Text('Aceptar'),
+                                        onPressed: () {
+                                          Navigator.of(context).popUntil(
+                                              (route) => route.isFirst);
                                         },
                                       ),
                                     ],
