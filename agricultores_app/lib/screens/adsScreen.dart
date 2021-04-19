@@ -11,6 +11,32 @@ class AdsScreen extends StatefulWidget {
 }
 
 class _AdsScreenState extends State<AdsScreen> {
+
+  parseLocation(location, labelPlural) {
+    return location != false && location != null ? location : labelPlural;
+  }
+
+  parseLabel(label, value) {
+    return new RichText(
+      text: new TextSpan(
+        style: new TextStyle(
+          fontSize: 14.0,
+          color: Colors.black,
+          fontFamily: "Poppins",
+        ),
+        children: <TextSpan>[
+          new TextSpan(
+            text: label + ": ", 
+            style: new TextStyle(fontWeight: FontWeight.bold),
+          ),
+          new TextSpan(
+            text: value,
+          )
+        ]
+      ),
+    );
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,22 +54,54 @@ class _AdsScreenState extends State<AdsScreen> {
                   children: [
                     ListView.separated(
                       itemBuilder: (context, index) {
+                        var adInfo = listResponse[index];
                         return InkWell(
                           child: Column(
                             children: [
+                              Text(
+                                adInfo.name, 
+                                style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                                textAlign: TextAlign.center,
+                              ),
+                              SizedBox(height: 10,),
                               Image(
                                   height: 150,
                                   width: MediaQuery.of(context).size.width,
                                   image: NetworkImage(
-                                      listResponse[index].pictureURL)),
-                              Text(listResponse[index].name),
-                              Text(listResponse[index]
-                                  .remainingCredits
-                                  .toString()),
-                              Text(listResponse[index].name),
-                              Text(listResponse[index].name),
-                              Text(listResponse[index].name),
-                              Text(listResponse[index].name),
+                                      adInfo.pictureURL)),
+                              SizedBox(height: 10,),
+                              parseLabel("Créditos asignados", adInfo.originalCredits.toString()),
+                              parseLabel("Créditos restantes", adInfo.remainingCredits.toString()),
+                              parseLabel(
+                                "Departamento",
+                                parseLocation(adInfo.departmentName, "Todos los departamentos."),
+                              ),
+                              parseLabel(
+                                "Región",
+                                parseLocation(adInfo.regionName, "Todas las regiones."),
+                              ),
+                              parseLabel(
+                                "Distrito",
+                                parseLocation(adInfo.departmentName, "Todos los departamentos."),
+                              ),
+                              parseLabel("Para órdenes", adInfo.forOrders ? "Sí." : "No."),
+                              parseLabel("Para pedidos", adInfo.forOrders ? "Sí." : "No."),
+                              parseLabel(
+                                "Inicio de siembra", 
+                                adInfo.beginningSowingDate == null ? "No asignado." : adInfo.beginningSowingDate
+                              ),
+                              parseLabel(
+                                "Fin de siembra", 
+                                adInfo.endingSowingDate == null ? "No asignado." : adInfo.endingSowingDate
+                              ),
+                              parseLabel(
+                                "Inicio de cosecha", 
+                                adInfo.beginningHarvestDate == null ? "No asignado." : adInfo.beginningHarvestDate
+                              ),
+                              parseLabel(
+                                "Fin de cosecha", 
+                                adInfo.endingHarvestDate == null ? "No asignado." : adInfo.endingHarvestDate
+                              ),
                             ],
                           ),
                         );
