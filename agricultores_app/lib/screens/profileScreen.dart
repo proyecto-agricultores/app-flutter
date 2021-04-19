@@ -1,6 +1,6 @@
 import 'package:agricultores_app/models/colorsModel.dart';
 import 'package:agricultores_app/screens/STAB.dart';
-import 'package:agricultores_app/screens/ads/TodosLosAdsScreen.dart';
+import 'package:agricultores_app/screens/adsScreen.dart';
 import 'package:agricultores_app/screens/cultivosAndOrders/cultivos/crearCutivoScreen.dart';
 import 'package:agricultores_app/screens/cultivosAndOrders/cultivoAndOrderScreen.dart';
 import 'package:agricultores_app/screens/cultivosAndOrders/orders/createOrderScreen.dart';
@@ -277,7 +277,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   role: this.role,
                 );
               } else if (this.role == "an") {
-                return TodosLosAdsScreen();
+                return AdsScreen();
               }
             }),
           );

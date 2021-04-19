@@ -1,6 +1,7 @@
 import 'package:agricultores_app/services/adsAdminService.dart';
+import 'package:agricultores_app/widgets/general/cosechaGreenButton.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show DeviceOrientation, SystemChrome;
+import 'package:url_launcher/url_launcher.dart';
 import 'package:shimmer/shimmer.dart';
 
 class AdsScreen extends StatefulWidget {
@@ -52,6 +53,15 @@ class _AdsScreenState extends State<AdsScreen> {
               return SingleChildScrollView(
                 child: Column(
                   children: [
+                    SizedBox(height: 10),
+                    CosechaGreenButton(onPressed: () async {
+                      const url = 'https://web-platform-advertisement.vercel.app/';
+                      if (await canLaunch(url)) {
+                        await launch(url);
+                      } else {
+                        throw 'No se pudo abrir $url';
+                      }
+                    }, text: "Más información sobre sus anuncios", isLoading: false),
                     ListView.separated(
                       physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
