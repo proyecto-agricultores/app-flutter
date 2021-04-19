@@ -1,3 +1,4 @@
+import 'package:agricultores_app/models/colorsModel.dart';
 import 'package:agricultores_app/services/adsAdminService.dart';
 import 'package:agricultores_app/widgets/general/cosechaGreenButton.dart';
 import 'package:flutter/material.dart';
@@ -43,6 +44,7 @@ class _AdsScreenState extends State<AdsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Mis Anuncios"),
+        backgroundColor: CosechaColors.azulFuerte,
       ),
       body: Container(
         child: FutureBuilder(
