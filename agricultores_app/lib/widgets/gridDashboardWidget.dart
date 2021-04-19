@@ -1,4 +1,5 @@
 import 'package:agricultores_app/models/menuItems.dart';
+import 'package:agricultores_app/screens/adsScreen.dart';
 import 'package:agricultores_app/screens/filters/filterCropsAndOrdersResultsScreen.dart';
 import 'package:agricultores_app/screens/filters/filterCropsAndOrdersScreen.dart';
 import 'package:agricultores_app/screens/filters/filterFarmersAndClientsResultsScreen.dart';
@@ -45,6 +46,11 @@ class GridDashboard extends StatelessWidget {
     img: "assets/images/menu/harvest.png",
     route: "crops",
   );
+  MenuItems anuncios = new MenuItems(
+    title: "Anuncios",
+    img: "assets/images/menu/advertisement.png",
+    route: "ads",
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +60,7 @@ class GridDashboard extends StatelessWidget {
       agricultor,
       comprador,
       perfil,
+      anuncios,
       logout,
     ];
     var color = 0xff453658;
@@ -115,6 +122,8 @@ class GridDashboard extends StatelessWidget {
                         minPrice: null,
                         supplyID: null,
                       );
+                    } else if (data.route == "ads") {
+                      return AdsScreen();
                     }
                   }),
                 );

@@ -70,6 +70,7 @@ flutter:
     - assets/images/order.jpg
     - assets/images/menu/user.png
     - assets/images/menu/farmer.png
+    - assets/images/menu/advertisement.png
     - assets/images/menu/logout.png
     - assets/images/menu/clerk.png
     - assets/images/menu/harvest.png
