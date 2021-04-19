@@ -24,42 +24,37 @@ class _AdsScreenState extends State<AdsScreen> {
             if (snapshot.hasData) {
               final listResponse = snapshot.data;
               return SingleChildScrollView(
-                child: Column(
-                  children: [
-                    ListView.separated(
-                      itemBuilder: (context, index) {
-                        return InkWell(
-                          child: Column(
-                            children: [
-                              Image(
-                                  height: 150,
-                                  width: MediaQuery.of(context).size.width,
-                                  image: NetworkImage(
-                                      listResponse[index].pictureURL)),
-                              Text(listResponse[index].name),
-                              Text(listResponse[index]
-                                  .remainingCredits
-                                  .toString()),
-                              Text(listResponse[index].name),
-                              Text(listResponse[index].name),
-                              Text(listResponse[index].name),
-                              Text(listResponse[index].name),
-                            ],
-                          ),
-                        );
-                      },
-                      separatorBuilder: (BuildContext context, int index) =>
-                          const Divider(
-                        height: 50,
-                        thickness: 2,
-                        indent: 100,
-                        endIndent: 100,
+                child: ListView.separated(
+                  itemBuilder: (context, index) {
+                    return InkWell(
+                      child: Column(
+                        children: [
+                          Image(
+                              height: 150,
+                              width: MediaQuery.of(context).size.width,
+                              image:
+                                  NetworkImage(listResponse[index].pictureURL)),
+                          Text(listResponse[index].name),
+                          Text(listResponse[index].remainingCredits.toString()),
+                          Text(listResponse[index].name),
+                          Text(listResponse[index].name),
+                          Text(listResponse[index].name),
+                          Text(listResponse[index].name),
+                        ],
                       ),
-                      itemCount: listResponse.length,
-                      padding: const EdgeInsets.all(8),
-                      shrinkWrap: true,
-                    )
-                  ],
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) =>
+                      const Divider(
+                    height: 50,
+                    thickness: 2,
+                    indent: 100,
+                    endIndent: 100,
+                  ),
+                  itemCount: listResponse.length,
+                  padding: const EdgeInsets.all(8),
+                  physics: ClampingScrollPhysics(),
+                  shrinkWrap: true,
                 ),
               );
             } else if (snapshot.data?.length == 0) {
