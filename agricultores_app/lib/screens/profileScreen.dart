@@ -1,4 +1,6 @@
+import 'package:agricultores_app/models/colorsModel.dart';
 import 'package:agricultores_app/screens/STAB.dart';
+import 'package:agricultores_app/screens/ads/TodosLosAdsScreen.dart';
 import 'package:agricultores_app/screens/cultivosAndOrders/cultivos/crearCutivoScreen.dart';
 import 'package:agricultores_app/screens/cultivosAndOrders/cultivoAndOrderScreen.dart';
 import 'package:agricultores_app/screens/cultivosAndOrders/orders/createOrderScreen.dart';
@@ -35,7 +37,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      endDrawer: Drawer(),
       body: FutureBuilder(
         future: MyProfileService.getLoggedinUser(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -50,9 +51,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       this._ubicacion(snapshot, false),
                       this._verMapa(snapshot, false),
                       this._agregarCultivoUOrden(),
-                      this._verMatches(),
+                      this.role != "an" ? this._verMatches() : Container(),
                       this._verTodosCultivos(),
-                      this._carruselCultivos(false),
+                      this.role != "an" ? this._carruselCultivos(false) : Container(),
                     ],
                   ),
                 ),
@@ -86,7 +87,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       pinned: true,
       expandedHeight: 300.0,
       backgroundColor:
-          this.role == 'ag' ? Color(0xff09B44D) : Color(0xfffc6e08),
+          this.role == 'ag' ? CosechaColors.verdeFuerte : 
+            (this.role == "an" ? CosechaColors.azulFuerte : CosechaColors.naranjaFuerte),
       title: Text("Perfil"),
       shape: ContinuousRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -119,44 +121,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ],
         ),
       ),
-      actions: <Widget>[
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              child: Column(
-                children: [
-                  Icon(Icons.person_outlined),
-                  Text("Perfil"),
-                ],
-              ),
-            ),
-            Container(
-              child: Column(
-                children: [
-                  Icon(Icons.coronavirus_outlined),
-                  Text("Cultivos"),
-                ],
-              ),
-            ),
-            Container(
-              child: Column(
-                children: [
-                  Icon(Icons.person_outlined),
-                  Text("Pedidos"),
-                ],
-              ),
-            ),
-          ],
-        ),
-        IconButton(
-          icon: Icon(Icons.menu, color: Colors.white),
-          onPressed: () {
-            _scaffoldKey.currentState.openEndDrawer();
-          },
-        ),
-      ],
     );
   }
 
@@ -302,16 +266,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(
-                //builder: (context) => this.role == 'ag' ? CrearCultivoScreen() : CreateOrderScreen(),
-                builder: (context) {
+              builder: (context) {
               if (this.role == 'ag') {
                 return TodosCultivosAndOrdersScreen(
                   role: this.role,
                 );
-              } else {
+              } else if (this.role == "co") {
                 return TodosCultivosAndOrdersScreen(
                   role: this.role,
                 );
+              } else if (this.role == "an") {
+                return TodosLosAdsScreen();
               }
             }),
           );
@@ -319,8 +284,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         color: Colors.green[900],
         textColor: Colors.white,
         child: this.role == 'ag'
-            ? Text("Ver todos los Cultivos")
-            : Text("Ver todas las Ordenes"),
+            ? Text("Ver todos mis cultivos")
+            : (this.role == "an" ? 
+              Text("Ver todos mis anuncios") : Text("Ver todas mis ordenes")),
       ),
     );
   }
@@ -368,12 +334,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(
-                //builder: (context) => this.role == 'ag' ? CrearCultivoScreen() : CreateOrderScreen(),
                 builder: (context) {
               if (this.role == 'ag') {
                 return CrearCultivoScreen();
-              } else {
+              } else if (this.role == "co") {
                 return CreateOrderScreen();
+              } else if (this.role == "an") {
+                return Text("diálogo");
               }
             }),
           );
@@ -381,7 +348,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         color: Colors.green[900],
         textColor: Colors.white,
         child:
-            this.role == 'ag' ? Text("Añadir Cultivo") : Text("Añadir Orden"),
+            this.role == 'ag' ? Text("Añadir Cultivo") :
+              (this.role == "co" ? Text("Añadir Orden") : Text("Añadir Anuncio")),
       ),
     );
   }
