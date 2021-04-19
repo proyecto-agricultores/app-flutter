@@ -1,5 +1,7 @@
+import 'package:agricultores_app/models/colorsModel.dart';
 import 'package:agricultores_app/screens/register/photoRegisterScreen.dart';
 import 'package:agricultores_app/services/codeRegisterService.dart';
+import 'package:agricultores_app/widgets/general/cosechaGreenButton.dart';
 import 'package:agricultores_app/widgets/general/cosechaLogo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show DeviceOrientation, SystemChrome;
@@ -101,28 +103,13 @@ class _CodeRegisterScreenState extends State<CodeRegisterScreen> {
                         },
                       ),
                       SizedBox(height: 40),
-                      this.isLoading
-                          ? CircularProgressIndicator()
-                          : Container(),
-                      FlatButton(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                        ),
-                        // onPressed: Token.generateOrRefreshToken(telephone, passwordController.text),
+                      CosechaGreenButton(
                         onPressed: () async {
-                          print(code);
-                          final response =
-                              await CodeRegisterService.generateCode();
-                          print(response);
-                        },
-                        color: Colors.green[300],
-                        child: Text('Reenviar el código SMS',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 10,
-                            )),
-                      ),
+                          await CodeRegisterService.generateCode();
+                        }, 
+                        text: 'Reenviar el código SMS', 
+                        isLoading: false,
+                       ),
                     ],
                   ),
                 ),

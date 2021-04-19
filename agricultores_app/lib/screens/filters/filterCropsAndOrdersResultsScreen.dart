@@ -1,6 +1,7 @@
 import 'package:agricultores_app/screens/cultivosAndOrders/cultivos/crearCutivoScreen.dart';
 import 'package:agricultores_app/screens/cultivosAndOrders/cultivoAndOrderScreen.dart';
 import 'package:agricultores_app/screens/cultivosAndOrders/orders/createOrderScreen.dart';
+import 'package:agricultores_app/screens/filters/filterCropsAndOrdersScreen.dart';
 import 'package:agricultores_app/services/myOrderService.dart';
 import 'package:agricultores_app/services/myProfileService.dart';
 import 'package:agricultores_app/services/myPubService.dart';
@@ -44,6 +45,24 @@ class _FilterCropsAndOrdersResultsScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.filter_list_alt, color: Colors.white),
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return FilterCropsAndOrdersScreen(
+                    title: this.widget.role == 'ag'
+                        ? 'Filtrar Cultivos'
+                        : 'Filtrar Órdenes',
+                    role: this.widget.role,
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
         title: Text(this.widget.title),
         backgroundColor:
             this.widget.role == 'ag' ? Color(0xff09B44D) : Color(0xfffc6e08),

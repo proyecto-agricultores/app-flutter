@@ -3,7 +3,9 @@ import 'package:agricultores_app/services/supplyService.dart';
 import 'package:flutter/material.dart';
 
 class SupplyDropdown extends StatelessWidget {
+
   SupplyDropdown({this.supplyID, this.updateSupply});
+
   final supplyID;
   final updateSupply;
   
@@ -12,32 +14,32 @@ class SupplyDropdown extends StatelessWidget {
     return FutureBuilder(
       future: SupplyService.getSupplies(),
       builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Center(
-              child:
-                  CircularProgressIndicator());
-        } else {
-          List<Supply> listResponse =
-              snapshot.data;
-          return DropdownButtonFormField(
-            validator: (value) => value == null ? 'Campo requerido' : null,
-            value: supplyID,
-            icon: Icon(Icons.arrow_downward),
-            onChanged: (newValue) {
-              updateSupply(newValue);
-            },
-            items: listResponse.map((item) {
-              return DropdownMenuItem(
-                child: Text(item.name),
-                value: item.id,
-              );
-            }).toList(),
-            decoration: new InputDecoration(
-              labelText: "Insumo",
-              enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+        List<Supply> listItems = [];
+        if (snapshot.hasData) {
+          listItems = snapshot.data;
+        } 
+        return IgnorePointer(
+          ignoring: !snapshot.hasData,
+          child: Container(
+            height: MediaQuery.of(context).size.height * 0.11,
+            width: MediaQuery.of(context).size.width * 0.8,
+            child: DropdownButtonFormField(
+              validator: (value) => value == null ? 'Campo requerido' : null,
+              hint: Text(snapshot.hasData ? 'Seleccione un insumo' : 'Cargando...'),
+              value: supplyID,
+              isExpanded: true,
+              onChanged: (newValue) {
+                updateSupply(newValue);
+              },
+              items: listItems.map((item) {
+                return DropdownMenuItem(
+                  child: Text(item.name),
+                  value: item.id,
+                );
+              }).toList(),
             ),
-          );
-        }
+          )
+        );
       },
     );
   }

@@ -134,54 +134,84 @@ class _TodosCultivosAndOrdersScreenState
                                   ),
                                 )
                               },
-                              child: Column(
-                                children: <Widget>[
-                                  Container(
-                                    alignment: Alignment.center,
-                                    child: Image(
-                                      height: 150,
-                                      width: MediaQuery.of(context).size.width,
-                                      fit: BoxFit.cover,
-                                      image: this.role == 'ag'
-                                          ? (listResponse[index]
-                                                  .pictureURLs
-                                                  .isEmpty
-                                              ? AssetImage(
-                                                  "assets/images/papas.jpg")
-                                              : NetworkImage(listResponse[index]
-                                                  .pictureURLs[0]))
-                                          : AssetImage(
-                                              "assets/images/order.jpg"),
-                                    ),
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text("Producto: "),
-                                      Text(
-                                        listResponse[index].supplieName,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
+                              child: Stack(
+                                children: [
+                                  Column(
+                                    children: <Widget>[
+                                      Container(
+                                        alignment: Alignment.center,
+                                        child: Image(
+                                          height: 150,
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          fit: BoxFit.cover,
+                                          image: this.role == 'ag'
+                                              ? (listResponse[index]
+                                                      .pictureURLs
+                                                      .isEmpty
+                                                  ? AssetImage(
+                                                      "assets/images/papas.jpg")
+                                                  : NetworkImage(
+                                                      listResponse[index]
+                                                          .pictureURLs[0]))
+                                              : AssetImage(
+                                                  "assets/images/order.jpg"),
+                                        ),
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text("Productos: "),
+                                          Text(
+                                            listResponse[index].supplieName,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text('Área: '),
+                                          Text(listResponse[index]
+                                              .area
+                                              .toString()),
+                                          Text(' '),
+                                          Text(listResponse[index].areaUnit),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text('Costo: '),
+                                          Text(listResponse[index]
+                                              .unitPrice
+                                              .toString()),
+                                          Text(' x '),
+                                          Text(listResponse[index].weightUnit),
+                                        ],
                                       ),
                                     ],
                                   ),
-                                  Row(
-                                    children: [
-                                      Text('Área: '),
-                                      Text(listResponse[index].area.toString()),
-                                      Text(' '),
-                                      Text(listResponse[index].areaUnit),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text('Costo: '),
-                                      Text(listResponse[index]
-                                          .unitPrice
-                                          .toString()),
-                                      Text(' x '),
-                                      Text(listResponse[index].weightUnit),
-                                    ],
-                                  ),
+                                  (this.role == 'ag'
+                                          ? listResponse[index].isSold
+                                          : listResponse[index].isSolved)
+                                      ? Padding(
+                                          padding: EdgeInsets.all(4.0),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.red,
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(10.0)),
+                                            ),
+                                            child: Text(
+                                              (this.role == 'ag'
+                                                  ? "  Vendido  "
+                                                  : "  Resuelto  "),
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      : Container(),
                                 ],
                               ),
                             );
@@ -222,7 +252,9 @@ class _TodosCultivosAndOrdersScreenState
             color: Colors.white,
           ),
           Row(
-            children: [Text("Producto: ")],
+            children: [
+              Text("Producto: "),
+            ],
           ),
           Row(
             children: [

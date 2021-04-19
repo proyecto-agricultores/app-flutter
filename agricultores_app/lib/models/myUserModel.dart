@@ -7,6 +7,7 @@ class MyUser {
   final String role;
   final String profilePicture;
   final String ubigeo;
+  final String phoneNumber;
   final double latitude;
   final double longitude;
   final isVerified;
@@ -19,6 +20,7 @@ class MyUser {
     this.profilePicture,
     this.ubigeo,
     this.isVerified,
+    this.phoneNumber,
     this.latitude,
     this.longitude,
   });
@@ -32,6 +34,7 @@ class MyUser {
       ubigeo: json['district'],
       profilePicture: json['profile_picture_URL'],
       isVerified: json['is_verified'],
+      phoneNumber: json['phone_number'],
       latitude: json['latitude'],
       longitude: json['longitude'],
     );

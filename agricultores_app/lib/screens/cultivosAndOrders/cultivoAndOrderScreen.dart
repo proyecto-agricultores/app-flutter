@@ -1,10 +1,15 @@
 import 'package:agricultores_app/screens/cultivosAndOrders/cultivos/editarCutivoScreen.dart';
+import 'package:agricultores_app/services/adService.dart';
 import 'package:agricultores_app/services/myOrderService.dart';
 import 'package:agricultores_app/services/myPubService.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show DeviceOrientation, SystemChrome;
 import 'package:intl/intl.dart';
+
+import 'dart:async';
+
+import 'package:url_launcher/url_launcher.dart';
 
 import 'orders/editOrderScreen.dart';
 
@@ -100,8 +105,6 @@ class _CultivoAndOrderScreenState extends State<CultivoAndOrderScreen> {
                                         .map<Widget>((item) => Container(
                                               child: Center(
                                                 child: Image.network(
-                                                  // item.replaceAll(
-                                                  //     'https', 'http'),
                                                   item,
                                                   fit: BoxFit.cover,
                                                   height: 200,
@@ -136,9 +139,16 @@ class _CultivoAndOrderScreenState extends State<CultivoAndOrderScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text('Costo: '),
-                              Text(snapshot.data.unitPrice.toString()),
-                              Text(' x '),
-                              Text(snapshot.data.weightUnit),
+                              snapshot.data.unitPrice.toString() != 'null'
+                                  ? Row(
+                                      children: [
+                                        Text(
+                                            snapshot.data.unitPrice.toString()),
+                                        Text(' x '),
+                                        Text(snapshot.data.weightUnit),
+                                      ],
+                                    )
+                                  : Text('Por asignar')
                             ],
                           ),
                           Row(
@@ -169,10 +179,63 @@ class _CultivoAndOrderScreenState extends State<CultivoAndOrderScreen> {
                               ),
                             ],
                           ),
+                          this.isMyCultivoOrOrder == true
+                              ? Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(roleActual ? "Vendido: " : "Resulto: ",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold)),
+                                    Text(
+                                      (roleActual
+                                              ? snapshot.data.isSold
+                                              : snapshot.data.isSolved)
+                                          ? "Si"
+                                          : "No",
+                                    ),
+                                  ],
+                                )
+                              : Container(),
                           SizedBox(height: 20),
                           this.isMyCultivoOrOrder == true
                               ? Column(
                                   children: [
+                                    FlatButton(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(18.0),
+                                      ),
+                                      color: (roleActual
+                                              ? snapshot.data.isSold
+                                              : snapshot.data.isSolved)
+                                          ? Colors.grey[350]
+                                          : Colors.blue[400],
+                                      onPressed: () async {
+                                        roleActual
+                                            ? await MyPubService.changeStatus(
+                                                pubOrOrderId,
+                                                !snapshot.data.isSold,
+                                              )
+                                            : await MyOrderService.changeStatus(
+                                                pubOrOrderId,
+                                                !snapshot.data.isSolved,
+                                              );
+                                        Navigator.of(context)
+                                            .popUntil((route) => route.isFirst);
+                                      },
+                                      child: Text(
+                                        (roleActual
+                                                ? snapshot.data.isSold
+                                                : snapshot.data.isSolved)
+                                            ? 'Marcar como NO Vendido'
+                                            : 'Marcar como Vendido',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
                                     FlatButton(
                                       shape: RoundedRectangleBorder(
                                         borderRadius:
@@ -258,7 +321,86 @@ class _CultivoAndOrderScreenState extends State<CultivoAndOrderScreen> {
                                     ),
                                   ],
                                 )
-                              : Container()
+                              : Container(
+                                  child: FutureBuilder(
+                                    future: AdService.getAdForIt(
+                                        snapshot.data.id,
+                                        roleActual ? 'pub' : 'order'),
+                                    builder: (BuildContext context,
+                                        AsyncSnapshot snapshotAd) {
+                                      if (snapshotAd.hasData &&
+                                          snapshotAd.data.displayAdd) {
+                                        return Center(
+                                          child: InkWell(
+                                            onTap: () async {
+                                              if (await canLaunch(
+                                                  snapshotAd.data.targetUrl)) {
+                                                await launch(
+                                                    snapshotAd.data.targetUrl);
+                                              } else {
+                                                throw 'Could not launch $snapshotAd.data.targetUrl';
+                                              }
+                                            },
+                                            child: DecoratedBox(
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.rectangle,
+                                                border: Border.all(
+                                                  width: 1.0,
+                                                  color:
+                                                      Colors.grey.withAlpha(60),
+                                                ),
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(8.0)),
+                                              ),
+                                              child: Padding(
+                                                padding: EdgeInsets.only(
+                                                  top: 10,
+                                                  right: 20,
+                                                  left: 20,
+                                                ),
+                                                child: Stack(children: [
+                                                  Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.7,
+                                                    height: 150.0,
+                                                    child: Container(
+                                                        child: Image.network(
+                                                            snapshotAd.data
+                                                                .imageUrl)),
+                                                  ),
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.grey,
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  10.0)),
+                                                    ),
+                                                    child: Text(
+                                                      "  AD  ",
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ]),
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      } else if (!snapshotAd.hasData) {
+                                        return Center(
+                                          child: CircularProgressIndicator(),
+                                        );
+                                      } else {
+                                        return Container();
+                                      }
+                                    },
+                                  ),
+                                )
                         ],
                       ),
                     );

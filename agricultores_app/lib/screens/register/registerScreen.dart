@@ -1,6 +1,8 @@
+import 'package:agricultores_app/models/colorsModel.dart';
 import 'package:agricultores_app/screens/register/codeRegisterScreen.dart';
 import 'package:agricultores_app/services/registerService.dart';
 import 'package:agricultores_app/services/token.dart';
+import 'package:agricultores_app/widgets/general/cosechaGreenButton.dart';
 import 'package:agricultores_app/widgets/general/cosechaLogo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'
@@ -38,7 +40,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       labelText: placeholder,
       counterText: "",
       border: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.green),
+        borderSide: BorderSide(color: CosechaColors.verdeFuerte),
         borderRadius: const BorderRadius.all(const Radius.circular(20.0)),
       ),
     );
@@ -84,7 +86,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           decoration: InputDecoration(
             labelText: 'Número de celular',
             border: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.green),
+              borderSide: BorderSide(color: CosechaColors.verdeFuerte),
               borderRadius: const BorderRadius.all(const Radius.circular(20.0)),
             ),
           ),
@@ -166,84 +168,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     ]);
   }
 
-  Widget _nextButton() {
-    return Container(
-      child: FlatButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18.0),
-        ),
-        onPressed: () async {
-          if (_formKey.currentState.validate()) {
-            setState(() {
-              this.isLoading = true;
-            });
-            try {
-              final register = await RegisterService.createUser(
-                  firstNameController.text,
-                  lastNameController.text,
-                  telephone,
-                  dniOrRucController.text,
-                  passwordController.text,
-                  dniOrRuc);
-              print(register);
-              print(telephone);
-              print(passwordController.text);
-              if (register == 'phone already in use') {
-                return showDialog<void>(
-                  context: context,
-                  barrierDismissible: true,
-                  builder: (BuildContext context) {
-                    return AlertDialog(
-                      title: Text('Número de teléfono ya registrado'),
-                      content: Text(
-                          'Ya existe una cuenta registrada con el número de teléfono ingresado. Intente hacer log-in'),
-                      actions: <Widget>[
-                        TextButton(
-                          child: Text('Aceptar'),
-                          onPressed: () {
-                            Navigator.of(context)
-                                .popUntil((route) => route.isFirst);
-                          },
-                        ),
-                      ],
-                    );
-                  },
-                );
-              } else if (register == 'ok') {
-                await Token.generateTokenFromUserAndPassword(
-                    telephone, passwordController.text);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => CodeRegisterScreen(),
-                  ),
-                );
-              }
-              setState(() {
-                this.isLoading = false;
-              });
-            } catch (e) {
-              print(e.toString());
-            }
-          }
-        },
-        color: Colors.green[400],
-        child: this.isLoading
-            ? LinearProgressIndicator(
-                minHeight: 5,
-              )
-            : Text(
-                'Siguiente',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     WidgetsFlutterBinding.ensureInitialized();
@@ -261,7 +185,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
         child: Column(
           children: [
-            CosechaLogo(scale: 5.0,),
+            CosechaLogo(
+              scale: 5.0,
+            ),
             this._buildTelephoneNumber(),
             Form(
               key: _formKey,
@@ -273,7 +199,85 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     this._buildLastName(),
                     this._buildDniOrRuc(),
                     this._buildPassword(),
-                    this._nextButton(),
+                    CosechaGreenButton(
+                      text: 'Siguiente',
+                      isLoading: this.isLoading,
+                      onPressed: () async {
+                        if (_formKey.currentState.validate()) {
+                          setState(() {
+                            this.isLoading = true;
+                          });
+                          try {
+                            final register = await RegisterService.createUser(
+                                firstNameController.text,
+                                lastNameController.text,
+                                telephone,
+                                dniOrRucController.text,
+                                passwordController.text,
+                                dniOrRuc);
+                            if (register == 'phone already in use') {
+                              return showDialog<void>(
+                                context: context,
+                                barrierDismissible: true,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text(
+                                        'Número de teléfono ya registrado'),
+                                    content: Text(
+                                        'Ya existe una cuenta registrada con el número de teléfono ingresado. Intente hacer log-in'),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        child: Text('Aceptar'),
+                                        onPressed: () {
+                                          Navigator.of(context).popUntil(
+                                              (route) => route.isFirst);
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            } else if (register[0] == 'error') {
+                              return showDialog<void>(
+                                context: context,
+                                barrierDismissible: true,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text('Error del servidor'),
+                                    content: Text(
+                                        'Se ha producido un error inesperado en el servidor.' +
+                                            register[1]),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        child: Text('Aceptar'),
+                                        onPressed: () {
+                                          Navigator.of(context).popUntil(
+                                              (route) => route.isFirst);
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            } else if (register == 'ok') {
+                              await Token.generateTokenFromUserAndPassword(
+                                  telephone, passwordController.text);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => CodeRegisterScreen(),
+                                ),
+                              );
+                            }
+                            setState(() {
+                              this.isLoading = false;
+                            });
+                          } catch (e) {
+                            print(e.toString());
+                          }
+                        }
+                      },
+                    )
                   ],
                 ),
               ),

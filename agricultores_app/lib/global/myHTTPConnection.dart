@@ -1,4 +1,3 @@
 class MyHTTPConection {
-  static const String HTTP_URL =
-      'https://pileline-cos-develop-dkve8fliz.herokuapp.com/';
+  static const String HTTP_URL = 'https://dev-cosecha-pr-45.herokuapp.com/';
 }

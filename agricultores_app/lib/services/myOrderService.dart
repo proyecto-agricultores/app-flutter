@@ -68,6 +68,21 @@ class MyOrderService {
     }
   }
 
+  static Future changeStatus(int id, bool status) async {
+    final response = await HTTPClient.getClient(WithToken.yes).put(
+      MyHTTPConection.HTTP_URL + 'myOrder/$id/',
+      body: jsonEncode(
+        {"is_solved": status},
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      return "Ok";
+    } else {
+      throw Exception('Error.');
+    }
+  }
+
   static Future update(MyOrder myOrder) async {
     final response = await HTTPClient.getClient(WithToken.yes).put(
       MyHTTPConection.HTTP_URL + 'myOrder/' + myOrder.id.toString() + '/',

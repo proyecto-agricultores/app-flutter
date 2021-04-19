@@ -1,8 +1,6 @@
 import 'package:agricultores_app/models/menuItems.dart';
-import 'package:agricultores_app/screens/buscadorAgricultoresScreen.dart';
-import 'package:agricultores_app/screens/buscadorCompradoresScreen.dart';
-import 'package:agricultores_app/screens/filters/filterCropsAndOrdersScreen.dart';
-import 'package:agricultores_app/screens/filters/filterFarmersAndClientsScreen.dart';
+import 'package:agricultores_app/screens/filters/filterCropsAndOrdersResultsScreen.dart';
+import 'package:agricultores_app/screens/filters/filterFarmersAndClientsResultsScreen.dart';
 import 'package:agricultores_app/screens/loginScreen.dart';
 import 'package:agricultores_app/screens/profileScreen.dart';
 import 'package:flutter/material.dart';
@@ -74,28 +72,48 @@ class GridDashboard extends StatelessWidget {
                     if (data.route == "profile") {
                       return ProfileScreen(role: role);
                     } else if (data.route == "buscadorAgricultores") {
-                      return FilterFarmersAndClientsScreen(
-                        title: "Buscar agricultores",
+                      return FilterFarmersAndClientsResultsScreenScreen(
+                        title: "Todos los agricultores",
                         role: "ag",
+                        regionID: null,
+                        supplyID: null,
+                        departmentID: null,
                       );
                     } else if (data.route == "buscadorCompradores") {
-                      return FilterFarmersAndClientsScreen(
-                        title: "Buscar compradores",
+                      return FilterFarmersAndClientsResultsScreenScreen(
+                        title: "Todos los compradores",
                         role: "co",
+                        regionID: null,
+                        supplyID: null,
+                        departmentID: null,
                       );
                     } else if (data.route == "loginScreen") {
                       return LoginScreen();
                     } else if (data.route == "farmers") {
-                      return FilterCropsAndOrdersScreen(
-                        title: "Buscar órdenes",
+                      return FilterCropsAndOrdersResultsScreen(
+                        title: "Todas las Órdenes",
                         role: "co",
+                        maxDate: null,
+                        departmentID: null,
+                        maxPrice: null,
+                        minDate: null,
+                        regionID: null,
+                        minPrice: null,
+                        supplyID: null,
                       );
                     } else if (data.route == "crops") {
-                      return FilterCropsAndOrdersScreen(
-                        title: "Buscar cultivos",
+                      return FilterCropsAndOrdersResultsScreen(
+                        title: "Todos los Cultivos",
                         role: "ag",
+                        maxDate: null,
+                        departmentID: null,
+                        maxPrice: null,
+                        minDate: null,
+                        regionID: null,
+                        minPrice: null,
+                        supplyID: null,
                       );
-                    }
+                    } 
                   }),
                 );
               },

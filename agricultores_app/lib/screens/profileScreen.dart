@@ -1,8 +1,11 @@
+import 'package:agricultores_app/models/colorsModel.dart';
 import 'package:agricultores_app/screens/STAB.dart';
+import 'package:agricultores_app/screens/adsScreen.dart';
 import 'package:agricultores_app/screens/cultivosAndOrders/cultivos/crearCutivoScreen.dart';
 import 'package:agricultores_app/screens/cultivosAndOrders/cultivoAndOrderScreen.dart';
 import 'package:agricultores_app/screens/cultivosAndOrders/orders/createOrderScreen.dart';
 import 'package:agricultores_app/screens/cultivosAndOrders/todosCultivosAndOrderScreen.dart';
+import 'package:agricultores_app/screens/register/photoRegisterScreen.dart';
 import 'package:agricultores_app/services/myOrderService.dart';
 import 'package:agricultores_app/services/myProfileService.dart';
 import 'package:agricultores_app/services/myPubService.dart';
@@ -10,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'cultivosAndOrders/matchesScreen.dart';
 
@@ -34,7 +38,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      endDrawer: Drawer(),
       body: FutureBuilder(
         future: MyProfileService.getLoggedinUser(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -49,9 +52,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       this._ubicacion(snapshot, false),
                       this._verMapa(snapshot, false),
                       this._agregarCultivoUOrden(),
-                      this._verMatches(),
+                      this.role != "an" ? this._verMatches() : Container(),
                       this._verTodosCultivos(),
-                      this._carruselCultivos(false),
+                      this.role != "an" ? this._carruselCultivos(false) : Container(),
                     ],
                   ),
                 ),
@@ -85,7 +88,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       pinned: true,
       expandedHeight: 300.0,
       backgroundColor:
-          this.role == 'ag' ? Color(0xff09B44D) : Color(0xfffc6e08),
+          this.role == 'ag' ? CosechaColors.verdeFuerte : 
+            (this.role == "an" ? CosechaColors.azulFuerte : CosechaColors.naranjaFuerte),
       title: Text("Perfil"),
       shape: ContinuousRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -118,44 +122,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ],
         ),
       ),
-      actions: <Widget>[
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              child: Column(
-                children: [
-                  Icon(Icons.person_outlined),
-                  Text("Perfil"),
-                ],
-              ),
-            ),
-            Container(
-              child: Column(
-                children: [
-                  Icon(Icons.coronavirus_outlined),
-                  Text("Cultivos"),
-                ],
-              ),
-            ),
-            Container(
-              child: Column(
-                children: [
-                  Icon(Icons.person_outlined),
-                  Text("Pedidos"),
-                ],
-              ),
-            ),
-          ],
-        ),
-        IconButton(
-          icon: Icon(Icons.menu, color: Colors.white),
-          onPressed: () {
-            _scaffoldKey.currentState.openEndDrawer();
-          },
-        ),
-      ],
     );
   }
 
@@ -172,22 +138,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       );
     } else if (snapshot.data.profilePicture == null) {
-      return Container(
-        height: 150,
-        width: 150,
-        margin: EdgeInsets.only(bottom: 70),
-        child: CircleAvatar(
-          backgroundImage: AssetImage("assets/images/user-placeholder.png"),
-        ),
+      return Stack(
+        children: [
+          this._imageIcon(Icons.add),
+          Container(
+            height: 150,
+            width: 150,
+            margin: EdgeInsets.only(bottom: 70),
+            child: CircleAvatar(
+              backgroundImage: AssetImage("assets/images/user-placeholder.png"),
+            ),
+          ),
+        ],
       );
     } else {
-      return Container(
-        height: 150,
-        width: 150,
-        margin: EdgeInsets.only(bottom: 70),
-        child: CircleAvatar(
-          backgroundImage: NetworkImage(snapshot.data.profilePicture),
-        ),
+      return Stack(
+        children: [
+          this._imageIcon(Icons.edit),
+          Container(
+            height: 150,
+            width: 150,
+            margin: EdgeInsets.only(bottom: 70),
+            child: CircleAvatar(
+              backgroundImage: NetworkImage(snapshot.data.profilePicture),
+            ),
+          ),
+        ],
       );
     }
   }
@@ -240,6 +216,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  Widget _imageIcon(IconData type) {
+    return GestureDetector(
+      onTap: () => {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return PhotoRegisterScreen(returnToProfile: true);
+            },
+          ),
+        ),
+      },
+      child: Icon(
+        type,
+        color: Colors.white,
+      ),
+    );
+  }
+
   Widget _verMapa(AsyncSnapshot snapshot, bool isLoading) {
     return !isLoading && snapshot.data.latitude != 0
         ? Container(
@@ -272,16 +267,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(
-                //builder: (context) => this.role == 'ag' ? CrearCultivoScreen() : CreateOrderScreen(),
-                builder: (context) {
+              builder: (context) {
               if (this.role == 'ag') {
                 return TodosCultivosAndOrdersScreen(
                   role: this.role,
                 );
-              } else {
+              } else if (this.role == "co") {
                 return TodosCultivosAndOrdersScreen(
                   role: this.role,
                 );
+              } else if (this.role == "an") {
+                return AdsScreen();
               }
             }),
           );
@@ -289,8 +285,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         color: Colors.green[900],
         textColor: Colors.white,
         child: this.role == 'ag'
-            ? Text("Ver todos los Cultivos")
-            : Text("Ver todas las Ordenes"),
+            ? Text("Ver todos mis cultivos")
+            : (this.role == "an" ? 
+              Text("Ver todos mis anuncios") : Text("Ver todas mis ordenes")),
       ),
     );
   }
@@ -335,24 +332,75 @@ class _ProfileScreenState extends State<ProfileScreen> {
           borderRadius: BorderRadius.circular(18.0),
         ),
         onPressed: () async {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                //builder: (context) => this.role == 'ag' ? CrearCultivoScreen() : CreateOrderScreen(),
+          if (this.role != "an") {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
                 builder: (context) {
-              if (this.role == 'ag') {
-                return CrearCultivoScreen();
-              } else {
-                return CreateOrderScreen();
-              }
-            }),
-          );
+                  if (this.role == 'ag') {
+                    return CrearCultivoScreen();
+                  } else if (this.role == "co") {
+                    return CreateOrderScreen();
+                  }
+              }),
+            );
+          } else {
+            showAdAlertDialog(context);
+          }
         },
         color: Colors.green[900],
         textColor: Colors.white,
         child:
-            this.role == 'ag' ? Text("Añadir Cultivo") : Text("Añadir Orden"),
+            this.role == 'ag' ? Text("Añadir Cultivo") :
+              (this.role == "co" ? Text("Añadir Orden") : Text("Añadir Anuncio")),
       ),
+    );
+  }
+
+  showAdAlertDialog(BuildContext context) {
+
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("Cancelar"),
+      onPressed:  () {
+        Navigator.of(context).pop(); 
+      },
+    );
+
+    _launchURL() async {
+      const url = 'https://web-platform-advertisement.vercel.app/';
+      if (await canLaunch(url)) {
+        await launch(url);
+      } else {
+        throw 'No se pudo abrir $url';
+      }
+    }
+
+    Widget continueButton = FlatButton(
+      child: Text("Ir"),
+      onPressed: _launchURL,
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Crear un anuncio"),
+      content: Text(
+        "Para publicar un anuncio debe ir a la versión web de Cosecha. " + 
+        "Le recomendamos usar una aplicación de escritorio. ¿Desea ingresar?"
+      ),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 
@@ -440,13 +488,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ],
                                 ),
                                 Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text('Costo: '),
-                                    Text(listResponse[index]
-                                        .unitPrice
-                                        .toString()),
-                                    Text(' x '),
-                                    Text(listResponse[index].weightUnit),
+                                    listResponse[index].unitPrice.toString() != 'null'
+                                    ? 
+                                    Row(
+                                      children: [
+                                        Text(listResponse[index].unitPrice.toString()),
+                                        Text(' x '),
+                                        Text(listResponse[index].weightUnit),
+                                      ],
+                                    )
+                                    : Text('Por asignar')
                                   ],
                                 ),
                               ],

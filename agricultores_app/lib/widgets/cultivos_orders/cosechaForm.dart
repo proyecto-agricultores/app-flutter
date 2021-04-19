@@ -12,28 +12,27 @@ import 'cosechaCalendar.dart';
 import 'cosechaTextFormField.dart';
 
 class CosechaForm extends StatelessWidget {
-  CosechaForm(
-    {
-      this.supplyID,
-      this.updateSupply,
-      this.unitPriceController,
-      this.weightUnit,
-      this.updateWeightUnit,
-      this.areaController,
-      this.areaUnit,
-      this.updateAreaUnit,
-      this.updateDate,
-      this.sowingDateController,
-      this.selectedSowingDate,
-      this.harvestDateController,
-      this.selectedHarvestDate,
-      this.onPressed,
-      this.isLoading,
-      this.formKey,
-      this.buttonText,
-      this.hasSupply,
-    }
-  );
+  CosechaForm({
+    this.supplyID,
+    this.updateSupply,
+    @required this.unitPriceController,
+    @required this.weightUnit,
+    @required this.updateWeightUnit,
+    @required this.areaController,
+    @required this.areaUnit,
+    @required this.updateAreaUnit,
+    @required this.updateDate,
+    @required this.sowingDateController,
+    @required this.selectedSowingDate,
+    @required this.harvestDateController,
+    @required this.selectedHarvestDate,
+    @required this.onPressed,
+    @required this.isLoading,
+    @required this.formKey,
+    @required this.buttonText,
+    @required this.hasSupply,
+    @required this.hasPrice,
+  });
 
   final supplyID;
   final updateSupply;
@@ -53,38 +52,38 @@ class CosechaForm extends StatelessWidget {
   final formKey;
   final buttonText;
   final hasSupply;
-  
+  final hasPrice;
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: formKey,
-      child: Column(
-        children: [
+        key: formKey,
+        child: Column(children: [
           this.hasSupply
-          ?
-          SupplyDropdown(
-            supplyID: this.supplyID,
-            updateSupply: updateSupply
+              ? SupplyDropdown(
+                  supplyID: this.supplyID, updateSupply: updateSupply)
+              : Container(),
+          Separator(height: 0.01),
+          this.hasPrice 
+          ? Column(
+            children: [
+              CosechaTextFormField(
+                validator: "El campo Precio no puede ser vacío",
+                text: "Precio unitario x ",
+                controller: this.unitPriceController,
+                unit: this.weightUnit,
+              ),
+              Separator(height: 0.01),
+              UnitDropdown(
+                initialUnit: this.weightUnit,
+                updateUnit: updateWeightUnit,
+                items: PriceUnit.getPriceUnits()
+              ),
+              Separator(height: 0.01),
+              CosechaDivider(),
+              Separator(height: 0.01),
+            ],
           )
-          :
-          Container(),
-          Separator(height: 0.01),
-          CosechaDivider(),
-          Separator(height: 0.01),
-          CosechaTextFormField(
-            validator: "El campo Precio no puede ser vacío",
-            text: "Precio unitario x ",
-            controller: this.unitPriceController,
-            unit: this.weightUnit,
-          ),
-          Separator(height: 0.01),
-          UnitDropdown(
-            initialUnit: this.weightUnit,
-            updateUnit: updateWeightUnit,
-            items: PriceUnit.getPriceUnits()
-          ),
-          CosechaDivider(),
-          Separator(height: 0.01),
+          : Container(),
           CosechaTextFormField(
             validator: "El campo Área no puede ser vacío",
             text: "Área en ",
@@ -96,21 +95,19 @@ class CosechaForm extends StatelessWidget {
             updateUnit: updateAreaUnit,
             items: AreaUnit.getAreaUnits()
           ), 
-          Separator(height: 0.01),
           CosechaDivider(),
-          CosechaCalendar(
-            updateDate: this.updateDate,
-            controller: this.sowingDateController,
-            selectedDate: this.selectedSowingDate,
-            label: "Fecha de siembra"
-          ),
           Separator(height: 0.01),
           CosechaCalendar(
-            updateDate: this.updateDate,
-            controller: this.harvestDateController,
-            selectedDate: this.selectedHarvestDate,
-            label: "Fecha de cosecha"
-          ),
+              updateDate: this.updateDate,
+              controller: this.sowingDateController,
+              selectedDate: this.selectedSowingDate,
+              label: "Fecha de siembra"),
+          Separator(height: 0.01),
+          CosechaCalendar(
+              updateDate: this.updateDate,
+              controller: this.harvestDateController,
+              selectedDate: this.selectedHarvestDate,
+              label: "Fecha de cosecha"),
           SizedBox(height: 20),
           CosechaGreenButton(
             onPressed: this.onPressed,
@@ -118,8 +115,6 @@ class CosechaForm extends StatelessWidget {
             isLoading: this.isLoading,
           ),
           CancelButton(),
-        ]
-      )
-    );
+        ]));
   }
 }

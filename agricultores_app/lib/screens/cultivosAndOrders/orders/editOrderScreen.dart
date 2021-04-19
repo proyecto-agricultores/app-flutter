@@ -181,6 +181,7 @@ class _UpdateOrderScreenState extends State<UpdateOrderScreen> {
                     formKey: this._formKey,
                     buttonText: 'Guardar Cambios',
                     hasSupply: false,
+                    hasPrice: true,
                   )
                 ]
               )

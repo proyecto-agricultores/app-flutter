@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:shimmer/shimmer.dart';
 
+import 'filterFarmersAndClientsScreen.dart';
+
 class FilterFarmersAndClientsResultsScreenScreen extends StatefulWidget {
   FilterFarmersAndClientsResultsScreenScreen(
       {Key key,
@@ -68,13 +70,6 @@ class _FilterFarmersAndClientsResultsScreenScreenState
                   child: Column(
                     children: <Widget>[
                       SizedBox(height: 30),
-                      CosechaGreenButton(
-                        text: 'Nueva búsqueda',
-                        isLoading: false,
-                        onPressed: () {
-                          Navigator.pop(context);
-                        }
-                      ),
                       this._carruselUsuarios(false),
                     ],
                   ),
@@ -129,41 +124,21 @@ class _FilterFarmersAndClientsResultsScreenScreenState
         centerTitle: true,
       ),
       actions: <Widget>[
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              child: Column(
-                children: [
-                  Icon(Icons.person_outlined),
-                  Text("Perfil"),
-                ],
-              ),
-            ),
-            Container(
-              child: Column(
-                children: [
-                  Icon(Icons.coronavirus_outlined),
-                  Text("Cultivos"),
-                ],
-              ),
-            ),
-            Container(
-              child: Column(
-                children: [
-                  Icon(Icons.person_outlined),
-                  Text("Pedidos"),
-                ],
-              ),
-            ),
-          ],
-        ),
         IconButton(
-          icon: Icon(Icons.menu, color: Colors.white),
-          onPressed: () {
-            _scaffoldKey.currentState.openEndDrawer();
-          },
+          icon: Icon(Icons.search, color: Colors.white),
+          onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return FilterFarmersAndClientsScreen(
+                  title: this.widget.role == 'ag'
+                      ? 'Buscar Agricultores'
+                      : 'Buscar Compradores',
+                  role: this.widget.role,
+                );
+              },
+            ),
+          ),
         ),
       ],
     );
@@ -199,6 +174,8 @@ class _FilterFarmersAndClientsResultsScreenScreenState
                                       profilePicture:
                                           listResponse[index].profilePicture,
                                       ubigeo: listResponse[index].ubigeo,
+                                      phoneNumber:
+                                          listResponse[index].phoneNumber,
                                       latitude: listResponse[index].latitude,
                                       longitude: listResponse[index].longitude,
                                     ),
