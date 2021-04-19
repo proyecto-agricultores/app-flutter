@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'cultivosAndOrders/matchesScreen.dart';
 
@@ -331,19 +332,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
           borderRadius: BorderRadius.circular(18.0),
         ),
         onPressed: () async {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
+          if (this.role != "an") {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
                 builder: (context) {
-              if (this.role == 'ag') {
-                return CrearCultivoScreen();
-              } else if (this.role == "co") {
-                return CreateOrderScreen();
-              } else if (this.role == "an") {
-                return Text("diálogo");
-              }
-            }),
-          );
+                  if (this.role == 'ag') {
+                    return CrearCultivoScreen();
+                  } else if (this.role == "co") {
+                    return CreateOrderScreen();
+                  }
+              }),
+            );
+          } else {
+            showAdAlertDialog(context);
+          }
         },
         color: Colors.green[900],
         textColor: Colors.white,
@@ -351,6 +354,53 @@ class _ProfileScreenState extends State<ProfileScreen> {
             this.role == 'ag' ? Text("Añadir Cultivo") :
               (this.role == "co" ? Text("Añadir Orden") : Text("Añadir Anuncio")),
       ),
+    );
+  }
+
+  showAdAlertDialog(BuildContext context) {
+
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("Cancelar"),
+      onPressed:  () {
+        Navigator.of(context).pop(); 
+      },
+    );
+
+    _launchURL() async {
+      const url = 'https://web-platform-advertisement.vercel.app/';
+      if (await canLaunch(url)) {
+        await launch(url);
+      } else {
+        throw 'No se pudo abrir $url';
+      }
+    }
+
+    Widget continueButton = FlatButton(
+      child: Text("Ir"),
+      onPressed: _launchURL,
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Crear un anuncio"),
+      content: Text(
+        "Para publicar un anuncio debe ir a la versión web de Cosecha. " + 
+        "Le recomendamos usar una aplicación de escritorio. ¿Desea ingresar?"
+      ),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 
