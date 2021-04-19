@@ -53,6 +53,7 @@ class _AdsScreenState extends State<AdsScreen> {
                 child: Column(
                   children: [
                     ListView.separated(
+                      physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
                         var adInfo = listResponse[index];
                         return InkWell(
