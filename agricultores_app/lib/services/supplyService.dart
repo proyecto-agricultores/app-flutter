@@ -22,4 +22,18 @@ class SupplyService {
       throw Exception('Error al intentar obtener los insumos');
     }
   }
+
+  static Future<Supply> getSupplyById(int supplyId) async {
+    final response = await HTTPClient.getClient(WithToken.yes).get(
+      MyHTTPConection.HTTP_URL + 'supplys/$supplyId/',
+    );
+
+    if (response.statusCode == 200) {
+      var json = jsonDecode(utf8.decode(response.bodyBytes));
+      return Supply.fromJson(json[0]);
+    } else {
+      throw Exception("Error al intentar obtener el insumo con ID $supplyId");
+    }
+  }
+  
 }

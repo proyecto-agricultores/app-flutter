@@ -34,6 +34,7 @@ class CosechaForm extends StatefulWidget {
     @required this.buttonText,
     @required this.hasSupply,
     @required this.hasPrice,
+    @required this.isEditingScreen
   });
 
   final supplyID;
@@ -55,6 +56,7 @@ class CosechaForm extends StatefulWidget {
   final buttonText;
   final hasSupply;
   final hasPrice;
+  final isEditingScreen;
 
   @override
   _CosechaFormState createState() => _CosechaFormState();

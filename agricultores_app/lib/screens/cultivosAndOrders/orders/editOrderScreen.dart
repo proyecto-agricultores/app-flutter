@@ -182,6 +182,7 @@ class _UpdateOrderScreenState extends State<UpdateOrderScreen> {
                     buttonText: 'Guardar Cambios',
                     hasSupply: false,
                     hasPrice: true,
+                    isEditingScreen: true,
                   )
                 ]
               )

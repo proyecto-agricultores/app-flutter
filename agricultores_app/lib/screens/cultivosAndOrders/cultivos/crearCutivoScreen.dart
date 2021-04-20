@@ -199,6 +199,7 @@ class _CrearCultivoScreenState extends State<CrearCultivoScreen> {
                     buttonText: 'Crear Cultivo',
                     hasSupply: true,
                     hasPrice: false,
+                    isEditingScreen: false,
                   )
                 ]
               )

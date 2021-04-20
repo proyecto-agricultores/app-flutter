@@ -328,6 +328,7 @@ class _EditarCultivoScreenState extends State<EditarCultivoScreen> {
                     buttonText: 'Guardar Cambios',
                     hasSupply: false, 
                     hasPrice: true,
+                    isEditingScreen: true,
                   )
                 ],
               ),

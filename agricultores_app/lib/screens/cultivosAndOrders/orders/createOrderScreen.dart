@@ -166,6 +166,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                     buttonText: 'Crear Orden',
                     hasSupply: true,
                     hasPrice: true,
+                    isEditingScreen: false,
                   )
                 ]
               )
