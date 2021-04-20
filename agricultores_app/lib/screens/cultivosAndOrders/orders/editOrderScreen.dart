@@ -132,7 +132,7 @@ class _UpdateOrderScreenState extends State<UpdateOrderScreen> {
   void initState() {
     super.initState();
     weightUnit = dataOrden.weightUnit;
-    unitPriceController.text = dataOrden.unitPrice.toString();
+    unitPriceController.text = dataOrden.unitPrice != null ? dataOrden.unitPrice.toString() : "";
     areaUnit = dataOrden.areaUnit;
     areaController.text = dataOrden.area.toString();
     harvestDateController.text = formatter.format(dataOrden.harvestDate);

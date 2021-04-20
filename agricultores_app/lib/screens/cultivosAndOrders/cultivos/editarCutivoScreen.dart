@@ -177,7 +177,7 @@ class _EditarCultivoScreenState extends State<EditarCultivoScreen> {
   void initState() {
     super.initState();
     weightUnit = dataCultivo.weightUnit;
-    unitPriceController.text = dataCultivo.unitPrice.toString();
+    unitPriceController.text = dataCultivo.unitPrice != null ? dataCultivo.unitPrice.toString() : "";
     areaUnit = dataCultivo.areaUnit;
     areaController.text = dataCultivo.area.toString();
     harvestDateController.text = formatter.format(dataCultivo.harvestDate);
