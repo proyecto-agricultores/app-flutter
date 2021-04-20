@@ -183,6 +183,8 @@ class _UpdateOrderScreenState extends State<UpdateOrderScreen> {
                     hasSupply: false,
                     hasPrice: true,
                     isEditingScreen: true,
+                    pubOrOrderId: ordenId,
+                    isOrder: true,
                   )
                 ]
               )

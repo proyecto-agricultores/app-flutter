@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 
 class SupplyDropdown extends StatelessWidget {
 
-  SupplyDropdown({this.supplyID, this.updateSupply, this.setSuggestedHarvestDate});
+  SupplyDropdown({this.supplyID, this.updateSupply, this.setDaysToHarvest});
 
   final supplyID;
   final updateSupply;
-  final setSuggestedHarvestDate;
+  final setDaysToHarvest;
   
   @override
   Widget build(BuildContext context) {
@@ -32,8 +32,8 @@ class SupplyDropdown extends StatelessWidget {
               isExpanded: true,
               onChanged: (newValue) {
                 updateSupply(mapItems[newValue].id);
-                if (setSuggestedHarvestDate != null) {
-                  setSuggestedHarvestDate(mapItems[newValue].daysToHarvest);
+                if (setDaysToHarvest != null) {
+                  setDaysToHarvest(mapItems[newValue].daysToHarvest);
                 }
               },
               items: mapItems.entries.map((item) {

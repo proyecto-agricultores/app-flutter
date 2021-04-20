@@ -1,5 +1,12 @@
+import 'package:agricultores_app/models/SupplyDaysForHarvestModel.dart';
 import 'package:agricultores_app/models/areaUnitModel.dart';
+import 'package:agricultores_app/models/myOrderModel.dart';
+import 'package:agricultores_app/models/myPubModel.dart';
 import 'package:agricultores_app/models/priceUnitModel.dart';
+import 'package:agricultores_app/models/supplyModel.dart';
+import 'package:agricultores_app/services/myOrderService.dart';
+import 'package:agricultores_app/services/myPubService.dart';
+import 'package:agricultores_app/services/supplyDaysForHarvestService.dart';
 import 'package:agricultores_app/widgets/cultivos_orders/supplyDropdown.dart';
 import 'package:agricultores_app/widgets/cultivos_orders/unitDropdown.dart';
 import 'package:agricultores_app/widgets/general/cancelButton.dart';
@@ -34,7 +41,9 @@ class CosechaForm extends StatefulWidget {
     @required this.buttonText,
     @required this.hasSupply,
     @required this.hasPrice,
-    @required this.isEditingScreen
+    @required this.isEditingScreen,
+    this.pubOrOrderId,
+    this.isOrder,
   });
 
   final supplyID;
@@ -57,6 +66,8 @@ class CosechaForm extends StatefulWidget {
   final hasSupply;
   final hasPrice;
   final isEditingScreen;
+  final pubOrOrderId;
+  final isOrder;
 
   @override
   _CosechaFormState createState() => _CosechaFormState();
@@ -68,27 +79,68 @@ class _CosechaFormState extends State<CosechaForm> {
   String suggestedHarvestDate = "-";
   DateTime initialSowingDate;
   int daysToHarvest;
+  Supply supply;
+  bool fetching = true;
 
   @override
   void initState() {
     super.initState();
     initialSowingDate = this.widget.selectedSowingDate;
     initializeDateFormatting();
+    getSupplyDaysForHarvest();
   }
 
-  setSuggestedHarvestDate(int days) {
+  getSupplyDaysForHarvest() async {
+    if (this.widget.isEditingScreen && this.widget.pubOrOrderId != null) {
+      if (this.widget.isOrder) {
+        SupplyDaysForHarvest order = await SupplyDaysForHarvestService.getDaysForOrder(this.widget.pubOrOrderId);
+        setState(() {
+          daysToHarvest = order.days;
+          fetching = false;
+        });
+      } else {
+        SupplyDaysForHarvest pub = await SupplyDaysForHarvestService.getDaysForPublication(this.widget.pubOrOrderId);
+        setState(() {
+          daysToHarvest = pub.days;
+          fetching = false;
+        });
+      }
+    }
+  }
+
+  setDaysToHarvest(int days) {
     setState(() {
       daysToHarvest = days;
     });
   }
 
+  calculateSuggestedHarvestDate(DateTime sowingDate) {
+    DateTime newDate = new DateTime(sowingDate.year, sowingDate.month, sowingDate.day + daysToHarvest);
+    return "${newDate.day.toString()}-${newDate.month.toString()}-${newDate.year.toString()}"; 
+  }
+
+  setSuggestedHarvestDateFromDateController() {
+    DateTime sowingDate = new DateFormat("dd-MM-yyyy").parse(this.widget.sowingDateController.text);
+    return calculateSuggestedHarvestDate(sowingDate);
+  }
+
   getSuggestedHarvestDate() {
-    if (this.widget.sowingDateController.text != "" && daysToHarvest != null) {
-      DateTime sowingDate = new DateFormat("dd-MM-yyyy").parse(this.widget.sowingDateController.text);
-      DateTime newDate = new DateTime(sowingDate.year, sowingDate.month, sowingDate.day + daysToHarvest);
-      return "${newDate.day.toString()}-${newDate.month.toString()}-${newDate.year.toString()}";
+    if (this.widget.isEditingScreen) {
+      if (fetching) {
+        return "-";
+      } else {
+        if (this.widget.sowingDateController.text == "") {
+          return calculateSuggestedHarvestDate(this.widget.selectedSowingDate);
+        } else {
+          return setSuggestedHarvestDateFromDateController();
+        }
+      }
     } else {
-      return "-";
+      if (this.widget.sowingDateController.text != "" && daysToHarvest != null) {
+        return setSuggestedHarvestDateFromDateController();
+      } else {
+        return "-";
+      }
     }
   }
 
@@ -99,7 +151,7 @@ class _CosechaFormState extends State<CosechaForm> {
         child: Column(children: [
           this.widget.hasSupply
               ? SupplyDropdown(
-                  supplyID: this.widget.supplyID, updateSupply: this.widget.updateSupply, setSuggestedHarvestDate: this.setSuggestedHarvestDate,)
+                  supplyID: this.widget.supplyID, updateSupply: this.widget.updateSupply, setDaysToHarvest: this.setDaysToHarvest,)
               : Container(),
           Separator(height: 0.01),
           this.widget.hasPrice 

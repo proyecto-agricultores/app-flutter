@@ -329,6 +329,8 @@ class _EditarCultivoScreenState extends State<EditarCultivoScreen> {
                     hasSupply: false, 
                     hasPrice: true,
                     isEditingScreen: true,
+                    pubOrOrderId: cultivoId,
+                    isOrder: false,
                   )
                 ],
               ),
