@@ -40,7 +40,7 @@ class _CrearCultivoScreenState extends State<CrearCultivoScreen> {
   final sowingDateController = TextEditingController();
   String weightUnit = "kg";
   String areaUnit = "hm2";
-  int supplyID = 1;
+  int supplyID;
 
   final DateFormat formatter = DateFormat('dd-MM-yyyy');
   final _formKey = new GlobalKey<FormState>();

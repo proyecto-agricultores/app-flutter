@@ -29,7 +29,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
   final sowingDateController = TextEditingController();
   String weightUnit = "kg";
   String areaUnit = "hm2";
-  int supplyID = 1;
+  int supplyID;
   final DateFormat formatter = DateFormat('dd-MM-yyyy');
 
   updateSupply(newValue) {

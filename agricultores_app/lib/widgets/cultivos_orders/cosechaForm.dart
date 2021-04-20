@@ -7,11 +7,13 @@ import 'package:agricultores_app/widgets/general/cosechaGreenButton.dart';
 import 'package:agricultores_app/widgets/general/divider.dart';
 import 'package:agricultores_app/widgets/general/separator.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 import 'cosechaCalendar.dart';
 import 'cosechaTextFormField.dart';
 
-class CosechaForm extends StatelessWidget {
+class CosechaForm extends StatefulWidget {
   CosechaForm({
     this.supplyID,
     this.updateSupply,
@@ -53,29 +55,64 @@ class CosechaForm extends StatelessWidget {
   final buttonText;
   final hasSupply;
   final hasPrice;
+
+  @override
+  _CosechaFormState createState() => _CosechaFormState();
+
+}
+
+class _CosechaFormState extends State<CosechaForm> {
+
+  String suggestedHarvestDate = "-";
+  DateTime initialSowingDate;
+  int daysToHarvest;
+
+  @override
+  void initState() {
+    super.initState();
+    initialSowingDate = this.widget.selectedSowingDate;
+    initializeDateFormatting();
+  }
+
+  setSuggestedHarvestDate(int days) {
+    setState(() {
+      daysToHarvest = days;
+    });
+  }
+
+  getSuggestedHarvestDate() {
+    if (this.widget.sowingDateController.text != "" && daysToHarvest != null) {
+      DateTime sowingDate = new DateFormat("dd-MM-yyyy").parse(this.widget.sowingDateController.text);
+      DateTime newDate = new DateTime(sowingDate.year, sowingDate.month, sowingDate.day + daysToHarvest);
+      return "${newDate.day.toString()}-${newDate.month.toString()}-${newDate.year.toString()}";
+    } else {
+      return "-";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
-        key: formKey,
+        key: this.widget.formKey,
         child: Column(children: [
-          this.hasSupply
+          this.widget.hasSupply
               ? SupplyDropdown(
-                  supplyID: this.supplyID, updateSupply: updateSupply)
+                  supplyID: this.widget.supplyID, updateSupply: this.widget.updateSupply, setSuggestedHarvestDate: this.setSuggestedHarvestDate,)
               : Container(),
           Separator(height: 0.01),
-          this.hasPrice 
+          this.widget.hasPrice 
           ? Column(
             children: [
               CosechaTextFormField(
                 validator: "El campo Precio no puede ser vacío",
                 text: "Precio unitario x ",
-                controller: this.unitPriceController,
-                unit: this.weightUnit,
+                controller: this.widget.unitPriceController,
+                unit: this.widget.weightUnit,
               ),
               Separator(height: 0.01),
               UnitDropdown(
-                initialUnit: this.weightUnit,
-                updateUnit: updateWeightUnit,
+                initialUnit: this.widget.weightUnit,
+                updateUnit: this.widget.updateWeightUnit,
                 items: PriceUnit.getPriceUnits()
               ),
               Separator(height: 0.01),
@@ -87,32 +124,33 @@ class CosechaForm extends StatelessWidget {
           CosechaTextFormField(
             validator: "El campo Área no puede ser vacío",
             text: "Área en ",
-            controller: this.areaController,
-            unit: this.areaUnit,
+            controller: this.widget.areaController,
+            unit: this.widget.areaUnit,
           ),
           UnitDropdown(
-            initialUnit: this.areaUnit,
-            updateUnit: updateAreaUnit,
+            initialUnit: this.widget.areaUnit,
+            updateUnit: this.widget.updateAreaUnit,
             items: AreaUnit.getAreaUnits()
           ), 
           CosechaDivider(),
           Separator(height: 0.01),
           CosechaCalendar(
-              updateDate: this.updateDate,
-              controller: this.sowingDateController,
-              selectedDate: this.selectedSowingDate,
+              updateDate: this.widget.updateDate,
+              controller: this.widget.sowingDateController,
+              selectedDate: this.widget.selectedSowingDate,
               label: "Fecha de siembra"),
           Separator(height: 0.01),
           CosechaCalendar(
-              updateDate: this.updateDate,
-              controller: this.harvestDateController,
-              selectedDate: this.selectedHarvestDate,
+              updateDate: this.widget.updateDate,
+              controller: this.widget.harvestDateController,
+              selectedDate: this.widget.selectedHarvestDate,
               label: "Fecha de cosecha"),
+          Text("Fecha de cosecha sugerida: " + getSuggestedHarvestDate()),
           SizedBox(height: 20),
           CosechaGreenButton(
-            onPressed: this.onPressed,
-            text: this.buttonText,
-            isLoading: this.isLoading,
+            onPressed: this.widget.onPressed,
+            text: this.widget.buttonText,
+            isLoading: this.widget.isLoading,
           ),
           CancelButton(),
         ]));

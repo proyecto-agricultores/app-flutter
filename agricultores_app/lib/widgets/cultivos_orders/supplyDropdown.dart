@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 
 class SupplyDropdown extends StatelessWidget {
 
-  SupplyDropdown({this.supplyID, this.updateSupply});
+  SupplyDropdown({this.supplyID, this.updateSupply, this.setSuggestedHarvestDate});
 
   final supplyID;
   final updateSupply;
+  final setSuggestedHarvestDate;
   
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,8 @@ class SupplyDropdown extends StatelessWidget {
         List<Supply> listItems = [];
         if (snapshot.hasData) {
           listItems = snapshot.data;
-        } 
+        }
+        Map<int, Supply> mapItems = listItems.asMap();
         return IgnorePointer(
           ignoring: !snapshot.hasData,
           child: Container(
@@ -29,12 +31,15 @@ class SupplyDropdown extends StatelessWidget {
               value: supplyID,
               isExpanded: true,
               onChanged: (newValue) {
-                updateSupply(newValue);
+                updateSupply(mapItems[newValue].id);
+                if (setSuggestedHarvestDate != null) {
+                  setSuggestedHarvestDate(mapItems[newValue].daysToHarvest);
+                }
               },
-              items: listItems.map((item) {
+              items: mapItems.entries.map((item) {
                 return DropdownMenuItem(
-                  child: Text(item.name),
-                  value: item.id,
+                  child: Text(item.value.name),
+                  value: item.key,
                 );
               }).toList(),
             ),
