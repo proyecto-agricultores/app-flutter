@@ -134,7 +134,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       return this.dniOrRuc
                           ? "El campo RUC no puede ser vacío"
                           : "El campo DNI no puede ser vacío";
-                    } else if (this.dniOrRuc && value.length < 10) {
+                    } else if (this.dniOrRuc && value.length < 11) {
                       return "Su RUC está incompleto";
                     } else if (!this.dniOrRuc && value.length < 8) {
                       return "Su DNI está incompleto";
@@ -142,7 +142,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       return null;
                     }
                   },
-                  maxLength: this.dniOrRuc ? 10 : 8,
+                  maxLength: this.dniOrRuc ? 11 : 8,
                   decoration: _buildInputDecoration(""),
                 ),
               ]),
