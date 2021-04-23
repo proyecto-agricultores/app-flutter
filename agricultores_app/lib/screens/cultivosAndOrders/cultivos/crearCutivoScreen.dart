@@ -4,6 +4,7 @@ import 'package:agricultores_app/services/myPubService.dart';
 import 'package:agricultores_app/widgets/cultivos_orders/cosechaForm.dart';
 import 'package:agricultores_app/widgets/cultivos_orders/imageCarouselWidget.dart';
 import 'package:agricultores_app/widgets/general/divider.dart';
+import 'package:agricultores_app/widgets/general/separator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'
     show
@@ -177,6 +178,7 @@ class _CrearCultivoScreenState extends State<CrearCultivoScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
+                  SizedBox(height: 15),
                   ImageCarousel(images: this._images, getImage: this.getImage),
                   CosechaDivider(),
                   CosechaForm(

@@ -2,6 +2,7 @@ import 'package:agricultores_app/services/updateRolService.dart';
 import 'package:agricultores_app/widgets/general/cosechaLogo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show DeviceOrientation, SystemChrome;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../app_icons.dart';
 import '../homeScreen.dart';
@@ -34,8 +35,10 @@ class _RoleRegisterScreenState extends State<RoleRegisterScreen> {
                 ),
                 FlatButton(
                   child: Text("Sí"),
-                  onPressed: () {
-                    UpdateRolService.updateRol(roleAbbreviation);
+                  onPressed: () async {
+                    await UpdateRolService.updateRol(roleAbbreviation);
+                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                    await prefs.setString('role', roleAbbreviation);
                     Navigator.of(context)
                         .popUntil((route) => route.isFirst);
                     Navigator.pushReplacement(

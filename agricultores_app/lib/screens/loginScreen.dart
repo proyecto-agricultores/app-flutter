@@ -1,5 +1,5 @@
+import 'package:agricultores_app/main.dart';
 import 'package:agricultores_app/models/colorsModel.dart';
-import 'package:agricultores_app/screens/homeScreen.dart';
 import 'package:agricultores_app/screens/register/registerScreen.dart';
 import 'package:agricultores_app/services/myProfileService.dart';
 import 'package:agricultores_app/services/token.dart';
@@ -119,7 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     await prefs.setString('role', user.role);
                     await Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => HomeScreen()),
+                      MaterialPageRoute(builder: (context) => MyApp()),
                     );
                   } catch (e) {
                     setState(() {

@@ -1,12 +1,11 @@
-import 'package:agricultores_app/models/colorsModel.dart';
 import 'package:agricultores_app/screens/register/photoRegisterScreen.dart';
 import 'package:agricultores_app/services/codeRegisterService.dart';
 import 'package:agricultores_app/widgets/general/cosechaGreenButton.dart';
 import 'package:agricultores_app/widgets/general/cosechaLogo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show DeviceOrientation, SystemChrome;
-
 import 'package:flutter_verification_code/flutter_verification_code.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CodeRegisterScreen extends StatefulWidget {
   CodeRegisterScreen({Key key}) : super(key: key);
