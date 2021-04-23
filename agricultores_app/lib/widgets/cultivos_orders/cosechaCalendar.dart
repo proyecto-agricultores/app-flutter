@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 class CosechaCalendar extends StatelessWidget {
   CosechaCalendar({this.updateDate, this.controller, this.selectedDate, this.label});
@@ -10,6 +11,7 @@ class CosechaCalendar extends StatelessWidget {
       initialDate: selectedDate,
       firstDate: DateTime(2021),
       lastDate: DateTime(2100),
+      locale: const Locale("es", "ES"),
     );
     if (picked != null && picked != selectedDate) {
       updateDate(picked, _dateController);

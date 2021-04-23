@@ -7,8 +7,8 @@ import 'package:agricultores_app/screens/register/roleRegisterScreen.dart';
 import 'package:agricultores_app/services/myProfileService.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'MyColors.dart';
 import 'screens/loginScreen.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   runApp(MyApp());
@@ -31,6 +31,13 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         fontFamily: 'Poppins',
       ),
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate
+      ],
+      supportedLocales: [
+        const Locale('es'),
+        const Locale('en'),
+      ],
       home: FutureBuilder(
         future: MyProfileService.getLoggedinUser(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
