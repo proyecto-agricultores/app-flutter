@@ -178,7 +178,7 @@ class _CrearCultivoScreenState extends State<CrearCultivoScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  SizedBox(height: 15),
+                  SizedBox(height: 20),
                   ImageCarousel(images: this._images, getImage: this.getImage),
                   CosechaDivider(),
                   CosechaForm(
