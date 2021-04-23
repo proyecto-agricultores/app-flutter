@@ -133,7 +133,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         return AlertDialog(
                           title: Text('Credenciales Incorrectas'),
                           content: Text(
-                              'Ingresar nuevamente su correo y contraseña.'),
+                              'Ingresar nuevamente su número y contraseña.'),
                           actions: <Widget>[
                             TextButton(
                               child: Text('Intentar Nuevamente'),
