@@ -1,5 +1,4 @@
 import 'package:agricultores_app/widgets/cultivos_orders/supplyDropdown.dart';
-import 'package:agricultores_app/widgets/general/divider.dart';
 import 'package:agricultores_app/widgets/general/cosechaGreenButton.dart';
 import 'package:agricultores_app/widgets/general/separator.dart';
 import 'package:agricultores_app/widgets/cultivos_orders/cosechaTextFormField.dart';
@@ -30,6 +29,8 @@ class _FilterCropsAndOrdersScreenState extends State<FilterCropsAndOrdersScreen>
   final String role;
   final minPriceController = TextEditingController();
   final maxPriceController = TextEditingController();
+  final minSowingDateController = TextEditingController();
+  final maxSowingDateController = TextEditingController();
   final minHarvestDateController = TextEditingController();
   final maxHarvestDateController = TextEditingController();
 
@@ -40,6 +41,8 @@ class _FilterCropsAndOrdersScreenState extends State<FilterCropsAndOrdersScreen>
   List<Region> _regions = [Region(id: 0, name: '')];
   DateTime _selectedMinHarvestDate = DateTime.now();
   DateTime _selectedMaxHarvestDate = DateTime.now();
+  DateTime _selectedMinSowingDate = DateTime.now();
+  DateTime _selectedMaxSowingDate = DateTime.now();
   bool _regionsAreFetched = false;
   bool _loadingRequest = false;
 
@@ -132,6 +135,18 @@ class _FilterCropsAndOrdersScreenState extends State<FilterCropsAndOrdersScreen>
                     unit: 'kg'
                   ),
                   Separator(height: 0.03),
+                  CosechaCalendar(
+                    updateDate: this.updateDate,
+                    controller: this.minSowingDateController,
+                    selectedDate: this._selectedMinSowingDate,
+                    label: "Fecha mínima de siembra"
+                  ),
+                  CosechaCalendar(
+                    updateDate: this.updateDate,
+                    controller: this.maxSowingDateController,
+                    selectedDate: this._selectedMaxSowingDate,
+                    label: "Fecha máxima de siembra"
+                  ),
                   CosechaCalendar(
                     updateDate: this.updateDate,
                     controller: this.minHarvestDateController,
