@@ -8,6 +8,7 @@ class MyOrder {
   final DateTime harvestDate;
   final DateTime sowingDate;
   final bool isSolved;
+  final int user;
 
   MyOrder({
     this.id,
@@ -19,6 +20,7 @@ class MyOrder {
     this.harvestDate,
     this.sowingDate,
     this.isSolved,
+    this.user,
   });
 
   factory MyOrder.fromJson(Map<String, dynamic> json) {
@@ -32,6 +34,7 @@ class MyOrder {
       isSolved: json['is_solved'],
       harvestDate: DateTime.parse(json['desired_harvest_date']),
       sowingDate: DateTime.parse(json['desired_sowing_date']),
+      user: json['user']
     );
   }
 }

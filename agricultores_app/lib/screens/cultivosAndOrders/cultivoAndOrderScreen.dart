@@ -1,7 +1,11 @@
+import 'package:agricultores_app/models/userModel.dart';
 import 'package:agricultores_app/screens/cultivosAndOrders/cultivos/editarCutivoScreen.dart';
+import 'package:agricultores_app/screens/userProfileScreen.dart';
 import 'package:agricultores_app/services/adService.dart';
 import 'package:agricultores_app/services/myOrderService.dart';
 import 'package:agricultores_app/services/myPubService.dart';
+import 'package:agricultores_app/services/userFilterService.dart';
+import 'package:agricultores_app/widgets/general/cosechaGreenButton.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show DeviceOrientation, SystemChrome;
@@ -45,6 +49,7 @@ class _CultivoAndOrderScreenState extends State<CultivoAndOrderScreen> {
   final role;
   final bool isMyCultivoOrOrder;
   final bool invertRole;
+  bool isLoading = false;
 
   _CultivoAndOrderScreenState(
     this.pubOrOrderId,
@@ -53,6 +58,38 @@ class _CultivoAndOrderScreenState extends State<CultivoAndOrderScreen> {
     this.isMyCultivoOrOrder,
     this.invertRole,
   );
+
+  Widget viewProfileButton(int userId) {
+    return CosechaGreenButton(
+      onPressed: this.isLoading ? null : () async {
+        setState(() {
+          isLoading = true;
+        });
+        User user = await UserFilterService.getUserById(userId);
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => UserProfileScreen(
+              id: user.id,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              role: user.role,
+              profilePicture: user.profilePicture,
+              ubigeo: user.ubigeo,
+              phoneNumber: user.phoneNumber,
+              latitude: user.latitude,
+              longitude: user.longitude,
+            )
+          )
+        );
+        setState(() {
+          isLoading = false;
+        });
+      },
+      text: "Ver perfil",
+      isLoading: false,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -179,6 +216,7 @@ class _CultivoAndOrderScreenState extends State<CultivoAndOrderScreen> {
                               ),
                             ],
                           ),
+                          !this.isMyCultivoOrOrder ? viewProfileButton(snapshot.data.user) : Container(),
                           this.isMyCultivoOrOrder == true
                               ? Row(
                                   mainAxisAlignment: MainAxisAlignment.center,

@@ -30,7 +30,8 @@ class CosechaGreenButton extends StatelessWidget {
           fontWeight: FontWeight.bold,
           fontSize: 16,
         )
-      )
+      ),
+      disabledColor: CosechaColors.verdeSuave,
     );
   }
   
