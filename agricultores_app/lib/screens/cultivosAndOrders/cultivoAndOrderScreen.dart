@@ -227,8 +227,8 @@ class _CultivoAndOrderScreenState extends State<CultivoAndOrderScreen> {
                                         (roleActual
                                                 ? snapshot.data.isSold
                                                 : snapshot.data.isSolved)
-                                            ? 'Marcar como NO Vendido'
-                                            : 'Marcar como Vendido',
+                                            ? 'Marcar como NO Resuelto'
+                                            : 'Marcar como Resuelto',
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
