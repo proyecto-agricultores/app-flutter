@@ -87,7 +87,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     children: <Widget>[
                       SizedBox(height: 30),
                       this._ubicacion(snapshot, false),
-                      this._verMapa(false),
+                      // this._verMapa(false),
                       this._contactar(snapshot, false),
                       Divider(),
                       this._carruselCultivos(false),
@@ -105,7 +105,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     children: <Widget>[
                       SizedBox(height: 30),
                       this._ubicacion(snapshot, true),
-                      this._verMapa(true),
+                      // this._verMapa(true),
                       this._contactar(snapshot, false),
                       this._carruselCultivos(true),
                     ],
@@ -145,7 +145,20 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 ),
               )
             : SABT(
-                child: firstName != null ? Text(firstName) : Text("Sin Nombre"),
+                child: RichText(
+                  textAlign: TextAlign.center,
+                  text: TextSpan(
+                    text: (firstName != null ? firstName : "Sin nombre") + "\n",
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: "(" + (role == "ag" ? "Agricultor" : (role == "an" ? "Anunciante" : "Comprador")) + ")",
+                        style: (
+                          TextStyle(fontSize: 9)
+                        )
+                      ),
+                    ],
+                  ),
+                )
               ),
         collapseMode: CollapseMode.pin,
         centerTitle: true,

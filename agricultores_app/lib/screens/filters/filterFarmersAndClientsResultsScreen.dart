@@ -255,8 +255,8 @@ class _FilterFarmersAndClientsResultsScreenScreenState
                 );
               } else {
                 return Center(
-                    child: Text("No hay resultados para esta búsqueda."),
-                  );
+                  child: Text("No hay resultados para esta búsqueda."),
+                );
               }
             } else {
               return Container();

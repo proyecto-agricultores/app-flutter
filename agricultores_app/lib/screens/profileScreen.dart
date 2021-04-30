@@ -50,7 +50,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: <Widget>[
                       SizedBox(height: 30),
                       this._ubicacion(snapshot, false),
-                      this._verMapa(snapshot, false),
+                      // this._verMapa(snapshot, false),
                       this._agregarCultivoUOrden(),
                       this.role != "an" ? this._verMatches() : Container(),
                       this._verTodosCultivos(),
@@ -69,7 +69,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: <Widget>[
                       SizedBox(height: 30),
                       this._ubicacion(snapshot, true),
-                      this._verMapa(snapshot, true),
+                      // this._verMapa(snapshot, true),
                     ],
                   ),
                 ),
