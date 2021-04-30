@@ -2,6 +2,7 @@ import 'package:agricultores_app/screens/STAB.dart';
 import 'package:agricultores_app/screens/cultivosAndOrders/cultivoAndOrderScreen.dart';
 import 'package:agricultores_app/services/myProfileService.dart';
 import 'package:agricultores_app/services/myPubService.dart';
+import 'package:agricultores_app/widgets/general/contactButton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:maps_launcher/maps_launcher.dart';
@@ -88,6 +89,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       this._ubicacion(snapshot, false),
                       this._verMapa(false),
                       this._contactar(snapshot, false),
+                      Divider(),
                       this._carruselCultivos(false),
                     ],
                   ),
@@ -258,25 +260,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   }
 
   Widget _contactar(AsyncSnapshot snapshot, bool isLoading) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 15),
-      child: RaisedButton(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18.0),
-        ),
-        onPressed: () async {
-          String url = 'tel:' + phoneNumber;
-          if (await canLaunch(url)) {
-            await launch(url);
-          } else {
-            throw 'Could not launch $url';
-          }
-          print(phoneNumber);
-        },
-        color: Colors.blue[900],
-        textColor: Colors.white,
-        child: Text("Contactar"),
-      ),
+    return Column(
+      children: [
+        Text("Contactarse aquí"),
+        ContactButton(phoneNumber: phoneNumber),
+        SizedBox(height: 10),
+      ],
     );
   }
 
