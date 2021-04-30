@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:agricultores_app/interceptor/httpInterceptor.dart';
+import 'package:agricultores_app/models/aOrderModel.dart';
 import 'package:agricultores_app/models/myOrderModel.dart';
 import 'package:agricultores_app/global/myHTTPConnection.dart';
 
@@ -61,7 +62,7 @@ class MyOrderService {
 
     if (response.statusCode == 200) {
       var json = jsonDecode(utf8.decode(response.bodyBytes));
-      return MyOrder.fromJson(json);
+      return AOrder.fromJson(json);
     } else {
       throw Exception(
           'Error al recuperar la información en publicación por ID.');

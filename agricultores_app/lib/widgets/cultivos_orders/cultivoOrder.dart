@@ -1,9 +1,15 @@
+import 'package:agricultores_app/models/userModel.dart';
 import 'package:agricultores_app/screens/cultivosAndOrders/cultivos/editarCutivoScreen.dart';
 import 'package:agricultores_app/screens/cultivosAndOrders/orders/editOrderScreen.dart';
+import 'package:agricultores_app/screens/userProfileScreen.dart';
 import 'package:agricultores_app/services/myOrderService.dart';
 import 'package:agricultores_app/services/myPubService.dart';
+import 'package:agricultores_app/services/userService.dart';
 import 'package:agricultores_app/widgets/ad/ad.dart';
+import 'package:agricultores_app/widgets/general/contactButton.dart';
+import 'package:agricultores_app/widgets/general/cosechaGreenButton.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -39,7 +45,7 @@ class CultivoOrder extends StatelessWidget {
           return Container(
             child: Column(
               children: [
-                roleActual
+                (roleActual && snapshot.data.pictureURLs.length != 0)
                     ? Container(
                         child: CarouselSlider(
                           options: CarouselOptions(
@@ -118,9 +124,43 @@ class CultivoOrder extends StatelessWidget {
                   ],
                 ),
                 this.isMyCultivoOrOrder == false
-                    ? Row(
+                    ? Column(
                         children: [
-                          Text("Test"),
+                          Divider(),
+                          Text(roleActual
+                              ? "Contactarse con el vendedor:"
+                              : "Contactarse con el credor de esta orden:"),
+                          ContactButton(
+                              phoneNumber: snapshot.data.userPhoneNumber),
+                          RichText(
+                            text: TextSpan(
+                              text: 'visitar el perfil',
+                              style: new TextStyle(color: Colors.indigo[900]),
+                              recognizer: new TapGestureRecognizer()
+                                ..onTap = () async {
+                                  User infoUser = await UserService.getUser(
+                                      snapshot.data.userId);
+
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => UserProfileScreen(
+                                        id: infoUser.id,
+                                        firstName: infoUser.firstName,
+                                        lastName: infoUser.lastName,
+                                        role: infoUser.role,
+                                        profilePicture: infoUser.profilePicture,
+                                        ubigeo: infoUser.ubigeo,
+                                        phoneNumber: infoUser.phoneNumber,
+                                        latitude: infoUser.latitude,
+                                        longitude: infoUser.longitude,
+                                      ),
+                                    ),
+                                  );
+                                },
+                            ),
+                          ),
+                          Divider(),
                         ],
                       )
                     : Container(),
