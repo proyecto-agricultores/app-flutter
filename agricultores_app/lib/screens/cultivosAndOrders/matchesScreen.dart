@@ -63,108 +63,116 @@ class _MatchesScreenState extends State<MatchesScreen> {
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
             final listResponse = snapshot.data;
-            if (snapshot.hasData) {
-              return Column(
-                children: [
-                  Icon(
-                    Icons.agriculture_outlined,
-                    color: Colors.indigo[900],
-                    size: 50,
-                  ),
-                  Text(
-                    this.role == 'ag'
-                        ? 'Órdenes que me interesan'
-                        : 'Cultivos que me interesan',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-                  ),
-                  SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        ListView.separated(
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemBuilder: (BuildContext context, int index) {
-                            return InkWell(
-                              onTap: () => {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => CultivoAndOrderScreen(
-                                      cultivoId: listResponse[index].id,
-                                      titulo: listResponse[index].supplieName,
-                                      role: this.role,
-                                      isMyCultivoOrOrder: false,
-                                      invertRole: this.role == "ag",
-                                    ),
-                                  ),
-                                )
-                              },
-                              child: Column(
-                                children: <Widget>[
-                                  Container(
-                                    alignment: Alignment.center,
-                                    child: Image(
-                                      height: 150,
-                                      width: MediaQuery.of(context).size.width,
-                                      fit: BoxFit.cover,
-                                      image: this.role == 'co'
-                                          ? (listResponse[index]
-                                                      .pictureURLs
-                                                      .length ==
-                                                  0
-                                              ? AssetImage(
-                                                  "assets/images/papas.jpg")
-                                              : NetworkImage(listResponse[index]
-                                                  .pictureURLs[0]))
-                                          : AssetImage(
-                                              "assets/images/order.jpg"),
-                                    ),
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text("Producto: "),
-                                      Text(
-                                        listResponse[index].supplieName,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
+            return listResponse.length != 0
+                ? Column(
+                    children: [
+                      Icon(
+                        Icons.agriculture_outlined,
+                        color: Colors.indigo[900],
+                        size: 50,
+                      ),
+                      Text(
+                        this.role == 'ag'
+                            ? 'Órdenes que me interesan'
+                            : 'Cultivos que me interesan',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 15),
+                      ),
+                      SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            ListView.separated(
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemBuilder: (BuildContext context, int index) {
+                                return InkWell(
+                                  onTap: () => {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            CultivoAndOrderScreen(
+                                          cultivoId: listResponse[index].id,
+                                          titulo:
+                                              listResponse[index].supplieName,
+                                          role: this.role,
+                                          isMyCultivoOrOrder: false,
+                                          invertRole: this.role == "ag",
+                                        ),
+                                      ),
+                                    )
+                                  },
+                                  child: Column(
+                                    children: <Widget>[
+                                      Container(
+                                        alignment: Alignment.center,
+                                        child: Image(
+                                          height: 150,
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          fit: BoxFit.cover,
+                                          image: this.role == 'co'
+                                              ? (listResponse[index]
+                                                          .pictureURLs
+                                                          .length ==
+                                                      0
+                                                  ? AssetImage(
+                                                      "assets/images/papas.jpg")
+                                                  : NetworkImage(
+                                                      listResponse[index]
+                                                          .pictureURLs[0]))
+                                              : AssetImage(
+                                                  "assets/images/order.jpg"),
+                                        ),
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text("Producto: "),
+                                          Text(
+                                            listResponse[index].supplieName,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text('Área: '),
+                                          Text(listResponse[index]
+                                              .area
+                                              .toString()),
+                                          Text(' '),
+                                          Text(listResponse[index].areaUnit),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text('Costo: '),
+                                          Text(listResponse[index]
+                                              .unitPrice
+                                              .toString()),
+                                          Text(' x '),
+                                          Text(listResponse[index].weightUnit),
+                                        ],
                                       ),
                                     ],
                                   ),
-                                  Row(
-                                    children: [
-                                      Text('Área: '),
-                                      Text(listResponse[index].area.toString()),
-                                      Text(' '),
-                                      Text(listResponse[index].areaUnit),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text('Costo: '),
-                                      Text(listResponse[index]
-                                          .unitPrice
-                                          .toString()),
-                                      Text(' x '),
-                                      Text(listResponse[index].weightUnit),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                          separatorBuilder: (BuildContext context, int index) =>
-                              const Divider(),
-                          itemCount: listResponse.length,
-                          padding: const EdgeInsets.all(8),
-                          shrinkWrap: true,
+                                );
+                              },
+                              separatorBuilder:
+                                  (BuildContext context, int index) =>
+                                      const Divider(),
+                              itemCount: listResponse.length,
+                              padding: const EdgeInsets.all(8),
+                              shrinkWrap: true,
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
-                ],
-              );
-            } else {
-              return Container();
-            }
+                      ),
+                    ],
+                  )
+                : Center(
+                    child: Text("No hay resultados para esta búsqueda."),
+                  );
           } else {
             return this._shimerPub();
           }
