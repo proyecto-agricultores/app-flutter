@@ -345,7 +345,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               }),
             );
           } else {
-            showAdAlertDialog(context);
+            return showAdAlertDialog(context);
           }
         },
         color: Colors.green[900],
@@ -363,7 +363,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     Widget cancelButton = FlatButton(
       child: Text("Cancelar"),
       onPressed:  () {
-        Navigator.of(context).pop(); 
+        Navigator.pop(context); 
       },
     );
 
