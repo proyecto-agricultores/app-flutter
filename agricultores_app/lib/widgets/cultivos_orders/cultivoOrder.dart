@@ -7,7 +7,6 @@ import 'package:agricultores_app/services/myPubService.dart';
 import 'package:agricultores_app/services/userService.dart';
 import 'package:agricultores_app/widgets/ad/ad.dart';
 import 'package:agricultores_app/widgets/general/contactButton.dart';
-import 'package:agricultores_app/widgets/general/cosechaGreenButton.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
