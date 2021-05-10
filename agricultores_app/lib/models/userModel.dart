@@ -8,6 +8,7 @@ class User {
   final double latitude;
   final double longitude;
   final isVerified;
+  final phoneNumber;
 
   User({
     this.id,
@@ -19,6 +20,7 @@ class User {
     this.isVerified,
     this.latitude,
     this.longitude,
+    this.phoneNumber,
   });
 
   factory User.fromJson(Map<String, dynamic> json) {
@@ -32,6 +34,7 @@ class User {
       isVerified: json['is_verified'],
       latitude: json['latitude'],
       longitude: json['longitude'],
+      phoneNumber: json['phone_number'],
     );
   }
 }
