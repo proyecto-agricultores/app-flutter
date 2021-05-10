@@ -37,17 +37,17 @@ class _SendCodeToChangePasswordScreenState extends State<SendCodeToChangePasswor
               SizedBox(height: 50,),
               Container(
                 child: Text(
-                  "Ingrese el número de la cuenta que desea recuperar",
+                  "Ingrese su número de celular para recuperar su cuenta",
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Colors.black,
                   )
                 ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: CosechaColors.verdeFuerte,
+                  color: Colors.grey[200],
                   boxShadow: [
-                    BoxShadow(color: Colors.green, spreadRadius: 3),
+                    BoxShadow(color: Colors.grey[50], spreadRadius: 3),
                   ],
                 ),
                 padding: EdgeInsets.all(10.0),
@@ -102,7 +102,7 @@ class _SendCodeToChangePasswordScreenState extends State<SendCodeToChangePasswor
                     );
                   }
                 },
-                text: "Enviar código", 
+                text: "Recuperar contraseña", 
                 isLoading: isLoading,
               )
             ]

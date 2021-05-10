@@ -1,6 +1,6 @@
 import 'package:agricultores_app/main.dart';
 import 'package:agricultores_app/models/colorsModel.dart';
-import 'package:agricultores_app/screens/changePassword/sendCodeScreenToChangePasswordScreen.dart';
+import 'package:agricultores_app/screens/changePassword/sendCodeToChangePasswordScreen.dart';
 import 'package:agricultores_app/screens/register/registerScreen.dart';
 import 'package:agricultores_app/services/myProfileService.dart';
 import 'package:agricultores_app/services/token.dart';
