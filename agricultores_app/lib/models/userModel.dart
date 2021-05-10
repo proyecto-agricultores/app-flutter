@@ -8,7 +8,7 @@ class User {
   final double latitude;
   final double longitude;
   final isVerified;
-  final phoneNumber;
+  final String phoneNumber;
 
   User({
     this.id,

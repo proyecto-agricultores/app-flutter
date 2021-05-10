@@ -153,105 +153,111 @@ class _FilterFarmersAndClientsResultsScreenScreenState
           if (snapshot.hasData) {
             final listResponse = snapshot.data;
             if (snapshot.hasData) {
-              return Column(
-                children: [
-                  SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        ListView.separated(
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemBuilder: (BuildContext context, int index) {
-                            return InkWell(
-                              onTap: () => {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => UserProfileScreen(
-                                      id: listResponse[index].id,
-                                      firstName: listResponse[index].firstName,
-                                      lastName: listResponse[index].lastName,
-                                      role: listResponse[index].role,
-                                      profilePicture:
-                                          listResponse[index].profilePicture,
-                                      ubigeo: listResponse[index].ubigeo,
-                                      phoneNumber:
-                                          listResponse[index].phoneNumber,
-                                      latitude: listResponse[index].latitude,
-                                      longitude: listResponse[index].longitude,
+              if (listResponse.length > 0) {
+                return Column(
+                  children: [
+                    SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          ListView.separated(
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemBuilder: (BuildContext context, int index) {
+                              return InkWell(
+                                onTap: () => {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => UserProfileScreen(
+                                        id: listResponse[index].id,
+                                        firstName: listResponse[index].firstName,
+                                        lastName: listResponse[index].lastName,
+                                        role: listResponse[index].role,
+                                        profilePicture:
+                                            listResponse[index].profilePicture,
+                                        ubigeo: listResponse[index].ubigeo,
+                                        phoneNumber:
+                                            listResponse[index].phoneNumber,
+                                        latitude: listResponse[index].latitude,
+                                        longitude: listResponse[index].longitude,
+                                      ),
                                     ),
-                                  ),
-                                )
-                              },
-                              child: Column(
-                                children: <Widget>[
-                                  Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        Container(
-                                            height: 80,
-                                            width: 80,
-                                            margin: EdgeInsets.only(right: 40),
-                                            child: CircleAvatar(
-                                                backgroundImage: listResponse[
-                                                                index]
-                                                            .profilePicture ==
-                                                        null
-                                                    ? AssetImage(
-                                                        "assets/images/user-placeholder.png")
-                                                    : NetworkImage(
-                                                        listResponse[index]
-                                                            .profilePicture))),
-                                        Column(children: <Widget>[
-                                          Row(
-                                            children: [
-                                              Text(
-                                                (listResponse[index]
-                                                                .firstName ==
-                                                            null
-                                                        ? ""
-                                                        : (listResponse[index]
-                                                            .firstName)) +
-                                                    " " +
-                                                    (listResponse[index]
-                                                                .lastName ==
-                                                            null
-                                                        ? ""
-                                                        : listResponse[index]
-                                                            .lastName),
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                            ],
-                                          ),
-                                          Row(
-                                            children: [
-                                              Container(
-                                                width: 200,
-                                                child: Text(
-                                                  listResponse[index].ubigeo,
+                                  )
+                                },
+                                child: Column(
+                                  children: <Widget>[
+                                    Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          Container(
+                                              height: 80,
+                                              width: 80,
+                                              margin: EdgeInsets.only(right: 40),
+                                              child: CircleAvatar(
+                                                  backgroundImage: listResponse[
+                                                                  index]
+                                                              .profilePicture ==
+                                                          null
+                                                      ? AssetImage(
+                                                          "assets/images/user-placeholder.png")
+                                                      : NetworkImage(
+                                                          listResponse[index]
+                                                              .profilePicture))),
+                                          Column(children: <Widget>[
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  (listResponse[index]
+                                                                  .firstName ==
+                                                              null
+                                                          ? ""
+                                                          : (listResponse[index]
+                                                              .firstName)) +
+                                                      " " +
+                                                      (listResponse[index]
+                                                                  .lastName ==
+                                                              null
+                                                          ? ""
+                                                          : listResponse[index]
+                                                              .lastName),
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
                                                 ),
-                                              )
-                                            ],
-                                          )
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                Container(
+                                                  width: 200,
+                                                  child: Text(
+                                                    listResponse[index].ubigeo,
+                                                  ),
+                                                )
+                                              ],
+                                            )
+                                          ])
                                         ])
-                                      ])
-                                ],
-                              ),
-                            );
-                          },
-                          separatorBuilder: (BuildContext context, int index) =>
-                              const Divider(),
-                          itemCount: listResponse.length,
-                          padding: const EdgeInsets.all(8),
-                          shrinkWrap: true,
-                        ),
-                      ],
+                                  ],
+                                ),
+                              );
+                            },
+                            separatorBuilder: (BuildContext context, int index) =>
+                                const Divider(),
+                            itemCount: listResponse.length,
+                            padding: const EdgeInsets.all(8),
+                            shrinkWrap: true,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              );
+                  ],
+                );
+              } else {
+                return Center(
+                  child: Text("No hay resultados para esta búsqueda."),
+                );
+              }
             } else {
               return Container();
             }

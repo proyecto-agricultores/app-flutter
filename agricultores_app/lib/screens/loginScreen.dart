@@ -1,5 +1,6 @@
 import 'package:agricultores_app/main.dart';
 import 'package:agricultores_app/models/colorsModel.dart';
+import 'package:agricultores_app/screens/changePassword/sendCodeScreenToChangePasswordScreen.dart';
 import 'package:agricultores_app/screens/register/registerScreen.dart';
 import 'package:agricultores_app/services/myProfileService.dart';
 import 'package:agricultores_app/services/token.dart';
@@ -27,6 +28,23 @@ class _LoginScreenState extends State<LoginScreen> {
   void dispose() {
     passwordController.dispose();
     super.dispose();
+  }
+
+  customGestureDetector(screen, text) {
+    return  new GestureDetector(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => screen));
+      },
+      child: new Text(
+        text,
+        style: TextStyle(
+          color: Colors.blue[400],
+        ),
+      ),
+    );
   }
 
   @override
@@ -87,20 +105,9 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               SizedBox(height: 30),
               Text('¿No tienes una cuenta?'),
-              new GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => RegisterScreen()));
-                },
-                child: new Text(
-                  "Regístrate aquí",
-                  style: TextStyle(
-                    color: Colors.blue[400],
-                  ),
-                ),
-              ),
+              customGestureDetector(RegisterScreen(), "Regístrate aquí"),
+              SizedBox(height: 15,),
+              customGestureDetector(SendCodeToChangePasswordScreen(), "Olvidé mi contraseña"),
               SizedBox(height: 30),
               CosechaGreenButton(
                 text: 'Ingresar',

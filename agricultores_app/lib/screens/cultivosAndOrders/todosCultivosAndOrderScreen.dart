@@ -42,8 +42,8 @@ class _TodosCultivosAndOrdersScreenState
               child: Column(
                 children: <Widget>[
                   SizedBox(height: 30),
+                  this._agregarCultivoUOrden(),
                   this._carruselCultivos(false),
-                  this._agregarCultivoUOrden()
                 ],
               ),
             );
@@ -52,8 +52,8 @@ class _TodosCultivosAndOrdersScreenState
               child: Column(
                 children: <Widget>[
                   SizedBox(height: 30),
+                  this._agregarCultivoUOrden(),
                   this._carruselCultivos(true),
-                  this._agregarCultivoUOrden()
                 ],
               ),
             );
@@ -87,7 +87,8 @@ class _TodosCultivosAndOrdersScreenState
         color: Colors.green[900],
         textColor: Colors.white,
         child:
-            this.role == 'ag' ? Text("Añadir Cultivo") : Text("Añadir Orden"),
+            this.role == 'ag' ? Text("Añadir Cultivo") :
+              (this.role == "co" ? Text("Añadir Orden") : Text("Añadir Anuncio")),
       ),
     );
   }

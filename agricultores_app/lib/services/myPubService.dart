@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:agricultores_app/interceptor/httpInterceptor.dart';
+import 'package:agricultores_app/models/aPubModel.dart';
 import 'package:agricultores_app/models/myOrderModel.dart';
 import 'package:agricultores_app/models/myPubModel.dart';
 
@@ -141,7 +142,7 @@ class MyPubService {
 
     if (response.statusCode == 200) {
       var json = jsonDecode(utf8.decode(response.bodyBytes));
-      return MyPub.fromJson(json);
+      return APub.fromJson(json);
     } else {
       throw Exception(
           'Error al recuperar la información en publicación por ID.');
