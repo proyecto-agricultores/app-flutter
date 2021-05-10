@@ -34,6 +34,7 @@ class _CultivoAndOrderScreenState extends State<CultivoAndOrderScreen> {
   final role;
   final bool isMyCultivoOrOrder;
   final bool invertRole;
+  bool isLoading = false;
 
   _CultivoAndOrderScreenState(
     this.pubOrOrderId,
@@ -42,6 +43,38 @@ class _CultivoAndOrderScreenState extends State<CultivoAndOrderScreen> {
     this.isMyCultivoOrOrder,
     this.invertRole,
   );
+
+  Widget viewProfileButton(int userId) {
+    return CosechaGreenButton(
+      onPressed: this.isLoading ? null : () async {
+        setState(() {
+          isLoading = true;
+        });
+        User user = await UserFilterService.getUserById(userId);
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => UserProfileScreen(
+              id: user.id,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              role: user.role,
+              profilePicture: user.profilePicture,
+              ubigeo: user.ubigeo,
+              phoneNumber: user.phoneNumber,
+              latitude: user.latitude,
+              longitude: user.longitude,
+            )
+          )
+        );
+        setState(() {
+          isLoading = false;
+        });
+      },
+      text: "Ver perfil",
+      isLoading: false,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {

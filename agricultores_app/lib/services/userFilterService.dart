@@ -121,6 +121,20 @@ class UserFilterService {
     }
   }
 
+  static Future getUserById(int id) async {
+    final response = await HTTPClient.getClient(WithToken.yes).get(
+      MyHTTPConection.HTTP_URL + 'users/$id/',
+    );
+
+    if (response.statusCode == 200) {
+      var json = jsonDecode(utf8.decode(response.bodyBytes));
+      return User.fromJson(json);
+    } else {
+      throw Exception("Error al intentar obtener el usuario con id $id");
+    }
+
+  }
+
   static Future appendPubPicture(int id, String filename) async {
     final accessToken = await Token.getToken(TokenType.access);
     Map<String, String> headers = {

@@ -9,6 +9,7 @@ class MyPub {
   final DateTime harvestDate;
   final DateTime sowingDate;
   final bool isSold;
+  final int user;
 
   MyPub({
     this.id,
@@ -21,6 +22,7 @@ class MyPub {
     this.harvestDate,
     this.sowingDate,
     this.isSold,
+    this.user,
   });
 
   factory MyPub.fromJson(Map<String, dynamic> json) {
@@ -37,6 +39,7 @@ class MyPub {
       isSold: json['is_sold'],
       harvestDate: DateTime.parse(json['harvest_date']),
       sowingDate: DateTime.parse(json['sowing_date']),
+      user: json['user'],
     );
   }
 
