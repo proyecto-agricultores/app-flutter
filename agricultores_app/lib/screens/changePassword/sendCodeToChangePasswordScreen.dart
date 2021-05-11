@@ -92,7 +92,7 @@ class _SendCodeToChangePasswordScreenState extends State<SendCodeToChangePasswor
                       builder: (BuildContext context) {
                         return AlertDialog(
                           title: Text("Error"),
-                          content: Text(e.toString().substring(11)),
+                          content: Text("Error al intentar mandar el código."),
                           actions: [
                             TextButton(
                               child: Text('Intentar Nuevamente'),
@@ -106,7 +106,7 @@ class _SendCodeToChangePasswordScreenState extends State<SendCodeToChangePasswor
                     );
                   }
                 },
-                text: "Recuperar contraseña", 
+                text: "Continuar", 
                 isLoading: isLoading,
               )
             ]
