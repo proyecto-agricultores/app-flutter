@@ -4,9 +4,7 @@ import 'package:agricultores_app/services/token.dart';
 import 'package:agricultores_app/widgets/general/cosechaGreenButton.dart';
 import 'package:agricultores_app/widgets/general/cosechaLogo.dart';
 import 'package:flutter/material.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:flutter_verification_code/flutter_verification_code.dart';
-
 import '../../main.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
@@ -80,15 +78,14 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   });
                   try {
                     final response = await ChangePasswordService.changePassword(code, passwordController.text, this.widget.phoneNumber);
-                    print(response.body);
                     await Token.generateTokenFromUserAndPassword(this.widget.phoneNumber, passwordController.text);
+                    setState(() {
+                      isLoading = false;
+                    });
                     await Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (context) => MyApp())
                     );
-                    setState(() {
-                      isLoading = false;
-                    });
                   } catch (e) {
                     print(e.toString());
                     print(e.toString().substring(11));
