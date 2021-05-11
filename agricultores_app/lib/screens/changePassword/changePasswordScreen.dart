@@ -27,6 +27,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print("phone number prop: ${this.widget.phoneNumber}");
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
@@ -78,22 +79,28 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                     isLoading = true;
                   });
                   try {
-                    final response = await ChangePasswordService.changePassword(code, passwordController.text, phoneNumber);
+                    final response = await ChangePasswordService.changePassword(code, passwordController.text, this.widget.phoneNumber);
                     print(response.body);
                     await Token.generateTokenFromUserAndPassword(this.widget.phoneNumber, passwordController.text);
                     await Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(builder: (context) => MyApp())
                     );
+                    setState(() {
+                      isLoading = false;
+                    });
                   } catch (e) {
                     print(e.toString());
                     print(e.toString().substring(11));
+                    setState(() {
+                      isLoading = false;
+                    });
                     return showDialog<void>(
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
                           title: Text("Error"),
-                          content: Text(e.toString().substring(11)),
+                          content: Text("Error al intentar cambiar la contraseña. Verifique el código ingresado."),
                           actions: [
                             TextButton(
                               child: Text('Intentar Nuevamente'),
