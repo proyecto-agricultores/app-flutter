@@ -8,24 +8,19 @@ class ChangePasswordService {
 
   static Future generateCode(String phoneNumber) async {
     final response = await HTTPClient.getClient(WithToken.no).get(
-      // uri
-      "https://cosecha-api.herokuapp.com/changePassword?phone_number=${phoneNumber.substring(1)}"
+      "${MyHTTPConection.HTTP_URL}changePassword?phone_number=${phoneNumber.substring(1)}"
     );
 
-    print(response.statusCode);
-    print(response.toString());
-    print(response.body);
-    print(response.request.url);
-    print(phoneNumber);
-
-    if (response.statusCode != 200) {
+    if (response.statusCode == 429) {
+      throw Exception("El servidor no puede manejar más pedidos el día de hoy. Por favor, intente en 24 horas.");
+    } else if (response.statusCode != 200) {
       throw Exception('Error al momento de generar el código de registro');
     }
   }
 
   static Future changePassword(String code, String newPassword, String phoneNumber) async {
     final response = await HTTPClient.getClient(WithToken.no).post(
-      MyHTTPConection.HTTP_URL + 'changePassword/',
+      MyHTTPConection.HTTP_URL + 'changePassword',
       body: jsonEncode(
         {
           "code": code,

@@ -75,6 +75,9 @@ class _SendCodeToChangePasswordScreenState extends State<SendCodeToChangePasswor
                   });
                   try {
                     await ChangePasswordService.generateCode(phoneNumber);
+                    setState(() {
+                      this.isLoading = false;
+                    });
                     await Navigator.pushReplacement(
                       context, 
                       MaterialPageRoute(builder: (context) => ChangePasswordScreen(phoneNumber: phoneNumber,))
@@ -83,12 +86,13 @@ class _SendCodeToChangePasswordScreenState extends State<SendCodeToChangePasswor
                     setState(() {
                       this.isLoading = false;
                     });
+                    print(e.toString());
                     return showDialog<void>(
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
                           title: Text("Error"),
-                          content: Text("Error al generar el código de registro."),
+                          content: Text("Error al intentar mandar el código."),
                           actions: [
                             TextButton(
                               child: Text('Intentar Nuevamente'),
@@ -102,7 +106,7 @@ class _SendCodeToChangePasswordScreenState extends State<SendCodeToChangePasswor
                     );
                   }
                 },
-                text: "Recuperar contraseña", 
+                text: "Continuar", 
                 isLoading: isLoading,
               )
             ]
