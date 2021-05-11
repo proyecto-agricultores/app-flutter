@@ -38,6 +38,24 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             children: <Widget>[
               CosechaLogo(scale: 5.0),
               SizedBox(height: 50,),
+              Container(
+                child: Text(
+                  "Se ha enviado un código de 4 dígitos a su celular. Ingréselo a continuación.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.black,
+                  )
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.grey[200],
+                  boxShadow: [
+                    BoxShadow(color: Colors.grey[50], spreadRadius: 3),
+                  ],
+                ),
+                padding: EdgeInsets.all(10.0),
+              ),
+              SizedBox(height: 30,),
               VerificationCode(
                 length: 4,
                 onCompleted: (String value) {
