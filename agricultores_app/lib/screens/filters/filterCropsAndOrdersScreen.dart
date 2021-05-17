@@ -180,8 +180,10 @@ class _FilterCropsAndOrdersScreenState extends State<FilterCropsAndOrdersScreen>
                               regionID: this._regionID,
                               minPrice: this.minPriceController.text,
                               maxPrice: this.maxPriceController.text,
-                              minDate: this.minHarvestDateController.text,
-                              maxDate: this.maxHarvestDateController.text,
+                              minSowingDate: this.minSowingDateController.text,
+                              maxSowingDate: this.maxSowingDateController.text,
+                              minHarvestDate: this.minHarvestDateController.text,
+                              maxHarvestDate: this.maxHarvestDateController.text,
                               role: this.widget.role,
                             )
                           )

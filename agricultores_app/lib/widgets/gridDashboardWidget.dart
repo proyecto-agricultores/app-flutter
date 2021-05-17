@@ -93,25 +93,29 @@ class GridDashboard extends StatelessWidget {
                       return FilterCropsAndOrdersResultsScreen(
                         title: "Todas las Órdenes",
                         role: "co",
-                        maxDate: null,
+                        maxHarvestDate: null,
                         departmentID: null,
                         maxPrice: null,
-                        minDate: null,
+                        minHarvestDate: null,
                         regionID: null,
                         minPrice: null,
                         supplyID: null,
+                        minSowingDate: null,
+                        maxSowingDate: null,
                       );
                     } else if (data.route == "crops") {
                       return FilterCropsAndOrdersResultsScreen(
                         title: "Todos los Cultivos",
                         role: "ag",
-                        maxDate: null,
+                        maxHarvestDate: null,
                         departmentID: null,
                         maxPrice: null,
-                        minDate: null,
+                        minHarvestDate: null,
                         regionID: null,
                         minPrice: null,
                         supplyID: null,
+                        minSowingDate: null,
+                        maxSowingDate: null,
                       );
                     } 
                   }),
