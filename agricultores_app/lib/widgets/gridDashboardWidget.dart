@@ -68,7 +68,9 @@ class GridDashboard extends StatelessWidget {
                 final role = await this._getRole();
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) {
+                  MaterialPageRoute(
+                    settings: RouteSettings(name: "/${data.route}"),
+                    builder: (context) {
                     if (data.route == "profile") {
                       return ProfileScreen(role: role);
                     } else if (data.route == "buscadorAgricultores") {

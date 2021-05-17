@@ -11,6 +11,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CultivoOrder extends StatelessWidget {
   CultivoOrder({
@@ -277,8 +278,7 @@ class CultivoOrder extends StatelessWidget {
                                                   this.pubOrOrderId)
                                               : MyOrderService.delete(
                                                   pubOrOrderId);
-                                          Navigator.of(context).popUntil(
-                                              (route) => route.isFirst);
+                                          Navigator.popUntil(context, ModalRoute.withName("/profile"));
                                         },
                                       ),
                                     ],
