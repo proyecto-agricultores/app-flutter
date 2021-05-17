@@ -20,8 +20,10 @@ class FilterCropsAndOrdersResultsScreen extends StatefulWidget {
     @required this.regionID,
     @required this.minPrice,
     @required this.maxPrice,
-    @required this.minDate,
-    @required this.maxDate,
+    @required this.minHarvestDate,
+    @required this.maxHarvestDate,
+    @required this.minSowingDate,
+    @required this.maxSowingDate,
   }) : super(key: key);
 
   final String title;
@@ -31,8 +33,10 @@ class FilterCropsAndOrdersResultsScreen extends StatefulWidget {
   final int regionID;
   final String minPrice;
   final String maxPrice;
-  final String minDate;
-  final String maxDate;
+  final String minHarvestDate;
+  final String maxHarvestDate;
+  final String minSowingDate;
+  final String maxSowingDate;
 
   @override
   _FilterCropsAndOrdersResultsScreenState createState() =>
@@ -103,8 +107,10 @@ class _FilterCropsAndOrdersResultsScreenState
           this.widget.regionID,
           this.widget.minPrice,
           this.widget.maxPrice,
-          this.widget.minDate,
-          this.widget.maxDate,
+          this.widget.minHarvestDate,
+          this.widget.maxHarvestDate,
+          this.widget.minSowingDate,
+          this.widget.maxSowingDate,
           this.widget.role,
         ),
         builder: (BuildContext context, AsyncSnapshot snapshot) {

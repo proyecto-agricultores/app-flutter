@@ -7,7 +7,8 @@ import 'dart:convert';
 
 class FilterService {
 
-  static filterPubsAndOrders(int supplyID, int departmentID, int regionID, String minPrice, String maxPrice, String minHarvestDate, String maxHarvestDate, String role) async {
+  static filterPubsAndOrders(int supplyID, int departmentID, int regionID, String minPrice, String maxPrice, 
+  String minHarvestDate, String maxHarvestDate, String minSowingDate, String maxSowingDate, String role) async {
     String suffix = 'api/filter/';
 
     role == 'co' ? suffix += 'orders/?' : suffix += 'pubs/?';
@@ -19,8 +20,10 @@ class FilterService {
     if (regionID != 0 && regionID != null) queryParams['region'] = regionID.toString();
     if (minPrice != null && minPrice != "") queryParams['min_price'] = minPrice;
     if (maxPrice != null && maxPrice != "") queryParams['max_price'] = maxPrice;
-    if (minHarvestDate != null && minHarvestDate != "") queryParams['min_date'] = minHarvestDate;
-    if (maxHarvestDate != null && maxHarvestDate != "") queryParams['max_date'] = maxHarvestDate;
+    if (minHarvestDate != null && minHarvestDate != "") queryParams['min_harvest_date'] = minHarvestDate;
+    if (maxHarvestDate != null && maxHarvestDate != "") queryParams['max_harvest_date'] = maxHarvestDate;
+    if (minSowingDate != null && minSowingDate != "") queryParams['min_sowing_date'] = minSowingDate;
+    if (maxSowingDate != null && maxSowingDate != "") queryParams['max_sowing_date'] = maxSowingDate;
 
     String queryString = Uri(queryParameters: queryParams).query;
 
