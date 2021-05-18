@@ -277,8 +277,7 @@ class CultivoOrder extends StatelessWidget {
                                                   this.pubOrOrderId)
                                               : MyOrderService.delete(
                                                   pubOrOrderId);
-                                          Navigator.of(context).popUntil(
-                                              (route) => route.isFirst);
+                                          Navigator.popUntil(context, ModalRoute.withName("/profile"));
                                         },
                                       ),
                                     ],

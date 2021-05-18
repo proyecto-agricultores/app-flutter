@@ -3,6 +3,7 @@ import 'package:agricultores_app/screens/filters/filterCropsAndOrdersResultsScre
 import 'package:agricultores_app/screens/filters/filterFarmersAndClientsResultsScreen.dart';
 import 'package:agricultores_app/screens/loginScreen.dart';
 import 'package:agricultores_app/screens/profileScreen.dart';
+import 'package:agricultores_app/services/token.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -68,7 +69,9 @@ class GridDashboard extends StatelessWidget {
                 final role = await this._getRole();
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) {
+                  MaterialPageRoute(
+                    settings: RouteSettings(name: "/${data.route}"),
+                    builder: (context) {
                     if (data.route == "profile") {
                       return ProfileScreen(role: role);
                     } else if (data.route == "buscadorAgricultores") {
@@ -88,6 +91,7 @@ class GridDashboard extends StatelessWidget {
                         departmentID: null,
                       );
                     } else if (data.route == "loginScreen") {
+                      Token.logout();
                       return LoginScreen();
                     } else if (data.route == "farmers") {
                       return FilterCropsAndOrdersResultsScreen(

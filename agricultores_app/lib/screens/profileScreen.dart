@@ -264,7 +264,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           borderRadius: BorderRadius.circular(18.0),
         ),
         onPressed: () async {
-          Navigator.push(
+          await Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) {
@@ -281,6 +281,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               }
             }),
           );
+          setState(() {});
         },
         color: Colors.green[900],
         textColor: Colors.white,
@@ -333,7 +334,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         onPressed: () async {
           if (this.role != "an") {
-            Navigator.push(
+            await Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) {
@@ -344,6 +345,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   }
               }),
             );
+            setState(() {});
           } else {
             return showAdAlertDialog(context);
           }
@@ -436,8 +438,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (BuildContext context, int index) {
                           return InkWell(
-                            onTap: () => {
-                              Navigator.push(
+                            onTap: () async {
+                              await Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => CultivoAndOrderScreen(
@@ -448,7 +450,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     invertRole: false,
                                   ),
                                 ),
-                              )
+                              );
+                              setState(() {});
                             },
                             child: Column(
                               children: <Widget>[
