@@ -1,7 +1,9 @@
-import 'package:agricultores_app/main.dart';
 import 'package:agricultores_app/models/colorsModel.dart';
 import 'package:agricultores_app/screens/changePassword/sendCodeToChangePasswordScreen.dart';
+import 'package:agricultores_app/screens/register/codeRegisterScreen.dart';
+import 'package:agricultores_app/screens/register/locationRegisterScreen.dart';
 import 'package:agricultores_app/screens/register/registerScreen.dart';
+import 'package:agricultores_app/screens/register/roleRegisterScreen.dart';
 import 'package:agricultores_app/services/myProfileService.dart';
 import 'package:agricultores_app/services/token.dart';
 import 'package:agricultores_app/widgets/general/cosechaGreenButton.dart';
@@ -9,6 +11,7 @@ import 'package:agricultores_app/widgets/general/cosechaLogo.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'homeScreen.dart';
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({Key key, this.title}) : super(key: key);
@@ -125,8 +128,18 @@ class _LoginScreenState extends State<LoginScreen> {
                     final user = await MyProfileService.getLoggedinUser();
                     await prefs.setString('role', user.role);
                     await Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => MyApp()),
+                      context, 
+                      MaterialPageRoute(builder: (context) {
+                        if (!user.isVerified) {
+                          return CodeRegisterScreen();
+                        } else if (user.ubigeo == "") {
+                          return LocationRegisterScreen();
+                        } else if (user.role == null) {
+                          return RoleRegisterScreen();
+                        } else {
+                          return HomeScreen();
+                        }  
+                      })
                     );
                   } catch (e) {
                     setState(() {

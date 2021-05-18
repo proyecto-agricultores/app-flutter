@@ -11,7 +11,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class CultivoOrder extends StatelessWidget {
   CultivoOrder({

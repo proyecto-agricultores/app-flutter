@@ -19,7 +19,7 @@ class CosechaGreenButton extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(18.0),
       ),
-      onPressed: this.onPressed,
+      onPressed: this.isLoading ? null : this.onPressed,
       color: CosechaColors.verdeFuerte,
       child: this.isLoading
       ? LinearProgressIndicator(minHeight: 5,)
@@ -31,7 +31,7 @@ class CosechaGreenButton extends StatelessWidget {
           fontSize: 16,
         )
       ),
-      disabledColor: CosechaColors.verdeSuave,
+      disabledColor: CosechaColors.verdeFuerte,
     );
   }
   
