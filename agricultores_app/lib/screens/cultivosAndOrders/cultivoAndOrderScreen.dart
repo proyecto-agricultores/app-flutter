@@ -50,31 +50,31 @@ class _CultivoAndOrderScreenState extends State<CultivoAndOrderScreen> {
 
   Widget viewProfileButton(int userId) {
     return CosechaGreenButton(
-      onPressed: this.isLoading ? null : () async {
-        setState(() {
-          isLoading = true;
-        });
-        User user = await UserFilterService.getUserById(userId);
-        await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => UserProfileScreen(
-              id: user.id,
-              firstName: user.firstName,
-              lastName: user.lastName,
-              role: user.role,
-              profilePicture: user.profilePicture,
-              ubigeo: user.ubigeo,
-              phoneNumber: user.phoneNumber,
-              latitude: user.latitude,
-              longitude: user.longitude,
-            )
-          )
-        );
-        setState(() {
-          isLoading = false;
-        });
-      },
+      onPressed: this.isLoading
+          ? null
+          : () async {
+              setState(() {
+                isLoading = true;
+              });
+              User user = await UserFilterService.getUserById(userId);
+              await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => UserProfileScreen(
+                            id: user.id,
+                            firstName: user.firstName,
+                            lastName: user.lastName,
+                            role: user.role,
+                            profilePicture: user.profilePicture,
+                            ubigeo: user.ubigeo,
+                            phoneNumber: user.phoneNumber,
+                            latitude: user.latitude,
+                            longitude: user.longitude,
+                          )));
+              setState(() {
+                isLoading = false;
+              });
+            },
       text: "Ver perfil",
       isLoading: false,
     );
@@ -103,13 +103,15 @@ class _CultivoAndOrderScreenState extends State<CultivoAndOrderScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
+              SizedBox(height: 30),
               CultivoOrder(
                 pubOrOrderId: pubOrOrderId,
                 isMyCultivoOrOrder: isMyCultivoOrOrder,
                 roleActual: roleActual,
                 role: role,
                 titulo: titulo,
-              )
+              ),
+              SizedBox(height: 30),
             ],
           ),
         ),
