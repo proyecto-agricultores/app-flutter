@@ -6,10 +6,7 @@ import 'package:agricultores_app/widgets/cultivos_orders/imageCarouselWidget.dar
 import 'package:agricultores_app/widgets/general/divider.dart';
 import 'package:agricultores_app/widgets/general/separator.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'
-    show
-        DeviceOrientation,
-        SystemChrome;
+import 'package:flutter/services.dart' show DeviceOrientation, SystemChrome;
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
@@ -47,8 +44,10 @@ class _CrearCultivoScreenState extends State<CrearCultivoScreen> {
   final _formKey = new GlobalKey<FormState>();
 
   updateDate(DateTime picked, TextEditingController dateController) {
-    setState(() {
-        var date = "${picked.toLocal().day}-${picked.toLocal().month}-${picked.toLocal().year}";
+    setState(
+      () {
+        var date =
+            "${picked.toLocal().day}-${picked.toLocal().month}-${picked.toLocal().year}";
         dateController.text = date;
       },
     );
@@ -69,14 +68,12 @@ class _CrearCultivoScreenState extends State<CrearCultivoScreen> {
   }
 
   _onPressed() async {
-    if (_formKey.currentState
-        .validate()) {
+    if (_formKey.currentState.validate()) {
       setState(() {
         this.isLoading = true;
       });
       try {
-        final crearCultivoResponse =
-            await MyPubService.create(
+        final crearCultivoResponse = await MyPubService.create(
           supplyID,
           MyPub(
             // weightUnit: null,
@@ -95,10 +92,8 @@ class _CrearCultivoScreenState extends State<CrearCultivoScreen> {
         );
 
         for (var image in _images) {
-          await MyPubService
-              .appendPubPicture(
-                  crearCultivoResponse.id,
-                  image.path);
+          await MyPubService.appendPubPicture(
+              crearCultivoResponse.id, image.path);
         }
 
         setState(() {
@@ -107,21 +102,17 @@ class _CrearCultivoScreenState extends State<CrearCultivoScreen> {
         return showDialog<void>(
           context: context,
           barrierDismissible: true,
-          builder:
-              (BuildContext context) {
+          builder: (BuildContext context) {
             return AlertDialog(
-              title: Text(
-                  'Cultivo creado correctamente.'),
+              title: Text('Cultivo creado correctamente.'),
               content: Text(
                   'Se acaba de crear el cultivo. Ahora lo podrás encontrar en tu perfil.'),
               actions: <Widget>[
                 TextButton(
                   child: Text('OK!'),
                   onPressed: () {
-                    Navigator.of(context)
-                        .popUntil((route) =>
-                            route
-                                .isFirst);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
                   },
                 ),
               ],
@@ -163,52 +154,47 @@ class _CrearCultivoScreenState extends State<CrearCultivoScreen> {
       ],
     );
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Crear Cultivo'),
-      ),
-      body: Column(
-        children: [
+        appBar: AppBar(
+          title: Text('Crear Cultivo'),
+        ),
+        body: Column(children: [
           Expanded(
-            child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(
-                horizontal: 40.0,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  SizedBox(height: 20),
-                  ImageCarousel(images: this._images, getImage: this.getImage),
-                  CosechaDivider(),
-                  CosechaForm(
-                    supplyID: this.supplyID,
-                    updateSupply: this.updateSupply,
-                    unitPriceController: this.unitPriceController,
-                    weightUnit: this.weightUnit,
-                    updateWeightUnit: this.updateWeightUnit,
-                    areaController: this.areaController,
-                    areaUnit: this.areaUnit,
-                    updateAreaUnit: this.updateAreaUnit,
-                    updateDate: this.updateDate,
-                    sowingDateController: this.sowingDateController,
-                    selectedSowingDate: this.selectedSowingDate,
-                    harvestDateController: this.harvestDateController,
-                    selectedHarvestDate: this.selectedHarvestDate,
-                    onPressed: this._onPressed,
-                    isLoading: this.isLoading,
-                    formKey: this._formKey,
-                    buttonText: 'Crear Cultivo',
-                    hasSupply: true,
-                    hasPrice: false,
-                    isEditingScreen: false,
-                  )
-                ]
-              )
-            )
-          )
-        ]
-      )
-    );
+              child: SingleChildScrollView(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 40.0,
+                  ),
+                  child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        SizedBox(height: 20),
+                        ImageCarousel(
+                            images: this._images, getImage: this.getImage),
+                        CosechaDivider(),
+                        CosechaForm(
+                          supplyID: this.supplyID,
+                          updateSupply: this.updateSupply,
+                          unitPriceController: this.unitPriceController,
+                          weightUnit: this.weightUnit,
+                          updateWeightUnit: this.updateWeightUnit,
+                          areaController: this.areaController,
+                          areaUnit: this.areaUnit,
+                          updateAreaUnit: this.updateAreaUnit,
+                          updateDate: this.updateDate,
+                          sowingDateController: this.sowingDateController,
+                          selectedSowingDate: this.selectedSowingDate,
+                          harvestDateController: this.harvestDateController,
+                          selectedHarvestDate: this.selectedHarvestDate,
+                          onPressed: this._onPressed,
+                          isLoading: this.isLoading,
+                          formKey: this._formKey,
+                          buttonText: 'Crear Cultivo',
+                          hasSupply: true,
+                          hasPrice: false,
+                          isEditingScreen: false,
+                        )
+                      ])))
+        ]));
   }
 }

@@ -6,23 +6,23 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 class UpdateOrderScreen extends StatefulWidget {
-  UpdateOrderScreen({
-    Key key,
-    @required this.ordenId, 
-    @required this.titulo, 
-    @required this.dataOrden
-    }) : super(key: key);
+  UpdateOrderScreen(
+      {Key key,
+      @required this.ordenId,
+      @required this.titulo,
+      @required this.dataOrden})
+      : super(key: key);
 
   final int ordenId;
   final String titulo;
   final dataOrden;
 
   @override
-  _UpdateOrderScreenState createState() => _UpdateOrderScreenState(ordenId, titulo, dataOrden);
+  _UpdateOrderScreenState createState() =>
+      _UpdateOrderScreenState(ordenId, titulo, dataOrden);
 }
 
 class _UpdateOrderScreenState extends State<UpdateOrderScreen> {
-
   _UpdateOrderScreenState(
     this.ordenId,
     this.titulo,
@@ -63,8 +63,10 @@ class _UpdateOrderScreenState extends State<UpdateOrderScreen> {
   }
 
   updateDate(DateTime picked, TextEditingController dateController) {
-    setState(() {
-        var date = "${picked.toLocal().day}-${picked.toLocal().month}-${picked.toLocal().year}";
+    setState(
+      () {
+        var date =
+            "${picked.toLocal().day}-${picked.toLocal().month}-${picked.toLocal().year}";
         dateController.text = date;
       },
     );
@@ -76,8 +78,7 @@ class _UpdateOrderScreenState extends State<UpdateOrderScreen> {
         this.isLoading = true;
       });
       try {
-        final update =
-            await MyOrderService.update(
+        final update = await MyOrderService.update(
           MyOrder(
             id: this.ordenId,
             supplieName: null,
@@ -105,17 +106,15 @@ class _UpdateOrderScreenState extends State<UpdateOrderScreen> {
           barrierDismissible: true,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text(
-                  'Cambios realizados correctamente.'),
-              content: Text(
-                  'Se acaba de actualizar la orden con nuevos datos.'),
+              title: Text('Cambios realizados correctamente.'),
+              content:
+                  Text('Se acaba de actualizar la orden con nuevos datos.'),
               actions: <Widget>[
                 TextButton(
                   child: Text('OK!'),
                   onPressed: () {
-                    Navigator.of(context)
-                        .popUntil((route) =>
-                            route.isFirst);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
                   },
                 ),
               ],
@@ -132,7 +131,8 @@ class _UpdateOrderScreenState extends State<UpdateOrderScreen> {
   void initState() {
     super.initState();
     weightUnit = dataOrden.weightUnit;
-    unitPriceController.text = dataOrden.unitPrice != null ? dataOrden.unitPrice.toString() : "";
+    unitPriceController.text =
+        dataOrden.unitPrice != null ? dataOrden.unitPrice.toString() : "";
     areaUnit = dataOrden.areaUnit;
     areaController.text = dataOrden.area.toString();
     harvestDateController.text = formatter.format(dataOrden.harvestDate);
@@ -149,49 +149,43 @@ class _UpdateOrderScreenState extends State<UpdateOrderScreen> {
       ],
     );
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Editar: ' + titulo),
-      ),
-      body: Column(
-        children: [
+        appBar: AppBar(
+          title: Text('Editar: ' + titulo),
+        ),
+        body: Column(children: [
           Expanded(
-            child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(
-                horizontal: 40.0,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  CosechaForm(
-                    unitPriceController: this.unitPriceController,
-                    weightUnit: this.weightUnit,
-                    updateWeightUnit: this.updateWeightUnit,
-                    areaController: this.areaController,
-                    areaUnit: this.areaUnit,
-                    updateAreaUnit: this.updateAreaUnit,
-                    updateDate: this.updateDate,
-                    sowingDateController: this.sowingDateController,
-                    selectedSowingDate: this.selectedSowingDate,
-                    harvestDateController: this.harvestDateController,
-                    selectedHarvestDate: this.selectedHarvestDate,
-                    onPressed: this._onPressed,
-                    isLoading: this.isLoading,
-                    formKey: this._formKey,
-                    buttonText: 'Guardar Cambios',
-                    hasSupply: false,
-                    hasPrice: true,
-                    isEditingScreen: true,
-                    pubOrOrderId: ordenId,
-                    isOrder: true,
-                  )
-                ]
-              )
-            )
-          )
-        ]
-      )
-    );
+              child: SingleChildScrollView(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 40.0,
+                  ),
+                  child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        CosechaForm(
+                          unitPriceController: this.unitPriceController,
+                          weightUnit: this.weightUnit,
+                          updateWeightUnit: this.updateWeightUnit,
+                          areaController: this.areaController,
+                          areaUnit: this.areaUnit,
+                          updateAreaUnit: this.updateAreaUnit,
+                          updateDate: this.updateDate,
+                          sowingDateController: this.sowingDateController,
+                          selectedSowingDate: this.selectedSowingDate,
+                          harvestDateController: this.harvestDateController,
+                          selectedHarvestDate: this.selectedHarvestDate,
+                          onPressed: this._onPressed,
+                          isLoading: this.isLoading,
+                          formKey: this._formKey,
+                          buttonText: 'Guardar Cambios',
+                          hasSupply: false,
+                          hasPrice: true,
+                          isEditingScreen: true,
+                          pubOrOrderId: ordenId,
+                          isOrder: true,
+                        )
+                      ])))
+        ]));
   }
 }

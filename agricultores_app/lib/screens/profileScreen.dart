@@ -54,7 +54,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       this._agregarCultivoUOrden(),
                       this.role != "an" ? this._verMatches() : Container(),
                       this._verTodosCultivos(),
-                      this.role != "an" ? this._carruselCultivos(false) : Container(),
+                      this.role != "an"
+                          ? this._carruselCultivos(false)
+                          : Container(),
                     ],
                   ),
                 ),
@@ -87,9 +89,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
       snap: true,
       pinned: true,
       expandedHeight: 300.0,
-      backgroundColor:
-          this.role == 'ag' ? CosechaColors.verdeFuerte : 
-            (this.role == "an" ? CosechaColors.azulFuerte : CosechaColors.naranjaFuerte),
+      backgroundColor: this.role == 'ag'
+          ? CosechaColors.verdeFuerte
+          : (this.role == "an"
+              ? CosechaColors.azulFuerte
+              : CosechaColors.naranjaFuerte),
       title: Text("Perfil"),
       shape: ContinuousRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -266,8 +270,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         onPressed: () async {
           await Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (context) {
+            MaterialPageRoute(builder: (context) {
               if (this.role == 'ag') {
                 return TodosCultivosAndOrdersScreen(
                   role: this.role,
@@ -287,8 +290,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         textColor: Colors.white,
         child: this.role == 'ag'
             ? Text("Ver todos mis cultivos")
-            : (this.role == "an" ? 
-              Text("Ver todos mis anuncios") : Text("Ver todas mis ordenes")),
+            : (this.role == "an"
+                ? Text("Ver todos mis anuncios")
+                : Text("Ver todas mis ordenes")),
       ),
     );
   }
@@ -336,15 +340,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
           if (this.role != "an") {
             await Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (context) {
-                  if (this.role == 'ag') {
-                    return CrearCultivoScreen();
-                  } else if (this.role == "co") {
-                    return CreateOrderScreen();
-                  }
+              MaterialPageRoute(builder: (context) {
+                if (this.role == 'ag') {
+                  return CrearCultivoScreen();
+                } else if (this.role == "co") {
+                  return CreateOrderScreen();
+                }
               }),
-            );
+            ).then((value) => setState(() {}));
             setState(() {});
           } else {
             return showAdAlertDialog(context);
@@ -352,20 +355,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
         },
         color: Colors.green[900],
         textColor: Colors.white,
-        child:
-            this.role == 'ag' ? Text("Añadir Cultivo") :
-              (this.role == "co" ? Text("Añadir Orden") : Text("Añadir Anuncio")),
+        child: this.role == 'ag'
+            ? Text("Añadir Cultivo")
+            : (this.role == "co"
+                ? Text("Añadir Orden")
+                : Text("Añadir Anuncio")),
       ),
     );
   }
 
   showAdAlertDialog(BuildContext context) {
-
     // set up the buttons
     Widget cancelButton = FlatButton(
       child: Text("Cancelar"),
-      onPressed:  () {
-        Navigator.pop(context); 
+      onPressed: () {
+        Navigator.pop(context);
       },
     );
 
@@ -387,15 +391,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
     AlertDialog alert = AlertDialog(
       title: Text("Crear un anuncio"),
       content: Text(
-        "Para publicar un anuncio debe ir a la versión web de Cosecha. " + 
-        "Le recomendamos usar una aplicación de escritorio. ¿Desea ingresar?"
-      ),
+          "Para publicar un anuncio debe ir a la versión web de Cosecha. " +
+              "Le recomendamos usar una aplicación de escritorio. ¿Desea ingresar?"),
       actions: [
         cancelButton,
         continueButton,
       ],
     );
-
 
     // show the dialog
     showDialog(
@@ -450,7 +452,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     invertRole: false,
                                   ),
                                 ),
-                              );
+                              ).then((value) => setState(() {}));
                               setState(() {});
                             },
                             child: Column(
@@ -494,16 +496,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text('Costo: '),
-                                    listResponse[index].unitPrice.toString() != 'null'
-                                    ? 
-                                    Row(
-                                      children: [
-                                        Text(listResponse[index].unitPrice.toString()),
-                                        Text(' x '),
-                                        Text(listResponse[index].weightUnit),
-                                      ],
-                                    )
-                                    : Text('Por asignar')
+                                    listResponse[index].unitPrice.toString() !=
+                                            'null'
+                                        ? Row(
+                                            children: [
+                                              Text(listResponse[index]
+                                                  .unitPrice
+                                                  .toString()),
+                                              Text(' x '),
+                                              Text(listResponse[index]
+                                                  .weightUnit),
+                                            ],
+                                          )
+                                        : Text('Por asignar')
                                   ],
                                 ),
                               ],

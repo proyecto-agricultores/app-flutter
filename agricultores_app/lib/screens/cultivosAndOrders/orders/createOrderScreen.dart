@@ -16,7 +16,6 @@ class CreateOrderScreen extends StatefulWidget {
 }
 
 class _CreateOrderScreenState extends State<CreateOrderScreen> {
-
   bool _isLoading = false;
   final _formKey = new GlobalKey<FormState>();
   DateTime selectedHarvestDate = DateTime.now();
@@ -39,8 +38,10 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
   }
 
   updateDate(DateTime picked, TextEditingController dateController) {
-    setState(() {
-        var date = "${picked.toLocal().day}-${picked.toLocal().month}-${picked.toLocal().year}";
+    setState(
+      () {
+        var date =
+            "${picked.toLocal().day}-${picked.toLocal().month}-${picked.toLocal().year}";
         dateController.text = date;
       },
     );
@@ -59,14 +60,12 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
   }
 
   _onPressed() async {
-    if (_formKey.currentState
-        .validate()) {
+    if (_formKey.currentState.validate()) {
       setState(() {
         this._isLoading = true;
       });
       try {
-        final crearOrdenResponse =
-            await MyOrderService.create(
+        final crearOrdenResponse = await MyOrderService.create(
           supplyID,
           MyOrder(
             weightUnit: this.weightUnit,
@@ -92,21 +91,17 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
         return showDialog<void>(
           context: context,
           barrierDismissible: true,
-          builder:
-              (BuildContext context) {
+          builder: (BuildContext context) {
             return AlertDialog(
-              title: Text(
-                  'Orden creada correctamente.'),
+              title: Text('Orden creada correctamente.'),
               content: Text(
                   'Se acaba de crear la orden. Ahora la podrás encontrar en tu perfil.'),
               actions: <Widget>[
                 TextButton(
                   child: Text('OK!'),
                   onPressed: () {
-                    Navigator.of(context)
-                        .popUntil((route) =>
-                            route
-                                .isFirst);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
                   },
                 ),
               ],
@@ -130,50 +125,44 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
       ],
     );
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Crear Orden'),
-      ),
-      body: Column(
-        children: [
+        appBar: AppBar(
+          title: Text('Crear Orden'),
+        ),
+        body: Column(children: [
           Expanded(
-            child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(
-                horizontal: 40.0,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  CosechaDivider(),
-                  CosechaForm(
-                    supplyID: this.supplyID,
-                    updateSupply: this.updateSupply,
-                    unitPriceController: this.unitPriceController,
-                    weightUnit: this.weightUnit,
-                    updateWeightUnit: this.updateWeightUnit,
-                    areaController: this.areaController,
-                    areaUnit: this.areaUnit,
-                    updateAreaUnit: this.updateAreaUnit,
-                    updateDate: this.updateDate,
-                    sowingDateController: this.sowingDateController,
-                    selectedSowingDate: this.selectedSowingDate,
-                    harvestDateController: this.harvestDateController,
-                    selectedHarvestDate: this.selectedHarvestDate,
-                    onPressed: this._onPressed,
-                    isLoading: this._isLoading,
-                    formKey: this._formKey,
-                    buttonText: 'Crear Orden',
-                    hasSupply: true,
-                    hasPrice: true,
-                    isEditingScreen: false,
-                  )
-                ]
-              )
-            )
-          )
-        ]
-      )
-    );
+              child: SingleChildScrollView(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 40.0,
+                  ),
+                  child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        CosechaDivider(),
+                        CosechaForm(
+                          supplyID: this.supplyID,
+                          updateSupply: this.updateSupply,
+                          unitPriceController: this.unitPriceController,
+                          weightUnit: this.weightUnit,
+                          updateWeightUnit: this.updateWeightUnit,
+                          areaController: this.areaController,
+                          areaUnit: this.areaUnit,
+                          updateAreaUnit: this.updateAreaUnit,
+                          updateDate: this.updateDate,
+                          sowingDateController: this.sowingDateController,
+                          selectedSowingDate: this.selectedSowingDate,
+                          harvestDateController: this.harvestDateController,
+                          selectedHarvestDate: this.selectedHarvestDate,
+                          onPressed: this._onPressed,
+                          isLoading: this._isLoading,
+                          formKey: this._formKey,
+                          buttonText: 'Crear Orden',
+                          hasSupply: true,
+                          hasPrice: true,
+                          isEditingScreen: false,
+                        )
+                      ])))
+        ]));
   }
 }

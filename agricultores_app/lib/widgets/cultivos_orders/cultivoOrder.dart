@@ -12,7 +12,13 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class CultivoOrder extends StatelessWidget {
+class CultivoOrder extends StatefulWidget {
+  final pubOrOrderId;
+  final isMyCultivoOrOrder;
+  final roleActual;
+  final role;
+  final titulo;
+
   CultivoOrder({
     @required this.pubOrOrderId,
     @required this.isMyCultivoOrOrder,
@@ -21,11 +27,31 @@ class CultivoOrder extends StatelessWidget {
     @required this.titulo,
   });
 
+  @override
+  _CultivoOrderState createState() => _CultivoOrderState(
+        pubOrOrderId,
+        isMyCultivoOrOrder,
+        roleActual,
+        role,
+        titulo,
+      );
+}
+
+class _CultivoOrderState extends State<CultivoOrder> {
+  _CultivoOrderState(
+    this.pubOrOrderId,
+    this.isMyCultivoOrOrder,
+    this.roleActual,
+    this.role,
+    this.titulo,
+  );
+
   final pubOrOrderId;
   final isMyCultivoOrOrder;
   final roleActual;
   final role;
   final titulo;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -193,6 +219,9 @@ class CultivoOrder extends StatelessWidget {
                                 ? Colors.grey[350]
                                 : Colors.blue[400],
                             onPressed: () async {
+                              setState(() {
+                                isLoading = true;
+                              });
                               roleActual
                                   ? await MyPubService.changeStatus(
                                       pubOrOrderId,
@@ -202,8 +231,9 @@ class CultivoOrder extends StatelessWidget {
                                       pubOrOrderId,
                                       !snapshot.data.isSolved,
                                     );
-                              Navigator.of(context)
-                                  .popUntil((route) => route.isFirst);
+                              setState(() {
+                                isLoading = false;
+                              });
                             },
                             child: Text(
                               (roleActual
@@ -218,6 +248,7 @@ class CultivoOrder extends StatelessWidget {
                               ),
                             ),
                           ),
+                          isLoading ? CircularProgressIndicator() : Container(),
                           FlatButton(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(18.0),
@@ -239,7 +270,7 @@ class CultivoOrder extends StatelessWidget {
                                           dataOrden: snapshot.data,
                                         ),
                                 ),
-                              );
+                              ).then((value) => setState(() {}));
                             },
                             child: Text(
                               'Editar',
@@ -277,7 +308,10 @@ class CultivoOrder extends StatelessWidget {
                                                   this.pubOrOrderId)
                                               : MyOrderService.delete(
                                                   pubOrOrderId);
-                                          Navigator.popUntil(context, ModalRoute.withName("/profile"));
+                                          Navigator.popUntil(
+                                            context,
+                                            ModalRoute.withName("/profile"),
+                                          );
                                         },
                                       ),
                                     ],

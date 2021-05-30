@@ -160,7 +160,8 @@ class _EditarCultivoScreenState extends State<EditarCultivoScreen> {
                 TextButton(
                   child: Text('OK!'),
                   onPressed: () {
-                    Navigator.of(context).popUntil((route) => route.isFirst);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
                   },
                 ),
               ],
@@ -177,7 +178,8 @@ class _EditarCultivoScreenState extends State<EditarCultivoScreen> {
   void initState() {
     super.initState();
     weightUnit = dataCultivo.weightUnit;
-    unitPriceController.text = dataCultivo.unitPrice != null ? dataCultivo.unitPrice.toString() : "";
+    unitPriceController.text =
+        dataCultivo.unitPrice != null ? dataCultivo.unitPrice.toString() : "";
     areaUnit = dataCultivo.areaUnit;
     areaController.text = dataCultivo.area.toString();
     harvestDateController.text = formatter.format(dataCultivo.harvestDate);
@@ -326,7 +328,7 @@ class _EditarCultivoScreenState extends State<EditarCultivoScreen> {
                     isLoading: this.isLoading,
                     formKey: this._formKey,
                     buttonText: 'Guardar Cambios',
-                    hasSupply: false, 
+                    hasSupply: false,
                     hasPrice: true,
                     isEditingScreen: true,
                     pubOrOrderId: cultivoId,
